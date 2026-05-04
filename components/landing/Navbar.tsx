@@ -59,7 +59,7 @@ export function Navbar() {
     >
       <div className="container-x flex items-center justify-between gap-6">
         <a href="/" className="flex items-center gap-2 font-serif text-[28px] font-semibold tracking-tight text-forest">
-          Replyo
+          Ansai
           <span className="w-2 h-2 rounded-full bg-terra animate-pulse-slow" />
         </a>
 

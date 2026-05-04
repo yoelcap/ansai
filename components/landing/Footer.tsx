@@ -10,7 +10,7 @@ export function Footer() {
       <div className="container-x">
         <div className="grid md:grid-cols-[2fr_1fr_1fr_1fr] gap-12 md:gap-16 mb-14">
           <div>
-            <div className="font-serif text-3xl font-semibold text-paper mb-4">Replyo</div>
+            <div className="font-serif text-3xl font-semibold text-paper mb-4">Ansai</div>
             <p className="text-white/60 text-sm max-w-[280px] leading-relaxed">{t("footer.tagline")}</p>
           </div>
 
@@ -85,7 +85,7 @@ export function Footer() {
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between gap-4 text-[13px] text-white/50">
-          <span>© 2026 Replyo. {t("footer.rights")}</span>
+          <span>© 2026 Ansai. {t("footer.rights")}</span>
           <div className="flex items-center gap-5">
             <span>{t("footer.made")}</span>
             <a

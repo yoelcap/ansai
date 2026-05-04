@@ -30,7 +30,7 @@ export function LegalPageLayout({ page, sections }: LegalPageLayoutProps) {
 
             {/* Header */}
             <div className="mb-12">
-              <p className="section-eyebrow">Replyo</p>
+              <p className="section-eyebrow">Ansai</p>
               <h1 className="display-serif text-4xl md:text-[52px] font-semibold text-ink leading-[1.1] mb-3">
                 {t(`${page}.title`)}
               </h1>
@@ -57,7 +57,7 @@ export function LegalPageLayout({ page, sections }: LegalPageLayoutProps) {
             {/* Mini legal nav */}
             <div className="mt-16 pt-8 border-t border-line flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
               <a href="/" className="hover:text-terra transition-colors">
-                ← Replyo
+                ← Ansai
               </a>
               <a href={oppositeHref} className="hover:text-terra transition-colors">
                 {t(oppositeLabelKey)}

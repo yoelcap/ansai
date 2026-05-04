@@ -15,9 +15,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Replyo — Responde a las reseñas de tu restaurante con IA",
+  title: "Ansai — Gestión automática de reseñas con IA",
   description:
-    "Replyo lee, analiza y responde automáticamente a las reseñas de tu negocio en Google con tu propio tono. Ahorra horas cada semana y mantén tu reputación impecable.",
+    "Ansai usa inteligencia artificial para responder automáticamente a tus reseñas de Google. Para restaurantes, bares y hoteles.",
   keywords: [
     "gestión de reseñas",
     "respuestas automáticas",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "HoReCa",
   ],
   openGraph: {
-    title: "Replyo — Tus reseñas, respondidas como tú las responderías",
+    title: "Ansai — Tus reseñas, respondidas como tú las responderías",
     description:
       "El asistente de IA que mantiene tu reputación impecable. Para restaurantes, bares y hoteles.",
     type: "website",

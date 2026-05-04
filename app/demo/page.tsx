@@ -83,7 +83,7 @@ function DemoContent() {
           href="/"
           className="font-serif text-[26px] font-semibold tracking-tight text-forest flex items-center gap-2"
         >
-          Replyo
+          Ansai
           <span className="w-2 h-2 rounded-full bg-terra animate-pulse-slow" />
         </a>
         <a

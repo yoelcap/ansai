@@ -44,7 +44,7 @@ function LoginForm() {
   return (
     <AuthLayout
       title="Bienvenido de vuelta"
-      subtitle="Inicia sesión en tu cuenta de Replyo"
+      subtitle="Inicia sesión en tu cuenta de Ansai"
       footer={
         <>
           ¿No tienes cuenta?{" "}

@@ -12,7 +12,7 @@ export default async function DashboardPage() {
       <header className="border-b border-line bg-paper">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 font-serif text-[24px] font-semibold text-forest">
-            Replyo
+            Ansai
             <span className="w-2 h-2 rounded-full bg-terra animate-pulse-slow" />
           </div>
           <div className="flex items-center gap-4">
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
 
       <main className="max-w-7xl mx-auto px-6 py-12">
         <h1 className="font-serif text-[40px] font-semibold text-forest tracking-tight">
-          Bienvenido a Replyo
+          Bienvenido a Ansai
         </h1>
         <p className="mt-3 text-ink-soft text-[17px]">
           Tu dashboard estará aquí. De momento, esto es un placeholder para verificar que el auth funciona.

@@ -1,6 +1,6 @@
 # 🔐 Setup de Autenticación con Supabase
 
-Este ZIP contiene todos los archivos necesarios para añadir login/signup a tu proyecto Replyo.
+Este ZIP contiene todos los archivos necesarios para añadir login/signup a tu proyecto Ansai.
 
 ---
 
