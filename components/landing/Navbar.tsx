@@ -58,9 +58,14 @@ export function Navbar() {
       )}
     >
       <div className="container-x flex items-center justify-between gap-6">
-        <a href="/" className="flex items-center gap-2 font-serif text-[28px] font-semibold tracking-tight text-forest">
-          Ansai
-          <span className="w-2 h-2 rounded-full bg-terra animate-pulse-slow" />
+        <a href="/" className="flex flex-col leading-none">
+          <div className="flex items-center gap-2 font-serif text-[28px] font-semibold tracking-tight text-forest">
+            Ansai
+            <span className="w-2 h-2 rounded-full bg-terra animate-pulse-slow" />
+          </div>
+          <span className="hidden md:block text-[11px] text-muted tracking-wide mt-0.5 font-sans font-normal">
+            {t("nav.tagline")}
+          </span>
         </a>
 
         {/* Desktop nav */}

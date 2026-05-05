@@ -15,6 +15,10 @@ export function FAQ() {
     { q: t("faq.q4"), a: t("faq.a4") },
     { q: t("faq.q5"), a: t("faq.a5") },
     { q: t("faq.q6"), a: t("faq.a6") },
+    { q: t("faq.q7"), a: t("faq.a7") },
+    { q: t("faq.q8"), a: t("faq.a8") },
+    { q: t("faq.q9"), a: t("faq.a9") },
+    { q: t("faq.q10"), a: t("faq.a10") },
   ];
 
   return (
@@ -35,7 +39,9 @@ export function FAQ() {
               onClick={() => setOpen(open === i ? null : i)}
             >
               <div className="flex justify-between items-center gap-6 py-7">
-                <h4 className="display-serif text-xl md:text-[22px] font-medium text-ink">{item.q}</h4>
+                <h4 className="display-serif text-xl md:text-[22px] font-medium text-ink">
+                  {item.q}
+                </h4>
                 <div
                   className={cn(
                     "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-lg transition-all",

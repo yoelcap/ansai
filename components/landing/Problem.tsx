@@ -24,18 +24,28 @@ export function Problem() {
 
             <div className="grid md:grid-cols-3 gap-10">
               <div className="pt-6 border-t border-white/15">
-                <div className="display-serif italic text-5xl text-terra-light leading-none mb-4">87%</div>
+                <div className="display-serif italic text-5xl text-terra-light leading-none mb-4">
+                  {t("problem.stat1_num")}
+                </div>
                 <p className="text-[15px] leading-relaxed text-white/85">{t("problem.stat1")}</p>
               </div>
               <div className="pt-6 border-t border-white/15">
-                <div className="display-serif italic text-5xl text-terra-light leading-none mb-4">3h</div>
+                <div className="display-serif italic text-5xl text-terra-light leading-none mb-4">
+                  {t("problem.stat2_num")}
+                </div>
                 <p className="text-[15px] leading-relaxed text-white/85">{t("problem.stat2")}</p>
               </div>
               <div className="pt-6 border-t border-white/15">
-                <div className="display-serif italic text-5xl text-terra-light leading-none mb-4">62%</div>
+                <div className="display-serif italic text-5xl text-terra-light leading-none mb-4">
+                  {t("problem.stat3_num")}
+                </div>
                 <p className="text-[15px] leading-relaxed text-white/85">{t("problem.stat3")}</p>
               </div>
             </div>
+
+            <p className="mt-12 text-[15px] text-white/70 max-w-xl leading-relaxed border-t border-white/10 pt-8">
+              {t("problem.bottom")}
+            </p>
           </div>
         </div>
       </div>
