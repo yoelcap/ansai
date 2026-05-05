@@ -5,16 +5,16 @@ import esTranslations from "@/locales/es.json";
 import enTranslations from "@/locales/en.json";
 import nlTranslations from "@/locales/nl.json";
 import frTranslations from "@/locales/fr.json";
-import itTranslations from "@/locales/it.json";
+import deTranslations from "@/locales/de.json";
 
-export type Locale = "es" | "en" | "nl" | "fr" | "it";
+export type Locale = "es" | "en" | "nl" | "fr" | "de";
 
 const translations = {
   es: esTranslations,
   en: enTranslations,
   nl: nlTranslations,
   fr: frTranslations,
-  it: itTranslations,
+  de: deTranslations,
 } as const;
 
 export const localeLabels: Record<Locale, string> = {
@@ -22,7 +22,7 @@ export const localeLabels: Record<Locale, string> = {
   en: "🇬🇧 EN",
   nl: "🇳🇱 NL",
   fr: "🇫🇷 FR",
-  it: "🇮🇹 IT",
+  de: "🇩🇪 DE",
 };
 
 export const localeFullLabels: Record<Locale, string> = {
@@ -30,7 +30,7 @@ export const localeFullLabels: Record<Locale, string> = {
   en: "🇬🇧 English",
   nl: "🇳🇱 Nederlands",
   fr: "🇫🇷 Français",
-  it: "🇮🇹 Italiano",
+  de: "🇩🇪 Deutsch",
 };
 
 type TranslationContextType = {

@@ -63,10 +63,10 @@ export function LegalPageLayout({ page, sections }: LegalPageLayoutProps) {
                 {t(oppositeLabelKey)}
               </a>
               <a
-                href="mailto:yoel.capilla@gmail.com"
+                href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}
                 className="hover:text-terra transition-colors"
               >
-                yoel.capilla@gmail.com
+                {process.env.NEXT_PUBLIC_CONTACT_EMAIL}
               </a>
             </div>
 
