@@ -36,11 +36,11 @@ const MOCK: Record<Locale, Record<"formal" | "casual", string>> = {
     casual:
       "Bonjour et merci beaucoup pour votre avis, ça compte vraiment pour nous ! On est vraiment désolés si quelque chose n'était pas à la hauteur, ce n'est pas ce qu'on vise. La prochaine fois n'hésitez pas à nous le dire sur place et on s'assure que tout se passe parfaitement. À très bientôt ! — L'équipe",
   },
-  it: {
+  de: {
     formal:
-      "Gentile cliente, la ringraziamo sinceramente per aver dedicato del tempo a condividere la sua esperienza con noi. Ci scusiamo per gli eventuali inconvenienti riscontrati e ci impegniamo a migliorare continuamente la qualità del nostro servizio. La sua opinione è per noi preziosa. Speriamo di poterla accogliere di nuovo molto presto. — La direzione",
+      "Sehr geehrte Gästin, sehr geehrter Gast, vielen Dank, dass Sie sich die Zeit genommen haben, Ihre Erfahrung mit uns zu teilen. Wir entschuldigen uns aufrichtig für etwaige Unannehmlichkeiten und sind stets bemüht, die Qualität unseres Service kontinuierlich zu verbessern. Ihre Meinung ist uns sehr wichtig. Wir freuen uns darauf, Sie bald wieder bei uns begrüßen zu dürfen. — Die Geschäftsleitung",
     casual:
-      "Ciao! Grazie mille per la tua recensione, ci fa davvero piacere. Siamo dispiaciuti se qualcosa non è stato all'altezza, non è quello che vogliamo. La prossima volta dimmelo e ci assicuriamo che tutto vada alla perfezione. A presto! — Il team",
+      "Hallo! Vielen Dank für deine Bewertung – das bedeutet uns wirklich viel! Es tut uns leid, falls etwas nicht gestimmt hat, das ist nicht unser Anspruch. Beim nächsten Besuch sag uns einfach Bescheid und wir sorgen dafür, dass alles perfekt läuft. Bis bald! — Das Team",
   },
 };
 
