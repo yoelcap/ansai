@@ -167,7 +167,7 @@ export function Pricing() {
               </ul>
 
               <a
-                href={plan.featured ? "/signup" : plan.name === t("pricing.biz_name") ? "mailto:yoel.capilla@gmail.com" : "/signup"}
+                href={plan.name === t("pricing.biz_name") ? "mailto:yoel.capilla@gmail.com" : "/#cta"}
                 className={cn(
                   "block w-full py-3.5 rounded-full text-sm font-semibold border text-center transition-colors",
                   plan.featured

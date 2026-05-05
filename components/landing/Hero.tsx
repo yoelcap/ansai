@@ -30,7 +30,7 @@ export function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 animate-slide-up [animation-delay:0.3s]">
-              <a href="/signup" className="btn-primary justify-center">
+              <a href="/#cta" className="btn-primary justify-center">
                 <span>{t("hero.cta_primary")}</span>
                 <span>→</span>
               </a>
