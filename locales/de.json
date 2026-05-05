@@ -132,19 +132,11 @@
     "q3": "Was passiert bei einer sehr negativen Bewertung?",
     "a3": "Ansai eskaliert immer kritische Bewertungen oder solche mit sensiblen Wörtern (\"Vergiftung\", \"Insekt\", \"Diebstahl\") zur manuellen Genehmigung. Außerdem benachrichtigt es dich per WhatsApp oder E-Mail, damit du schnell reagieren kannst. Die KI trifft niemals Entscheidungen, die deinem Ruf schaden könnten.",
     "q4": "Wie lange dauert die Einrichtung?",
-    "a4": "Weniger als 5 Minuten. Verbinde dein Google-Konto, beantworte 4 Fragen zu deinem Betrieb und Ton, fertig. Ansai beginnt sofort deine Bewertungen zu verarbeiten und Antworten zu generieren. Die erste Antwort ist in unter 1 Minute bereit.",
+    "a4": "Weniger als 10 Minuten. Verbinde dein Google-Konto, beantworte 4 Fragen zu deinem Betrieb und Ton, fertig. Ansai beginnt sofort deine Bewertungen zu verarbeiten und Antworten zu generieren. Die erste Antwort ist in unter 1 Minute bereit.",
     "q5": "Sind meine Daten sicher?",
     "a5": "Vollständige Einhaltung der europäischen DSGVO. Daten verschlüsselt im Ruhezustand und bei der Übertragung. Wir verkaufen oder teilen keine Informationen mit Dritten. Du kannst deine Daten jederzeit exportieren oder löschen.",
     "q6": "Kann ich jederzeit kündigen?",
-    "a6": "Ja. Keine Mindestlaufzeit, kein Kleingedrucktes. Kündige mit einem Klick aus deinem Dashboard und du zahlst ab dem nächsten Monat nichts mehr. Wenn du gehst, exportieren wir deine Daten. Kein Groll.",
-    "q7": "Was passiert, wenn Ansai eine unangemessene Antwort generiert?",
-    "a7": "Es wird nichts ohne deine Genehmigung veröffentlicht. Du prüfst jede Antwort, bevor sie den Kunden erreicht.",
-    "q8": "Brauche ich technische Kenntnisse zur Einrichtung?",
-    "a8": "Keine. Die Einrichtung dauert 10 Minuten und wir helfen per Videoanruf, wenn nötig.",
-    "q9": "Kann ich jederzeit kündigen?",
-    "a9": "Ja. Ohne Mindestlaufzeit, ohne Verpflichtung. Kündige mit einem Klick aus deinem Konto.",
-    "q10": "Was passiert, wenn ich eine sehr negative Bewertung erhalte?",
-    "a10": "Wir benachrichtigen dich sofort per E-Mail. Ansai generiert eine einfühlsame und professionelle Antwort. Du entscheidest, ob du sie veröffentlichst oder den Kunden direkt anrufst."
+    "a6": "Ja. Keine Mindestlaufzeit, kein Kleingedrucktes. Kündige mit einem Klick aus deinem Dashboard und du zahlst ab dem nächsten Monat nichts mehr. Wenn du gehst, exportieren wir deine Daten. Kein Groll."
   },
   "cta": {
     "title_part1": "Werde Teil der",
