@@ -43,17 +43,10 @@ export function Footer() {
             </h5>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-white/70 hover:text-paper text-sm transition-colors">
-                  {t("footer.about")}
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-white/70 hover:text-paper text-sm transition-colors">
-                  {t("footer.blog")}
-                </a>
-              </li>
-              <li>
-                <a href="mailto:yoel.capilla@gmail.com" className="text-white/70 hover:text-paper text-sm transition-colors">
+                <a
+                  href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}
+                  className="text-white/70 hover:text-paper text-sm transition-colors"
+                >
                   {t("footer.contact")}
                 </a>
               </li>
@@ -73,11 +66,6 @@ export function Footer() {
               <li>
                 <a href="/privacy" className="text-white/70 hover:text-paper text-sm transition-colors">
                   {t("footer.privacy")}
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-white/70 hover:text-paper text-sm transition-colors">
-                  {t("footer.cookies")}
                 </a>
               </li>
             </ul>
