@@ -230,5 +230,48 @@
     "card2_desc": "Pensado para trabajar de forma segura y alineada con la normativa europea de protección de datos.",
     "card3_title": "Cancela cuando quieras",
     "card3_desc": "Sin permanencia. Sin compromiso."
+  },
+  "app": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "reviews": "Reseñas",
+      "reviews_pending": "pendientes",
+      "insights": "Insights",
+      "settings": "Configuración",
+      "settings_business": "Negocio",
+      "settings_tone": "Tono",
+      "settings_integrations": "Integraciones",
+      "settings_billing": "Facturación",
+      "settings_account": "Cuenta",
+      "help": "Ayuda"
+    },
+    "header": {
+      "profile": "Perfil",
+      "settings": "Configuración",
+      "logout": "Cerrar sesión"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Resumen de tu actividad reciente",
+      "kpi_rating": "Rating medio",
+      "kpi_reviews": "Reseñas totales",
+      "kpi_pending": "Pendientes de respuesta",
+      "kpi_response_time": "Tiempo medio de respuesta",
+      "this_month": "este mes",
+      "this_week": "esta semana",
+      "before": "Antes",
+      "pending_title": "Reseñas pendientes",
+      "view_all": "Ver todas",
+      "review_action": "Revisar",
+      "chart_title": "Evolución del rating",
+      "chart_subtitle": "Últimos 30 días",
+      "alerts_title": "Alertas inteligentes"
+    },
+    "dev_login": {
+      "title": "Acceso de desarrollo",
+      "subtitle": "Solo para entorno de desarrollo",
+      "button": "Entrar como demo",
+      "warning": "Este acceso es solo para pruebas. No aparece en producción."
+    }
   }
 }

@@ -230,5 +230,48 @@
     "card2_desc": "Konzipiert für sicheren Betrieb im Einklang mit den europäischen Datenschutzvorschriften.",
     "card3_title": "Jederzeit kündbar",
     "card3_desc": "Ohne Mindestlaufzeit. Ohne Verpflichtung."
+  },
+  "app": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "reviews": "Bewertungen",
+      "reviews_pending": "ausstehend",
+      "insights": "Einblicke",
+      "settings": "Einstellungen",
+      "settings_business": "Unternehmen",
+      "settings_tone": "Ton",
+      "settings_integrations": "Integrationen",
+      "settings_billing": "Abrechnung",
+      "settings_account": "Konto",
+      "help": "Hilfe"
+    },
+    "header": {
+      "profile": "Profil",
+      "settings": "Einstellungen",
+      "logout": "Abmelden"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Übersicht Ihrer letzten Aktivitäten",
+      "kpi_rating": "Durchschn. Bewertung",
+      "kpi_reviews": "Bewertungen gesamt",
+      "kpi_pending": "Ausstehende Antworten",
+      "kpi_response_time": "Ø Antwortzeit",
+      "this_month": "diesen Monat",
+      "this_week": "diese Woche",
+      "before": "Vorher",
+      "pending_title": "Ausstehende Bewertungen",
+      "view_all": "Alle anzeigen",
+      "review_action": "Prüfen",
+      "chart_title": "Bewertungsentwicklung",
+      "chart_subtitle": "Letzte 30 Tage",
+      "alerts_title": "Intelligente Warnungen"
+    },
+    "dev_login": {
+      "title": "Entwicklerzugang",
+      "subtitle": "Nur in der Entwicklungsumgebung verfügbar",
+      "button": "Als Demo einloggen",
+      "warning": "Dieser Zugang ist nur zum Testen. Nicht in der Produktion verfügbar."
+    }
   }
 }
