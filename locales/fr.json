@@ -230,5 +230,48 @@
     "card2_desc": "Conçu pour fonctionner de manière sécurisée et conforme à la réglementation européenne sur la protection des données.",
     "card3_title": "Annulez quand vous voulez",
     "card3_desc": "Sans engagement. Sans contrat."
+  },
+  "app": {
+    "sidebar": {
+      "dashboard": "Tableau de bord",
+      "reviews": "Avis",
+      "reviews_pending": "en attente",
+      "insights": "Insights",
+      "settings": "Paramètres",
+      "settings_business": "Établissement",
+      "settings_tone": "Ton",
+      "settings_integrations": "Intégrations",
+      "settings_billing": "Facturation",
+      "settings_account": "Compte",
+      "help": "Aide"
+    },
+    "header": {
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "logout": "Se déconnecter"
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "subtitle": "Résumé de votre activité récente",
+      "kpi_rating": "Note moyenne",
+      "kpi_reviews": "Avis totaux",
+      "kpi_pending": "En attente de réponse",
+      "kpi_response_time": "Temps de réponse moy.",
+      "this_month": "ce mois-ci",
+      "this_week": "cette semaine",
+      "before": "Avant",
+      "pending_title": "Avis en attente",
+      "view_all": "Voir tout",
+      "review_action": "Traiter",
+      "chart_title": "Évolution de la note",
+      "chart_subtitle": "30 derniers jours",
+      "alerts_title": "Alertes intelligentes"
+    },
+    "dev_login": {
+      "title": "Accès développeur",
+      "subtitle": "Uniquement disponible en développement",
+      "button": "Entrer en mode démo",
+      "warning": "Cet accès est uniquement pour les tests. Non disponible en production."
+    }
   }
 }

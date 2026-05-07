@@ -230,5 +230,48 @@
     "card2_desc": "Ontworpen om veilig en in lijn met de Europese privacywetgeving te werken.",
     "card3_title": "Opzegbaar wanneer je wilt",
     "card3_desc": "Geen verplichting. Geen contract."
+  },
+  "app": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "reviews": "Beoordelingen",
+      "reviews_pending": "in behandeling",
+      "insights": "Inzichten",
+      "settings": "Instellingen",
+      "settings_business": "Bedrijf",
+      "settings_tone": "Toon",
+      "settings_integrations": "Integraties",
+      "settings_billing": "Facturering",
+      "settings_account": "Account",
+      "help": "Hulp"
+    },
+    "header": {
+      "profile": "Profiel",
+      "settings": "Instellingen",
+      "logout": "Uitloggen"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Overzicht van uw recente activiteit",
+      "kpi_rating": "Gemiddelde beoordeling",
+      "kpi_reviews": "Totale beoordelingen",
+      "kpi_pending": "In behandeling",
+      "kpi_response_time": "Gem. reactietijd",
+      "this_month": "deze maand",
+      "this_week": "deze week",
+      "before": "Eerder",
+      "pending_title": "Openstaande beoordelingen",
+      "view_all": "Alles bekijken",
+      "review_action": "Bekijken",
+      "chart_title": "Beoordelingsevolutie",
+      "chart_subtitle": "Laatste 30 dagen",
+      "alerts_title": "Slimme meldingen"
+    },
+    "dev_login": {
+      "title": "Ontwikkelaarstoegang",
+      "subtitle": "Alleen beschikbaar in ontwikkeling",
+      "button": "Inloggen als demo",
+      "warning": "Deze toegang is alleen voor testen. Niet beschikbaar in productie."
+    }
   }
 }
