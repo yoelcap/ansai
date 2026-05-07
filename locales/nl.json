@@ -10,7 +10,7 @@
     "tagline": "Reviewbeheer voor de horeca"
   },
   "hero": {
-    "eyebrow": "Voor restaurants, cafés, bars, hotels en horecagroepen",
+    "eyebrow": "Voor de horecasector in België",
     "title_part1": "Beantwoord je reviews",
     "title_em": "zonder uren te verliezen elke week.",
     "subtitle": "Ansai bereidt persoonlijke antwoorden voor op je Google-reviews in de toon van jouw zaak. Jij controleert, bewerkt en keurt goed met één klik. Er wordt niets gepubliceerd zonder jouw toestemming.",
@@ -67,7 +67,7 @@
     "f2_title": "Meldingen voor negatieve reviews",
     "f2_desc": "Detecteert kritieke reviews snel zodat je kunt handelen voordat het probleem groeit.",
     "f3_title": "Google Reviews eerst",
-    "f3_desc": "Beheer je Google-reviews vanuit een duidelijk overzicht. Meer platformen kunnen worden toegevoegd op basis van plan en beschikbaarheid.",
+    "f3_desc": "We beginnen met Google Reviews, het belangrijkste platform voor de meeste horecabedrijven.",
     "f4_title": "Antwoord in de taal van de klant",
     "f4_desc": "Bereidt antwoorden voor in het Nederlands, Frans, Engels of Spaans, met dezelfde professionele toon.",
     "f5_title": "Keur goed vanuit je telefoon",
@@ -144,7 +144,7 @@
   "cta": {
     "title_part1": "Word lid van de privébeta",
     "title_em": "van Ansai.",
-    "subtitle": "We nemen de eerste 50 horecabedrijven in België op."
+    "subtitle": "Er zijn nog maar weinig plekken. De eerste 50 zaken krijgen 30 dagen gratis zonder verplichtingen."
   },
   "footer": {
     "tagline": "De eenvoudigste manier om je reviews bij te houden. Gemaakt voor restaurants, cafés, hotels en horecagroepen in België.",
@@ -153,13 +153,10 @@
     "pricing": "Prijzen",
     "faq": "FAQ",
     "company": "Bedrijf",
-    "about": "Over ons",
-    "blog": "Blog",
     "contact": "Contact",
     "legal": "Juridisch",
     "terms": "Voorwaarden",
     "privacy": "Privacy",
-    "cookies": "Cookies",
     "rights": "Alle rechten voorbehouden.",
     "made": "Gemaakt met ✦ in Mechelen"
   },
@@ -193,7 +190,7 @@
   },
   "demo_page": {
     "eyebrow": "Interactieve demo",
-    "title": "Probeer de Ansai-magie",
+    "title": "Zie hoe jouw antwoord eruit zou zien",
     "subtitle": "Plak een review en zie het antwoord in 3 seconden. Geen registratie nodig.",
     "review_label": "Google review",
     "review_placeholder": "Plak hier een echte klantreview...",
