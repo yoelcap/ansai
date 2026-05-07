@@ -59,7 +59,7 @@ export function Pricing() {
       name: t("pricing.biz_name"),
       tagline: t("pricing.biz_tagline"),
       desc: t("pricing.biz_desc"),
-      price: "€150",
+      price: t("pricing.biz_price"),
       daily: t("pricing.biz_daily"),
       aiLabel: t("pricing.biz_ai"),
       features: [
@@ -119,7 +119,7 @@ export function Pricing() {
               <div className="display-serif text-[56px] font-normal leading-none mb-0.5">
                 {plan.price}
                 <span className={cn("text-lg font-sans", plan.featured ? "text-white/70" : "text-muted")}>
-                  /mes
+                  {t("pricing.per_month")}
                 </span>
               </div>
               <p className={cn("text-[12px] mb-1", plan.featured ? "text-white/50" : "text-muted/70")}>
@@ -137,7 +137,7 @@ export function Pricing() {
                 )}
               >
                 <p className={cn("text-[10px] font-semibold uppercase tracking-[0.14em] mb-1", plan.featured ? "text-gold" : "text-terra")}>
-                  ✦ Automático
+                  ✦ {t("pricing.ai_label")}
                 </p>
                 <p className={cn("font-semibold text-[15px]", plan.featured ? "text-paper" : "text-ink")}>
                   {plan.aiLabel}
