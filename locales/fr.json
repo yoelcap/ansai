@@ -10,7 +10,7 @@
     "tagline": "Gestion des avis pour la restauration"
   },
   "hero": {
-    "eyebrow": "Pour restaurants, cafés, bars, hôtels et groupes de restauration",
+    "eyebrow": "Pour le secteur horeca en Belgique",
     "title_part1": "Répondez à vos avis",
     "title_em": "sans perdre des heures chaque semaine.",
     "subtitle": "Ansai prépare des réponses personnalisées pour vos avis Google dans le ton de votre établissement. Vous relisez, modifiez et approuvez en un clic. Rien n'est publié sans votre accord.",
@@ -67,7 +67,7 @@
     "f2_title": "Alertes pour les avis négatifs",
     "f2_desc": "Détecte les avis critiques rapidement pour que vous puissiez agir avant que le problème ne s'aggrave.",
     "f3_title": "Google Reviews en priorité",
-    "f3_desc": "Gérez vos avis Google depuis un tableau de bord clair. D'autres plateformes peuvent être ajoutées selon le plan et la disponibilité.",
+    "f3_desc": "Nous commençons par Google Reviews, la plateforme la plus importante pour la plupart des établissements horeca.",
     "f4_title": "Répond dans la langue du client",
     "f4_desc": "Prépare des réponses en néerlandais, français, anglais ou espagnol, en maintenant le même ton professionnel.",
     "f5_title": "Approuvez depuis votre téléphone",
@@ -144,7 +144,7 @@
   "cta": {
     "title_part1": "Rejoignez la bêta privée",
     "title_em": "d'Ansai.",
-    "subtitle": "Nous intégrons les 50 premiers établissements horeca en Belgique."
+    "subtitle": "Il reste peu de places. Les 50 premiers établissements bénéficient de 30 jours gratuits sans engagement."
   },
   "footer": {
     "tagline": "La façon la plus simple de garder vos avis à jour. Créé pour restaurants, cafés, hôtels et groupes de restauration en Belgique.",
@@ -153,13 +153,10 @@
     "pricing": "Tarifs",
     "faq": "FAQ",
     "company": "Entreprise",
-    "about": "À propos",
-    "blog": "Blog",
     "contact": "Contact",
     "legal": "Légal",
     "terms": "Conditions",
     "privacy": "Confidentialité",
-    "cookies": "Cookies",
     "rights": "Tous droits réservés.",
     "made": "Fait avec ✦ à Malines"
   },
@@ -193,7 +190,7 @@
   },
   "demo_page": {
     "eyebrow": "Démo interactive",
-    "title": "Essayez la magie Ansai",
+    "title": "Voyez à quoi ressemblerait votre réponse",
     "subtitle": "Collez n'importe quel avis et voyez la réponse en 3 secondes. Sans inscription.",
     "review_label": "Avis Google",
     "review_placeholder": "Collez ici un vrai avis client...",

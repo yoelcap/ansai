@@ -10,7 +10,7 @@
     "tagline": "Review management for hospitality"
   },
   "hero": {
-    "eyebrow": "For restaurants, cafés, bars, hotels and hospitality groups",
+    "eyebrow": "For the hospitality sector in Belgium",
     "title_part1": "Reply to your reviews",
     "title_em": "without losing hours every week.",
     "subtitle": "Ansai prepares personalised responses for your Google reviews in your business's tone. You review, edit and approve with one click. Nothing is published without your permission.",
@@ -67,7 +67,7 @@
     "f2_title": "Alerts for negative reviews",
     "f2_desc": "Detects critical reviews quickly so you can act before the issue grows.",
     "f3_title": "Google Reviews first",
-    "f3_desc": "Manage your Google reviews from a clear dashboard. More platforms can be added depending on the plan and availability.",
+    "f3_desc": "We start with Google Reviews, the most important platform for most hospitality businesses.",
     "f4_title": "Replies in the customer's language",
     "f4_desc": "Prepares responses in Dutch, French, English or Spanish, maintaining the same professional tone.",
     "f5_title": "Approve from your phone",
@@ -144,7 +144,7 @@
   "cta": {
     "title_part1": "Join Ansai's",
     "title_em": "private beta.",
-    "subtitle": "We're onboarding the first 50 hospitality businesses in Belgium."
+    "subtitle": "Limited spots left. The first 50 businesses get 30 days free with no commitment."
   },
   "footer": {
     "tagline": "The simplest way to keep your reviews up to date. Built for restaurants, cafés, hotels and hospitality groups in Belgium.",
@@ -153,13 +153,10 @@
     "pricing": "Pricing",
     "faq": "FAQ",
     "company": "Company",
-    "about": "About us",
-    "blog": "Blog",
     "contact": "Contact",
     "legal": "Legal",
     "terms": "Terms",
     "privacy": "Privacy",
-    "cookies": "Cookies",
     "rights": "All rights reserved.",
     "made": "Made with ✦ in Mechelen"
   },
@@ -193,7 +190,7 @@
   },
   "demo_page": {
     "eyebrow": "Interactive demo",
-    "title": "Try the Ansai magic",
+    "title": "See how your reply would look",
     "subtitle": "Paste any review and see the reply in 3 seconds. No sign-up needed.",
     "review_label": "Google review",
     "review_placeholder": "Paste a real customer review here...",

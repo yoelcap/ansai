@@ -10,7 +10,7 @@
     "tagline": "Bewertungsmanagement für die Gastronomie"
   },
   "hero": {
-    "eyebrow": "Für Restaurants, Cafés, Bars, Hotels und Gastronomiebetriebe",
+    "eyebrow": "Für den Gastronomiesektor in Belgien",
     "title_part1": "Beantworte deine Bewertungen",
     "title_em": "ohne jede Woche Stunden zu verlieren.",
     "subtitle": "Ansai bereitet personalisierte Antworten auf deine Google-Bewertungen im Ton deines Betriebs vor. Du prüfst, bearbeitest und genehmigst mit einem Klick. Nichts wird ohne deine Erlaubnis veröffentlicht.",
@@ -67,7 +67,7 @@
     "f2_title": "Alarme für negative Bewertungen",
     "f2_desc": "Erkennt kritische Bewertungen schnell, damit du handeln kannst, bevor das Problem wächst.",
     "f3_title": "Google Reviews zuerst",
-    "f3_desc": "Verwalte deine Google-Bewertungen über ein übersichtliches Dashboard. Weitere Plattformen können je nach Plan und Verfügbarkeit hinzugefügt werden.",
+    "f3_desc": "Wir starten mit Google Reviews, der wichtigsten Plattform für die meisten Gastronomiebetriebe.",
     "f4_title": "Antwortet in der Sprache des Kunden",
     "f4_desc": "Bereitet Antworten auf Niederländisch, Französisch, Englisch oder Spanisch vor und behält dabei den gleichen professionellen Ton.",
     "f5_title": "Genehmige vom Handy",
@@ -144,7 +144,7 @@
   "cta": {
     "title_part1": "Werde Teil der privaten Beta",
     "title_em": "von Ansai.",
-    "subtitle": "Wir nehmen die ersten 50 Gastronomiebetriebe in Belgien auf."
+    "subtitle": "Nur noch wenige Plätze verfügbar. Die ersten 50 Betriebe erhalten 30 Tage kostenlos ohne Verpflichtung."
   },
   "footer": {
     "tagline": "Der einfachste Weg, deine Bewertungen aktuell zu halten. Erstellt für Restaurants, Cafés, Hotels und Gastronomiebetriebe in Belgien.",
@@ -153,13 +153,10 @@
     "pricing": "Preise",
     "faq": "FAQ",
     "company": "Unternehmen",
-    "about": "Über uns",
-    "blog": "Blog",
     "contact": "Kontakt",
     "legal": "Rechtliches",
     "terms": "Nutzungsbedingungen",
     "privacy": "Datenschutz",
-    "cookies": "Cookies",
     "rights": "Alle Rechte vorbehalten.",
     "made": "Gemacht mit ✦ in Mechelen"
   },
@@ -193,7 +190,7 @@
   },
   "demo_page": {
     "eyebrow": "Interaktive Demo",
-    "title": "Erlebe die Magie von Ansai",
+    "title": "Sieh, wie deine Antwort aussehen würde",
     "subtitle": "Füge eine Bewertung ein und sieh die Antwort in 3 Sekunden. Ohne Registrierung.",
     "review_label": "Google-Bewertung",
     "review_placeholder": "Füge hier eine echte Kundenbewertung ein...",

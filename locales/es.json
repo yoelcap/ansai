@@ -10,7 +10,7 @@
     "tagline": "Gestión de reseñas para hostelería"
   },
   "hero": {
-    "eyebrow": "Para restaurantes, cafés, bares, hoteles y grupos hosteleros",
+    "eyebrow": "Para el sector hostelero en Bélgica",
     "title_part1": "Responde a tus reseñas",
     "title_em": "sin perder horas cada semana.",
     "subtitle": "Ansai prepara respuestas personalizadas para tus reseñas de Google con el tono de tu negocio. Tú revisas, editas y apruebas con un click. Nada se publica sin tu permiso.",
@@ -67,7 +67,7 @@
     "f2_title": "Alertas para reseñas negativas",
     "f2_desc": "Detecta reseñas críticas rápidamente para que puedas actuar antes de que el problema crezca.",
     "f3_title": "Google Reviews primero",
-    "f3_desc": "Gestiona tus reseñas de Google desde un panel claro. Más plataformas pueden añadirse según el plan y disponibilidad.",
+    "f3_desc": "Empezamos con Google Reviews, la plataforma más importante para la mayoría de negocios hosteleros.",
     "f4_title": "Responde en el idioma del cliente",
     "f4_desc": "Prepara respuestas en neerlandés, francés, inglés o español, manteniendo el mismo tono profesional.",
     "f5_title": "Aprueba desde tu móvil",
@@ -144,7 +144,7 @@
   "cta": {
     "title_part1": "Únete a la beta privada",
     "title_em": "de Ansai.",
-    "subtitle": "Estamos incorporando los primeros 50 negocios horeca en Bélgica."
+    "subtitle": "Quedan pocas plazas. Los primeros 50 negocios tienen 30 días gratis sin compromiso."
   },
   "footer": {
     "tagline": "La forma más sencilla de mantener tus reseñas al día. Creado para restaurantes, cafés, hoteles y grupos hosteleros en Bélgica.",
@@ -153,13 +153,10 @@
     "pricing": "Precios",
     "faq": "FAQ",
     "company": "Empresa",
-    "about": "Sobre nosotros",
-    "blog": "Blog",
     "contact": "Contacto",
     "legal": "Legal",
     "terms": "Términos",
     "privacy": "Privacidad",
-    "cookies": "Cookies",
     "rights": "Todos los derechos reservados.",
     "made": "Hecho con ✦ en Mechelen"
   },
@@ -193,7 +190,7 @@
   },
   "demo_page": {
     "eyebrow": "Demo interactiva",
-    "title": "Prueba la magia de Ansai",
+    "title": "Ve cómo quedaría tu respuesta",
     "subtitle": "Pega cualquier reseña y ve la respuesta en 3 segundos. Sin registro.",
     "review_label": "Reseña de Google",
     "review_placeholder": "Pega aquí la reseña de un cliente real...",
