@@ -272,6 +272,15 @@
       "subtitle": "Nur in der Entwicklungsumgebung verfügbar",
       "button": "Als Demo einloggen",
       "warning": "Dieser Zugang ist nur zum Testen. Nicht in der Produktion verfügbar."
+    },
+    "review_panel": {
+      "ai_label": "KI-vorgeschlagene Antwort",
+      "ai_badge": "KI-Entwurf",
+      "approve": "Genehmigen und veröffentlichen",
+      "edit": "Bearbeiten",
+      "reject": "Ablehnen",
+      "save_changes": "Änderungen speichern",
+      "cancel": "Abbrechen"
     }
   }
 }

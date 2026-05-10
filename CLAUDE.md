@@ -22,7 +22,13 @@ There are no tests yet. TypeScript checking runs as part of `npm run build`.
 
 ```
 app/
-├── (public routes)        # landing, demo, login, signup, terms, privacy
+├── page.tsx               # Landing page
+├── demo/page.tsx          # Interactive demo
+├── login/page.tsx         # Login UI (placeholder — not wired to Supabase yet)
+├── signup/page.tsx        # Signup UI (placeholder — not wired to Supabase yet)
+├── forgot-password/       # Placeholder
+├── terms/ privacy/        # Legal pages
+├── auth/callback/         # Supabase OAuth callback route (scaffolded)
 ├── dashboard/
 │   ├── layout.tsx         # Private app layout (TranslationProvider + AppShell)
 │   └── page.tsx           # Dashboard with KPIs, pending reviews, chart, alerts
@@ -51,6 +57,8 @@ All auth is currently faked via localStorage + a cookie (`replyo_fake_user`). Se
 - **Client guard:** `AppShell` also does a `useEffect` redirect as a second layer.
 - **Dev login:** `app/dev-login/page.tsx` sets a hardcoded demo user and redirects to `/dashboard`.
 
+Supabase clients are scaffolded at `lib/supabase-client.ts` (browser) and `lib/supabase-server.ts` (server/RSC). They require `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` env vars — these are intentionally absent until auth is wired up.
+
 ### i18n system
 
 `lib/i18n.tsx` exports a React context (`TranslationProvider`) and `useTranslation()` hook. Every page that uses translations must wrap its content in `<TranslationProvider>` (see `app/page.tsx` and `app/dashboard/layout.tsx` as examples — it is NOT in the root layout).
@@ -70,6 +78,10 @@ When adding new strings, add the key to all 5 locale files. If unsure of a trans
 ### Mock data
 
 `lib/mock/dashboardData.ts` exports `getMockDashboardData()`. Types are designed to match a future real API shape — replace the function body when wiring up the backend, not the types.
+
+### Utilities
+
+`lib/utils.ts` exports `cn(...inputs)` — a `clsx` + `tailwind-merge` helper for conditional class merging. Use it whenever combining Tailwind classes conditionally.
 
 ## Design system
 
@@ -91,5 +103,7 @@ When adding new strings, add the key to all 5 locale files. If unsure of a trans
 - `.btn-ghost` — transparent text button
 - `.section-eyebrow` — small uppercase terra label above section titles
 - `.display-serif` — Fraunces with tracking and stylistic set
+
+**Animations** (defined in `tailwind.config.ts`): `animate-slide-up`, `animate-pulse-slow`, `animate-spin-slow`.
 
 **Style rule:** No blue SaaS aesthetics. Use the palette above. Terracota (`terra`) for alerts/negative, forest for positive/primary.

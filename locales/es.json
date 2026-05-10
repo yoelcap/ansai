@@ -272,6 +272,15 @@
       "subtitle": "Solo para entorno de desarrollo",
       "button": "Entrar como demo",
       "warning": "Este acceso es solo para pruebas. No aparece en producción."
+    },
+    "review_panel": {
+      "ai_label": "Respuesta sugerida por IA",
+      "ai_badge": "Borrador IA",
+      "approve": "Aprobar y publicar",
+      "edit": "Editar",
+      "reject": "Rechazar",
+      "save_changes": "Guardar cambios",
+      "cancel": "Cancelar"
     }
   }
 }

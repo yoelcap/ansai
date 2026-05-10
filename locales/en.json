@@ -272,6 +272,15 @@
       "subtitle": "Only available in development",
       "button": "Enter as demo",
       "warning": "This access is for testing only. Not available in production."
+    },
+    "review_panel": {
+      "ai_label": "AI suggested response",
+      "ai_badge": "AI Draft",
+      "approve": "Approve & publish",
+      "edit": "Edit",
+      "reject": "Reject",
+      "save_changes": "Save changes",
+      "cancel": "Cancel"
     }
   }
 }
