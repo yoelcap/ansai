@@ -163,6 +163,138 @@ export function getMockDashboardData(): DashboardData {
   };
 }
 
+export function getAllMockReviews(): Review[] {
+  return [
+    // Pending
+    {
+      id: "r1",
+      authorName: "María García",
+      authorInitial: "M",
+      rating: 2,
+      text: "Esperamos casi una hora para que nos atendieran. La comida estaba bien pero el servicio fue muy lento y no pidieron disculpas.",
+      language: "es",
+      createdAt: "2026-05-07T08:30:00Z",
+      relativeTime: "hace 2h",
+      status: "pending",
+      source: "google",
+    },
+    {
+      id: "r2",
+      authorName: "Jan Vermeer",
+      authorInitial: "J",
+      rating: 5,
+      text: "Uitstekend restaurant! Het eten was heerlijk en de bediening was attent en vriendelijk. Zeker een aanrader voor iedereen.",
+      language: "nl",
+      createdAt: "2026-05-07T06:15:00Z",
+      relativeTime: "hace 4h",
+      status: "pending",
+      source: "google",
+    },
+    {
+      id: "r3",
+      authorName: "Sophie Martin",
+      authorInitial: "S",
+      rating: 4,
+      text: "Great food and cozy atmosphere. The pasta was excellent. Service could be a bit faster during busy hours but overall very happy.",
+      language: "en",
+      createdAt: "2026-05-06T19:45:00Z",
+      relativeTime: "hace 13h",
+      status: "pending",
+      source: "google",
+    },
+    {
+      id: "r4",
+      authorName: "Carlos Ruiz",
+      authorInitial: "C",
+      rating: 1,
+      text: "Pésima experiencia. Encontramos un pelo en la comida y cuando avisamos al camarero no se disculpó ni ofreció solución alguna.",
+      language: "es",
+      createdAt: "2026-05-06T14:20:00Z",
+      relativeTime: "hace 18h",
+      status: "pending",
+      source: "google",
+    },
+    {
+      id: "r5",
+      authorName: "Emma De Vries",
+      authorInitial: "E",
+      rating: 4,
+      text: "Leuk restaurant in het centrum. De portie was groot en de prijs was redelijk. We zullen zeker terugkomen.",
+      language: "nl",
+      createdAt: "2026-05-06T12:00:00Z",
+      relativeTime: "hace 20h",
+      status: "pending",
+      source: "google",
+    },
+    // Responded
+    {
+      id: "r6",
+      authorName: "Isabelle Laurent",
+      authorInitial: "I",
+      rating: 5,
+      text: "Une expérience absolument parfaite. Le personnel était aux petits soins et la cuisine était raffinée. Je recommande vivement!",
+      language: "nl",
+      createdAt: "2026-05-05T14:00:00Z",
+      relativeTime: "hace 2 días",
+      status: "responded",
+      source: "google",
+    },
+    {
+      id: "r7",
+      authorName: "Thomas Müller",
+      authorInitial: "T",
+      rating: 4,
+      text: "Fantastic place! The food was outstanding and staff very professional. The terrace is lovely in the evening. Will definitely return.",
+      language: "en",
+      createdAt: "2026-05-04T19:30:00Z",
+      relativeTime: "hace 3 días",
+      status: "responded",
+      source: "google",
+    },
+    {
+      id: "r8",
+      authorName: "Pieter Jacobs",
+      authorInitial: "P",
+      rating: 3,
+      text: "Redelijk restaurant. Het eten was oké maar niet bijzonder. De bediening was vriendelijk maar traag. Verwachtte meer voor de prijs.",
+      language: "nl",
+      createdAt: "2026-05-03T12:45:00Z",
+      relativeTime: "hace 4 días",
+      status: "responded",
+      source: "google",
+    },
+    // Ignored
+    {
+      id: "r9",
+      authorName: "Pedro López",
+      authorInitial: "P",
+      rating: 1,
+      text: "Llevan meses con el mismo menú sin actualizar. El local está muy descuidado y la limpieza deja mucho que desear.",
+      language: "es",
+      createdAt: "2026-05-02T10:00:00Z",
+      relativeTime: "hace 5 días",
+      status: "ignored",
+      source: "google",
+    },
+    {
+      id: "r10",
+      authorName: "Anna Smit",
+      authorInitial: "A",
+      rating: 2,
+      text: "Teleurstellend bezoek. We hebben lang moeten wachten en het eten was lauw. Het personeel leek niet geïnteresseerd in de klanten.",
+      language: "nl",
+      createdAt: "2026-05-01T18:20:00Z",
+      relativeTime: "hace 6 días",
+      status: "ignored",
+      source: "google",
+    },
+  ];
+}
+
+export function getMockPendingCount(): number {
+  return getAllMockReviews().filter((r) => r.status === "pending").length;
+}
+
 function generateChartData(): ChartDataPoint[] {
   // Deterministic 30-day data (Apr 7 – May 6, 2026) with upward trend
   const ratings = [

@@ -281,6 +281,24 @@
       "reject": "Afwijzen",
       "save_changes": "Wijzigingen opslaan",
       "cancel": "Annuleren"
+    },
+    "reviews": {
+      "title": "Beoordelingen",
+      "subtitle": "Beheer al uw Google-beoordelingen",
+      "filter_all": "Alle",
+      "filter_pending": "In behandeling",
+      "filter_responded": "Beantwoord",
+      "filter_rejected": "Afgewezen",
+      "stars_all": "Alle sterren",
+      "stars_low": "1-2 ★",
+      "stars_mid": "3 ★",
+      "stars_high": "4-5 ★",
+      "search_placeholder": "Zoeken op naam of inhoud...",
+      "badge_pending": "In behandeling",
+      "badge_responded": "Beantwoord",
+      "badge_rejected": "Afgewezen",
+      "review_action": "Bekijken",
+      "empty": "Geen beoordelingen met deze filters"
     }
   }
 }

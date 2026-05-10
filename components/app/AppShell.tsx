@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth/useAuth";
 import { Sidebar } from "./Sidebar";
 import { AppHeader } from "./AppHeader";
+import { getMockPendingCount } from "@/lib/mock/dashboardData";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
@@ -51,7 +52,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Sidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
-        pendingCount={8}
+        pendingCount={getMockPendingCount()}
       />
 
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
