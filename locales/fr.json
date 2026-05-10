@@ -281,6 +281,24 @@
       "reject": "Rejeter",
       "save_changes": "Enregistrer les modifications",
       "cancel": "Annuler"
+    },
+    "reviews": {
+      "title": "Avis",
+      "subtitle": "Gérez tous vos avis Google",
+      "filter_all": "Tous",
+      "filter_pending": "En attente",
+      "filter_responded": "Traités",
+      "filter_rejected": "Rejetés",
+      "stars_all": "Toutes les étoiles",
+      "stars_low": "1-2 ★",
+      "stars_mid": "3 ★",
+      "stars_high": "4-5 ★",
+      "search_placeholder": "Rechercher par nom ou contenu...",
+      "badge_pending": "En attente",
+      "badge_responded": "Traité",
+      "badge_rejected": "Rejeté",
+      "review_action": "Traiter",
+      "empty": "Aucun avis ne correspond à ces filtres"
     }
   }
 }

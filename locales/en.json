@@ -281,6 +281,24 @@
       "reject": "Reject",
       "save_changes": "Save changes",
       "cancel": "Cancel"
+    },
+    "reviews": {
+      "title": "Reviews",
+      "subtitle": "Manage all your Google reviews",
+      "filter_all": "All",
+      "filter_pending": "Pending",
+      "filter_responded": "Responded",
+      "filter_rejected": "Rejected",
+      "stars_all": "All stars",
+      "stars_low": "1-2 ★",
+      "stars_mid": "3 ★",
+      "stars_high": "4-5 ★",
+      "search_placeholder": "Search by name or content...",
+      "badge_pending": "Pending",
+      "badge_responded": "Responded",
+      "badge_rejected": "Rejected",
+      "review_action": "Review",
+      "empty": "No reviews match these filters"
     }
   }
 }

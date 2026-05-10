@@ -281,6 +281,24 @@
       "reject": "Ablehnen",
       "save_changes": "Änderungen speichern",
       "cancel": "Abbrechen"
+    },
+    "reviews": {
+      "title": "Bewertungen",
+      "subtitle": "Verwalten Sie alle Ihre Google-Bewertungen",
+      "filter_all": "Alle",
+      "filter_pending": "Ausstehend",
+      "filter_responded": "Beantwortet",
+      "filter_rejected": "Abgelehnt",
+      "stars_all": "Alle Sterne",
+      "stars_low": "1-2 ★",
+      "stars_mid": "3 ★",
+      "stars_high": "4-5 ★",
+      "search_placeholder": "Nach Name oder Inhalt suchen...",
+      "badge_pending": "Ausstehend",
+      "badge_responded": "Beantwortet",
+      "badge_rejected": "Abgelehnt",
+      "review_action": "Prüfen",
+      "empty": "Keine Bewertungen mit diesen Filtern"
     }
   }
 }

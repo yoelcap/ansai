@@ -32,10 +32,13 @@ app/
 ├── dashboard/
 │   ├── layout.tsx         # Private app layout (TranslationProvider + AppShell)
 │   └── page.tsx           # Dashboard with KPIs, pending reviews, chart, alerts
+├── reviews/
+│   ├── layout.tsx         # Same pattern: TranslationProvider + AppShell
+│   └── page.tsx           # Full review list with filters, status badges, slide-over
 └── dev-login/page.tsx     # Fake auth login (dev only)
 ```
 
-**Future refactor:** When adding `/reviews`, `/insights`, `/settings`, create `app/(app)/` route group and move `app/dashboard/` inside it. The layout at `app/dashboard/layout.tsx` becomes `app/(app)/layout.tsx`.
+**Future refactor:** When adding `/insights` and `/settings`, consider creating an `app/(app)/` route group and consolidating the shared `layout.tsx` (TranslationProvider + AppShell) that currently lives separately in `app/dashboard/` and `app/reviews/`.
 
 ### Private app component tree
 
@@ -77,7 +80,10 @@ When adding new strings, add the key to all 5 locale files. If unsure of a trans
 
 ### Mock data
 
-`lib/mock/dashboardData.ts` exports `getMockDashboardData()`. Types are designed to match a future real API shape — replace the function body when wiring up the backend, not the types.
+`lib/mock/dashboardData.ts` exports:
+- `getMockDashboardData()` — dashboard KPIs + the 5 most recent pending reviews. Types match future API shape; replace the function body, not the types.
+- `getAllMockReviews()` — all 10 mock reviews across all statuses (`pending`, `responded`, `ignored`). Used by the `/reviews` page.
+- `getMockPendingCount()` — pending review count derived from `getAllMockReviews()`; used by `AppShell` to populate the sidebar badge.
 
 ### Utilities
 
