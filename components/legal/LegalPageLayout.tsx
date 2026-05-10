@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/lib/i18n";
+import { CONTACT_EMAIL } from "@/lib/constants";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 
@@ -63,10 +64,10 @@ export function LegalPageLayout({ page, sections }: LegalPageLayoutProps) {
                 {t(oppositeLabelKey)}
               </a>
               <a
-                href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="hover:text-terra transition-colors"
               >
-                {process.env.NEXT_PUBLIC_CONTACT_EMAIL}
+                {CONTACT_EMAIL}
               </a>
             </div>
 

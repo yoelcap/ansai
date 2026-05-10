@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/lib/i18n";
+import { CONTACT_EMAIL } from "@/lib/constants";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -44,7 +45,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}
+                  href={`mailto:${CONTACT_EMAIL}`}
                   className="text-white/70 hover:text-paper text-sm transition-colors"
                 >
                   {t("footer.contact")}
