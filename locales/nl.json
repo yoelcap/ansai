@@ -272,6 +272,15 @@
       "subtitle": "Alleen beschikbaar in ontwikkeling",
       "button": "Inloggen als demo",
       "warning": "Deze toegang is alleen voor testen. Niet beschikbaar in productie."
+    },
+    "review_panel": {
+      "ai_label": "Door AI voorgesteld antwoord",
+      "ai_badge": "AI-concept",
+      "approve": "Goedkeuren en publiceren",
+      "edit": "Bewerken",
+      "reject": "Afwijzen",
+      "save_changes": "Wijzigingen opslaan",
+      "cancel": "Annuleren"
     }
   }
 }

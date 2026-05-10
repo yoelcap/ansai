@@ -272,6 +272,15 @@
       "subtitle": "Uniquement disponible en développement",
       "button": "Entrer en mode démo",
       "warning": "Cet accès est uniquement pour les tests. Non disponible en production."
+    },
+    "review_panel": {
+      "ai_label": "Réponse suggérée par l'IA",
+      "ai_badge": "Brouillon IA",
+      "approve": "Approuver et publier",
+      "edit": "Modifier",
+      "reject": "Rejeter",
+      "save_changes": "Enregistrer les modifications",
+      "cancel": "Annuler"
     }
   }
 }
