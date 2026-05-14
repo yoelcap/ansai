@@ -7,41 +7,62 @@ import { Sidebar } from "./Sidebar";
 import { AppHeader } from "./AppHeader";
 import { getMockPendingCount } from "@/lib/mock/dashboardData";
 
+function Spinner() {
+  return (
+    <div className="min-h-screen bg-cream flex items-center justify-center">
+      <div className="flex items-center gap-2">
+        <span className="font-serif text-base text-forest">Ansai</span>
+        <span className="w-1.5 h-1.5 rounded-full bg-terra animate-pulse-slow" />
+      </div>
+    </div>
+  );
+}
+
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { user, loading, logout } = useAuth();
+  const { user, profile, business, loading, logout } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Client-side auth guard as fallback to middleware
-  // TODO: reemplazar por Supabase Auth
   useEffect(() => {
     if (!loading && !user) {
-      router.replace("/dev-login");
+      router.replace("/login");
     }
   }, [loading, user, router]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <div className="flex items-center gap-2">
-          <span className="font-serif text-base text-forest">Ansai</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-terra animate-pulse-slow" />
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!loading && user && profile === null) {
+      logout().then(() => router.replace("/login"));
+    }
+  }, [loading, user, profile, router, logout]);
 
-  if (!user) return null;
+  useEffect(() => {
+    if (!loading && user && profile !== null && !profile.onboarded) {
+      router.replace("/onboarding");
+    }
+  }, [loading, user, profile, router]);
 
-  const handleLogout = () => {
-    // TODO: reemplazar por Supabase Auth (signOut)
-    logout();
-    router.replace("/dev-login");
+  // Show spinner while loading auth state
+  if (loading) return <Spinner />;
+
+  // Show spinner while redirect-to-login is in flight
+  if (!user) return <Spinner />;
+
+  // User exists but has no profile — stale/invalid session, logout in progress
+  if (profile === null) return <Spinner />;
+
+  // Show spinner while redirect-to-onboarding is in flight
+  if (!profile.onboarded) return <Spinner />;
+
+  const displayName =
+    business?.name ?? profile?.full_name ?? user.email ?? "Ansai";
+
+  const handleLogout = async () => {
+    await logout();
+    router.replace("/login");
   };
 
   return (
     <div className="flex h-screen overflow-hidden bg-cream">
-      {/* Mobile overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-ink/40 z-20 lg:hidden"
@@ -57,7 +78,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <AppHeader
-          businessName={user.businessName}
+          businessName={displayName}
           onMenuClick={() => setSidebarOpen(true)}
           onLogout={handleLogout}
         />

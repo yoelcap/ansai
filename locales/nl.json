@@ -437,6 +437,70 @@
       "status_paid": "Betaald",
       "download_btn": "Downloaden",
       "billing_contact": "Vragen over uw facturering?"
+    },
+    "toast": {
+      "close": "Sluiten"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Inloggen",
+      "subtitle": "Welkom terug bij Ansai",
+      "email": "E-mail",
+      "password": "Wachtwoord",
+      "submit": "Inloggen",
+      "loading": "Inloggen...",
+      "forgotPassword": "Wachtwoord vergeten?",
+      "noAccount": "Nog geen account?",
+      "signUp": "Registreren",
+      "or": "of",
+      "continueWithGoogle": "Doorgaan met Google"
+    },
+    "signup": {
+      "title": "Account aanmaken",
+      "subtitle": "Begin met het beheren van je reviews",
+      "fullName": "Volledige naam",
+      "email": "E-mail",
+      "password": "Wachtwoord",
+      "confirmPassword": "Wachtwoord bevestigen",
+      "passwordHint": "Minimaal 8 tekens",
+      "acceptTerms": "Ik ga akkoord met de <terms>algemene voorwaarden</terms> en het <privacy>privacybeleid</privacy>",
+      "submit": "Account aanmaken",
+      "loading": "Account aanmaken...",
+      "hasAccount": "Al een account?",
+      "logIn": "Inloggen",
+      "confirmEmail": "We hebben een e-mail gestuurd naar {email}. Bevestig je account om door te gaan.",
+      "backToLogin": "Terug naar inloggen"
+    },
+    "forgotPassword": {
+      "title": "Wachtwoord herstellen",
+      "subtitle": "We sturen je een link om het opnieuw in te stellen",
+      "email": "E-mail",
+      "submit": "Link versturen",
+      "loading": "Versturen...",
+      "success": "Controleer je e-mail. We hebben je een link gestuurd om je wachtwoord opnieuw in te stellen.",
+      "backToLogin": "Terug naar inloggen"
+    },
+    "resetPassword": {
+      "title": "Nieuw wachtwoord",
+      "subtitle": "Voer je nieuwe wachtwoord in",
+      "newPassword": "Nieuw wachtwoord",
+      "confirmPassword": "Wachtwoord bevestigen",
+      "submit": "Wachtwoord wijzigen",
+      "loading": "Wijzigen...",
+      "success": "Wachtwoord succesvol bijgewerkt"
+    },
+    "errors": {
+      "invalidCredentials": "Onjuist e-mailadres of wachtwoord",
+      "emailNotConfirmed": "Bevestig je e-mail voordat je inlogt",
+      "emailAlreadyRegistered": "Dit e-mailadres heeft al een account",
+      "weakPassword": "Het wachtwoord moet minimaal 8 tekens bevatten",
+      "passwordsDontMatch": "Wachtwoorden komen niet overeen",
+      "invalidEmail": "Ongeldig e-mailadres",
+      "requiredField": "Dit veld is verplicht",
+      "termsRequired": "Je moet de voorwaarden accepteren",
+      "networkError": "Verbindingsfout. Probeer het opnieuw.",
+      "unknown": "Er is iets misgegaan. Probeer het opnieuw."
     }
   }
 }

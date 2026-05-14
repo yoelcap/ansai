@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Download, CreditCard, Zap } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
-import { useAuth } from "@/lib/auth/useAuth";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -25,8 +24,7 @@ const SECTION = "bg-paper border border-line rounded-2xl p-5 md:p-6";
 
 export default function BillingPage() {
   const { t } = useTranslation();
-  const { user } = useAuth();
-  const plan = PLAN_DATA[user?.plan ?? "pro"];
+  const plan = PLAN_DATA["pro"];
   const [cancelConfirm, setCancelConfirm] = useState(false);
 
   return (

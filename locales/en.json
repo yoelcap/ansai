@@ -437,6 +437,70 @@
       "status_paid": "Paid",
       "download_btn": "Download",
       "billing_contact": "Questions about your billing?"
+    },
+    "toast": {
+      "close": "Close"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Welcome back to Ansai",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "loading": "Signing in...",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "or": "or",
+      "continueWithGoogle": "Continue with Google"
+    },
+    "signup": {
+      "title": "Create account",
+      "subtitle": "Start managing your reviews",
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "passwordHint": "Minimum 8 characters",
+      "acceptTerms": "I accept the <terms>terms</terms> and <privacy>privacy policy</privacy>",
+      "submit": "Create account",
+      "loading": "Creating account...",
+      "hasAccount": "Already have an account?",
+      "logIn": "Sign in",
+      "confirmEmail": "We've sent an email to {email}. Please confirm your account to continue.",
+      "backToLogin": "Back to sign in"
+    },
+    "forgotPassword": {
+      "title": "Reset password",
+      "subtitle": "We'll send you a link to reset it",
+      "email": "Email",
+      "submit": "Send link",
+      "loading": "Sending...",
+      "success": "Check your email. We've sent you a link to reset your password.",
+      "backToLogin": "Back to sign in"
+    },
+    "resetPassword": {
+      "title": "New password",
+      "subtitle": "Enter your new password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "submit": "Change password",
+      "loading": "Changing...",
+      "success": "Password updated successfully"
+    },
+    "errors": {
+      "invalidCredentials": "Incorrect email or password",
+      "emailNotConfirmed": "Please confirm your email before signing in",
+      "emailAlreadyRegistered": "This email already has an account",
+      "weakPassword": "Password must be at least 8 characters",
+      "passwordsDontMatch": "Passwords do not match",
+      "invalidEmail": "Invalid email",
+      "requiredField": "This field is required",
+      "termsRequired": "You must accept the terms",
+      "networkError": "Connection error. Please try again.",
+      "unknown": "Something went wrong. Please try again."
     }
   }
 }

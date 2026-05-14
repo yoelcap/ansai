@@ -117,7 +117,7 @@ const TheForkLogo = () => (
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function IntegrationsPage() {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { business } = useAuth();
   const [googleConnected, setGoogleConnected] = useState(true);
 
   return (
@@ -128,7 +128,7 @@ export default function IntegrationsPage() {
         title={t("app.settings.google_title")}
         description={t("app.settings.google_desc")}
         connected={googleConnected}
-        connectedName={user?.businessName ?? "Mi negocio"}
+        connectedName={business?.name ?? "Mi negocio"}
         onConnect={() => setGoogleConnected(true)}
         onDisconnect={() => setGoogleConnected(false)}
         t={t}
