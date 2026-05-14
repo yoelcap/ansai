@@ -39,14 +39,22 @@ export async function POST() {
     }
   }
 
-  // Mark onboarded = true — this MUST succeed before redirecting to dashboard
+  // Upsert the profile — creates it if the on_auth_user_created trigger failed,
+  // or just flips onboarded=true for the normal path.
   const { error: profileError } = await admin
     .from("profiles")
-    .update({ onboarded: true })
-    .eq("id", user.id);
+    .upsert(
+      {
+        id: user.id,
+        email: user.email ?? null,
+        full_name: user.user_metadata?.full_name ?? null,
+        onboarded: true,
+      },
+      { onConflict: "id" }
+    );
 
   if (profileError) {
-    console.error("Failed to update profile:", profileError);
+    console.error("Failed to upsert profile:", profileError);
     return NextResponse.json({ error: "Failed to update profile" }, { status: 500 });
   }
 
