@@ -39,11 +39,26 @@ const config: Config = {
         "slide-up": "slideUp 0.7s ease backwards",
         "pulse-slow": "pulse 2s ease-in-out infinite",
         "spin-slow": "spin 8s linear infinite",
+        "toast-enter": "toastEnter 0.3s ease forwards",
+        "toast-exit": "toastExit 0.25s ease forwards",
+        "toast-progress": "toastProgress 4s linear forwards",
       },
       keyframes: {
         slideUp: {
           from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
+        },
+        toastEnter: {
+          from: { opacity: "0", transform: "translateX(calc(100% + 1rem))" },
+          to: { opacity: "1", transform: "translateX(0)" },
+        },
+        toastExit: {
+          from: { opacity: "1", transform: "translateX(0)" },
+          to: { opacity: "0", transform: "translateX(calc(100% + 1rem))" },
+        },
+        toastProgress: {
+          from: { width: "100%" },
+          to: { width: "0%" },
         },
       },
     },

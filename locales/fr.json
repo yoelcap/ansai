@@ -437,6 +437,70 @@
       "status_paid": "Payée",
       "download_btn": "Télécharger",
       "billing_contact": "Des questions sur votre facturation ?"
+    },
+    "toast": {
+      "close": "Fermer"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Se connecter",
+      "subtitle": "Bienvenue sur Ansai",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "loading": "Connexion...",
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "signUp": "S'inscrire",
+      "or": "ou",
+      "continueWithGoogle": "Continuer avec Google"
+    },
+    "signup": {
+      "title": "Créer un compte",
+      "subtitle": "Commencez à gérer vos avis",
+      "fullName": "Nom complet",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "passwordHint": "Minimum 8 caractères",
+      "acceptTerms": "J'accepte les <terms>conditions générales</terms> et la <privacy>politique de confidentialité</privacy>",
+      "submit": "Créer mon compte",
+      "loading": "Création du compte...",
+      "hasAccount": "Déjà un compte ?",
+      "logIn": "Se connecter",
+      "confirmEmail": "Nous vous avons envoyé un e-mail à {email}. Confirmez votre compte pour continuer.",
+      "backToLogin": "Retour à la connexion"
+    },
+    "forgotPassword": {
+      "title": "Récupérer le mot de passe",
+      "subtitle": "Nous vous enverrons un lien pour le réinitialiser",
+      "email": "E-mail",
+      "submit": "Envoyer le lien",
+      "loading": "Envoi en cours...",
+      "success": "Vérifiez votre e-mail. Nous vous avons envoyé un lien pour réinitialiser votre mot de passe.",
+      "backToLogin": "Retour à la connexion"
+    },
+    "resetPassword": {
+      "title": "Nouveau mot de passe",
+      "subtitle": "Entrez votre nouveau mot de passe",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "submit": "Changer le mot de passe",
+      "loading": "Changement en cours...",
+      "success": "Mot de passe mis à jour avec succès"
+    },
+    "errors": {
+      "invalidCredentials": "E-mail ou mot de passe incorrect",
+      "emailNotConfirmed": "Confirmez votre e-mail avant de vous connecter",
+      "emailAlreadyRegistered": "Cet e-mail est déjà associé à un compte",
+      "weakPassword": "Le mot de passe doit comporter au moins 8 caractères",
+      "passwordsDontMatch": "Les mots de passe ne correspondent pas",
+      "invalidEmail": "E-mail invalide",
+      "requiredField": "Ce champ est obligatoire",
+      "termsRequired": "Vous devez accepter les conditions",
+      "networkError": "Erreur de connexion. Veuillez réessayer.",
+      "unknown": "Une erreur s'est produite. Veuillez réessayer."
     }
   }
 }

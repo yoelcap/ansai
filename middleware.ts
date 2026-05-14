@@ -1,30 +1,71 @@
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-// TODO: reemplazar por Supabase Auth
-// import { createServerClient } from "@supabase/ssr";
-const FAKE_AUTH_COOKIE = "replyo_fake_user";
-
 export async function middleware(request: NextRequest) {
-  const response = NextResponse.next({ request });
+  let response = NextResponse.next({
+    request: { headers: request.headers },
+  });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name, value, options) {
+          request.cookies.set({ name, value, ...options });
+          response = NextResponse.next({
+            request: { headers: request.headers },
+          });
+          response.cookies.set({ name, value, ...options });
+        },
+        remove(name, options) {
+          request.cookies.set({ name, value: "", ...options });
+          response = NextResponse.next({
+            request: { headers: request.headers },
+          });
+          response.cookies.set({ name, value: "", ...options });
+        },
+      },
+    }
+  );
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const pathname = request.nextUrl.pathname;
 
-  // TODO: reemplazar por Supabase Auth (createServerClient + getUser)
-  const fakeUserCookie = request.cookies.get(FAKE_AUTH_COOKIE);
-  const isAuthenticated = !!fakeUserCookie?.value;
+  // Pages that require NO session (redirect to dashboard if already logged in)
+  const authOnlyPaths = ["/login", "/signup", "/forgot-password"];
 
-  const protectedRoutes = ["/dashboard", "/reviews", "/insights", "/settings", "/onboarding"];
-  const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
+  // Pages that require a session (redirect to login if not logged in)
+  const protectedPaths = [
+    "/dashboard",
+    "/reviews",
+    "/insights",
+    "/settings",
+    "/onboarding",
+    "/help",
+  ];
 
-  if (!isAuthenticated && isProtected) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dev-login";
-    return NextResponse.redirect(url);
+  const isAuthOnly = authOnlyPaths.some((p) => pathname.startsWith(p));
+  const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
+
+  if (!user && isProtected) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (isAuthenticated && pathname === "/dev-login") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+  // Authenticated users on auth-only pages → dashboard
+  // The dashboard (AppShell) handles the onboarding redirect internally
+  if (user && isAuthOnly) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  if (pathname.startsWith("/dev-login") && process.env.NODE_ENV === "production") {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return response;
@@ -32,6 +73,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

@@ -73,14 +73,14 @@ export default function TeamPage() {
 
   const [members, setMembers] = useState<Member[]>(() =>
     MOCK_MEMBERS.map((m) =>
-      m.isCurrentUser ? { ...m, email: user?.email ?? m.email, name: user?.businessName ? "Marco Rossi" : m.name } : m
+      m.isCurrentUser ? { ...m, email: user?.email ?? m.email } : m
     )
   );
   const [showModal, setShowModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<Role>("editor");
 
-  const canInvite = user?.plan !== "starter";
+  const canInvite = true; // TODO: check subscription plan via Stripe
 
   const handleRemove = (id: string) =>
     setMembers((prev) => prev.filter((m) => m.id !== id));

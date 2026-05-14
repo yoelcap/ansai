@@ -437,6 +437,70 @@
       "status_paid": "Pagada",
       "download_btn": "Descargar",
       "billing_contact": "¿Dudas sobre tu facturación?"
+    },
+    "toast": {
+      "close": "Cerrar"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "subtitle": "Bienvenido de nuevo a Ansai",
+      "email": "Email",
+      "password": "Contraseña",
+      "submit": "Iniciar sesión",
+      "loading": "Iniciando sesión...",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿No tienes cuenta?",
+      "signUp": "Regístrate",
+      "or": "o",
+      "continueWithGoogle": "Continuar con Google"
+    },
+    "signup": {
+      "title": "Crear cuenta",
+      "subtitle": "Empieza a gestionar tus reseñas",
+      "fullName": "Nombre completo",
+      "email": "Email",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "passwordHint": "Mínimo 8 caracteres",
+      "acceptTerms": "Acepto los <terms>términos</terms> y la <privacy>política de privacidad</privacy>",
+      "submit": "Crear cuenta",
+      "loading": "Creando cuenta...",
+      "hasAccount": "¿Ya tienes cuenta?",
+      "logIn": "Inicia sesión",
+      "confirmEmail": "Te hemos enviado un email a {email}. Confirma tu cuenta para continuar.",
+      "backToLogin": "Volver a inicio de sesión"
+    },
+    "forgotPassword": {
+      "title": "Recuperar contraseña",
+      "subtitle": "Te enviaremos un enlace para restablecerla",
+      "email": "Email",
+      "submit": "Enviar enlace",
+      "loading": "Enviando...",
+      "success": "Revisa tu email. Te hemos enviado un enlace para restablecer tu contraseña.",
+      "backToLogin": "Volver a inicio de sesión"
+    },
+    "resetPassword": {
+      "title": "Nueva contraseña",
+      "subtitle": "Introduce tu nueva contraseña",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "submit": "Cambiar contraseña",
+      "loading": "Cambiando...",
+      "success": "Contraseña actualizada correctamente"
+    },
+    "errors": {
+      "invalidCredentials": "Email o contraseña incorrectos",
+      "emailNotConfirmed": "Confirma tu email antes de iniciar sesión",
+      "emailAlreadyRegistered": "Este email ya tiene una cuenta",
+      "weakPassword": "La contraseña debe tener al menos 8 caracteres",
+      "passwordsDontMatch": "Las contraseñas no coinciden",
+      "invalidEmail": "Email no válido",
+      "requiredField": "Este campo es obligatorio",
+      "termsRequired": "Debes aceptar los términos",
+      "networkError": "Error de conexión. Inténtalo de nuevo.",
+      "unknown": "Algo ha salido mal. Inténtalo de nuevo."
     }
   }
 }

@@ -1,11 +1,3 @@
-export type Plan = "starter" | "pro" | "business";
-
-export interface FakeUser {
-  id: string;
-  email: string;
-  businessName: string;
-  plan: Plan;
-}
 
 export interface Review {
   id: string;

@@ -437,6 +437,70 @@
       "status_paid": "Bezahlt",
       "download_btn": "Herunterladen",
       "billing_contact": "Fragen zu Ihrer Abrechnung?"
+    },
+    "toast": {
+      "close": "Schließen"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Anmelden",
+      "subtitle": "Willkommen zurück bei Ansai",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "submit": "Anmelden",
+      "loading": "Anmelden...",
+      "forgotPassword": "Passwort vergessen?",
+      "noAccount": "Noch kein Konto?",
+      "signUp": "Registrieren",
+      "or": "oder",
+      "continueWithGoogle": "Mit Google fortfahren"
+    },
+    "signup": {
+      "title": "Konto erstellen",
+      "subtitle": "Beginne mit der Verwaltung deiner Bewertungen",
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "passwordHint": "Mindestens 8 Zeichen",
+      "acceptTerms": "Ich akzeptiere die <terms>Nutzungsbedingungen</terms> und die <privacy>Datenschutzrichtlinie</privacy>",
+      "submit": "Konto erstellen",
+      "loading": "Konto wird erstellt...",
+      "hasAccount": "Bereits ein Konto?",
+      "logIn": "Anmelden",
+      "confirmEmail": "Wir haben eine E-Mail an {email} gesendet. Bestätige dein Konto, um fortzufahren.",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "forgotPassword": {
+      "title": "Passwort zurücksetzen",
+      "subtitle": "Wir senden dir einen Link zum Zurücksetzen",
+      "email": "E-Mail",
+      "submit": "Link senden",
+      "loading": "Senden...",
+      "success": "Überprüfe deine E-Mail. Wir haben dir einen Link zum Zurücksetzen deines Passworts gesendet.",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "resetPassword": {
+      "title": "Neues Passwort",
+      "subtitle": "Gib dein neues Passwort ein",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "submit": "Passwort ändern",
+      "loading": "Änderung läuft...",
+      "success": "Passwort erfolgreich aktualisiert"
+    },
+    "errors": {
+      "invalidCredentials": "Falsche E-Mail-Adresse oder falsches Passwort",
+      "emailNotConfirmed": "Bitte bestätige deine E-Mail, bevor du dich anmeldest",
+      "emailAlreadyRegistered": "Diese E-Mail ist bereits mit einem Konto verknüpft",
+      "weakPassword": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "passwordsDontMatch": "Die Passwörter stimmen nicht überein",
+      "invalidEmail": "Ungültige E-Mail-Adresse",
+      "requiredField": "Dieses Feld ist erforderlich",
+      "termsRequired": "Du musst die Bedingungen akzeptieren",
+      "networkError": "Verbindungsfehler. Bitte versuche es erneut.",
+      "unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
     }
   }
 }

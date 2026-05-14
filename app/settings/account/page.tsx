@@ -53,10 +53,9 @@ export default function AccountPage() {
     setTimeout(() => setPasswordSaved(false), 2500);
   };
 
-  const handleDelete = () => {
-    // TODO: reemplazar por Supabase Auth (deleteUser)
-    logout();
-    router.replace("/dev-login");
+  const handleDelete = async () => {
+    await logout();
+    router.replace("/login");
   };
 
   return (

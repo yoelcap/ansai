@@ -1,68 +1,157 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
+import type { User } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase-client";
 
-export type Plan = "starter" | "pro" | "business";
-
-export interface FakeUser {
+export interface Profile {
   id: string;
-  email: string;
-  businessName: string;
-  plan: Plan;
+  email: string | null;
+  full_name: string | null;
+  avatar_url: string | null;
+  interface_language: string | null;
+  onboarded: boolean;
+  onboarding_step: number;
+  current_business_id: string | null;
 }
 
-// TODO: reemplazar por Supabase Auth
-const STORAGE_KEY = "replyo_fake_user";
-const COOKIE_NAME = "replyo_fake_user";
-
-function setCookie(value: string) {
-  // TODO: reemplazar por Supabase Auth (session cookie)
-  const maxAge = 60 * 60 * 24 * 7; // 7 días
-  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}; SameSite=Lax`;
-}
-
-function deleteCookie() {
-  // TODO: reemplazar por Supabase Auth (session invalidation)
-  document.cookie = `${COOKIE_NAME}=; path=/; max-age=0`;
+export interface Business {
+  id: string;
+  user_id: string;
+  name: string;
+  type: string | null;
+  city: string | null;
+  country: string | null;
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  website: string | null;
 }
 
 export function useAuth() {
-  const [user, setUser] = useState<FakeUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: reemplazar por Supabase Auth (getUser())
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setUser(JSON.parse(raw) as FakeUser);
-    } catch {
-      // ignore parse errors
+    const supabase = createClient();
+
+    async function fetchProfileAndBusiness(userId: string) {
+      try {
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", userId)
+          .single();
+
+        setProfile((profileData as Profile) ?? null);
+
+        if (profileData) {
+          const { data: businessData } = await supabase
+            .from("businesses")
+            .select("*")
+            .eq("user_id", userId)
+            .order("created_at", { ascending: true })
+            .limit(1)
+            .maybeSingle();
+
+          setBusiness((businessData as Business) ?? null);
+        }
+      } catch (error) {
+        console.error("Error fetching profile/business:", error);
+      } finally {
+        setLoading(false);
+      }
     }
-    setLoading(false);
+
+    supabase.auth.getUser().then(async ({ data: { user: u } }) => {
+      setUser(u ?? null);
+      if (u) {
+        await fetchProfileAndBusiness(u.id);
+      } else {
+        setLoading(false);
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) {
+        await fetchProfileAndBusiness(u.id);
+      } else {
+        setProfile(null);
+        setBusiness(null);
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = useCallback((userData: FakeUser) => {
-    // TODO: reemplazar por Supabase Auth (signInWithEmail)
-    const raw = JSON.stringify(userData);
-    try {
-      localStorage.setItem(STORAGE_KEY, raw);
-      setCookie(raw);
-    } catch {
-      // ignore storage errors
-    }
-    setUser(userData);
-  }, []);
+  async function login(
+    email: string,
+    password: string
+  ): Promise<{ error?: string }> {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return { error: error.message };
+    return {};
+  }
 
-  const logout = useCallback(() => {
-    // TODO: reemplazar por Supabase Auth (signOut)
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-      deleteCookie();
-    } catch {
-      // ignore storage errors
-    }
+  async function signup(
+    email: string,
+    password: string,
+    fullName: string
+  ): Promise<{ error?: string }> {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) return { error: error.message };
+    return {};
+  }
+
+  async function logout(): Promise<void> {
+    const supabase = createClient();
+    await supabase.auth.signOut();
     setUser(null);
-  }, []);
+    setProfile(null);
+    setBusiness(null);
+  }
 
-  return { user, loading, login, logout };
+  async function resetPassword(email: string): Promise<{ error?: string }> {
+    const supabase = createClient();
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+    });
+    if (error) return { error: error.message };
+    return {};
+  }
+
+  async function updatePassword(newPassword: string): Promise<{ error?: string }> {
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) return { error: error.message };
+    return {};
+  }
+
+  return {
+    user,
+    profile,
+    business,
+    loading,
+    login,
+    signup,
+    logout,
+    resetPassword,
+    updatePassword,
+  };
 }

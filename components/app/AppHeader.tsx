@@ -108,7 +108,7 @@ export function AppHeader({ businessName, onMenuClick, onLogout }: AppHeaderProp
             <div className="absolute right-0 top-full mt-1.5 bg-paper border border-line rounded-xl shadow-lg py-1 min-w-[170px] z-20">
               <div className="px-3 py-2.5 border-b border-line">
                 <div className="text-xs font-semibold text-ink truncate">
-                  {user?.businessName}
+                  {businessName}
                 </div>
                 <div className="text-[11px] text-muted truncate mt-0.5">
                   {user?.email}

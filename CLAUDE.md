@@ -12,9 +12,19 @@ npm run lint      # ESLint
 
 There are no tests yet. TypeScript checking runs as part of `npm run build`.
 
+## Environment
+
+Requires `.env.local` with:
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+ANTHROPIC_API_KEY=
+NEXT_PUBLIC_API_URL=http://localhost:3000
+```
+
 ## Project overview
 
-**Ansai** (branded as Replyo internally) — a SaaS for HoReCa businesses (restaurants, bars, hotels) to manage Google reviews with AI. Currently the public landing page and a private dashboard are built. Supabase integration and Stripe are planned but not yet wired up.
+**Ansai** (branded as Replyo internally) — a SaaS for HoReCa businesses (restaurants, bars, hotels) to manage Google reviews with AI. Supabase Auth is wired up. Stripe is planned but not yet integrated.
 
 ## Architecture
 
@@ -22,23 +32,36 @@ There are no tests yet. TypeScript checking runs as part of `npm run build`.
 
 ```
 app/
-├── page.tsx               # Landing page
-├── demo/page.tsx          # Interactive demo
-├── login/page.tsx         # Login UI (placeholder — not wired to Supabase yet)
-├── signup/page.tsx        # Signup UI (placeholder — not wired to Supabase yet)
-├── forgot-password/       # Placeholder
-├── terms/ privacy/        # Legal pages
-├── auth/callback/         # Supabase OAuth callback route (scaffolded)
+├── page.tsx                   # Landing page
+├── demo/page.tsx              # Interactive demo
+├── login/page.tsx             # Email/password + Google OAuth login
+├── signup/page.tsx            # Registration with email confirmation flow
+├── forgot-password/page.tsx   # Sends reset email
+├── reset-password/page.tsx    # Sets new password after reset link
+├── terms/ privacy/            # Legal pages
+├── auth/callback/route.ts     # Server route: exchanges OAuth/email code, checks onboarding
 ├── dashboard/
-│   ├── layout.tsx         # Private app layout (TranslationProvider + AppShell)
-│   └── page.tsx           # Dashboard with KPIs, pending reviews, chart, alerts
+│   ├── layout.tsx             # TranslationProvider + AppShell
+│   └── page.tsx               # KPIs, pending reviews, chart, alerts
 ├── reviews/
-│   ├── layout.tsx         # Same pattern: TranslationProvider + AppShell
-│   └── page.tsx           # Full review list with filters, status badges, slide-over
-└── dev-login/page.tsx     # Fake auth login (dev only)
+│   ├── layout.tsx             # TranslationProvider + AppShell
+│   └── page.tsx               # Full review list with filters, status badges, slide-over
+├── insights/
+│   ├── layout.tsx             # TranslationProvider + AppShell
+│   └── page.tsx               # Period-aware analytics (rating, stars, language, topics)
+├── settings/
+│   ├── layout.tsx             # TranslationProvider + AppShell + horizontal tab nav
+│   ├── page.tsx               # Redirects to /settings/business
+│   ├── business/page.tsx
+│   ├── tone/page.tsx
+│   ├── integrations/page.tsx
+│   ├── team/page.tsx
+│   ├── billing/page.tsx
+│   └── account/page.tsx
+└── dev-login/page.tsx         # Redirects to /login (blocked in production by middleware)
 ```
 
-**Future refactor:** When adding `/insights` and `/settings`, consider creating an `app/(app)/` route group and consolidating the shared `layout.tsx` (TranslationProvider + AppShell) that currently lives separately in `app/dashboard/` and `app/reviews/`.
+Each private section has its own `layout.tsx` with `<TranslationProvider><AppShell>`. The `/settings` layout also includes a horizontal tab bar inside `SettingsInner` (see [app/settings/layout.tsx](app/settings/layout.tsx)).
 
 ### Private app component tree
 
@@ -49,22 +72,33 @@ AppShell (components/app/AppShell.tsx)
 └── main > {children}
 ```
 
-Dashboard sub-components live in `components/app/dashboard/`.
+- Dashboard sub-components: `components/app/dashboard/`
+- Insights charts: `components/app/insights/` (`RatingEvolutionChart`, `StarsChart`, `LanguageDonut`)
+- Auth page wrapper: `components/auth/AuthLayout.tsx` — used by login/signup/forgot-password/reset-password
 
-### Auth system (temporary — fake auth)
+### Auth system (Supabase Auth)
 
-All auth is currently faked via localStorage + a cookie (`replyo_fake_user`). Search `// TODO: reemplazar por Supabase Auth` to find every replacement point.
+Auth is handled by Supabase. Key files:
 
-- **Hook:** `lib/auth/useAuth.ts` — `login(user)` writes to localStorage + sets cookie; `logout()` clears both.
-- **Middleware:** `middleware.ts` reads the cookie to protect `/dashboard`, `/reviews`, `/insights`, `/settings`, `/onboarding`. Redirects unauthenticated users to `/dev-login`.
-- **Client guard:** `AppShell` also does a `useEffect` redirect as a second layer.
-- **Dev login:** `app/dev-login/page.tsx` sets a hardcoded demo user and redirects to `/dashboard`.
+- **`lib/supabase-client.ts`** — `createBrowserClient` from `@supabase/ssr`. Use in Client Components.
+- **`lib/supabase-server.ts`** — `createServerClient` with `cookies()` from `next/headers`. Use in Server Components and Route Handlers.
+- **`lib/auth/useAuth.ts`** — Client hook. Returns `{ user, profile, business, loading, login, signup, logout, resetPassword, updatePassword }`.
+  - `user` — Supabase `User` object (has `.email`, `.id`, `.user_metadata`)
+  - `profile` — row from `public.profiles` (has `full_name`, `onboarded`, `current_business_id`, etc.)
+  - `business` — row from `public.businesses` (has `name`, `type`, `city`, etc.)
+  - All auth methods return `Promise<{ error?: string }>` or `Promise<void>`.
+- **`middleware.ts`** — Validates the Supabase session on every request using `supabase.auth.getUser()` (also refreshes the session cookie). Protects `/dashboard`, `/reviews`, `/insights`, `/settings`, `/onboarding`. Blocks `/dev-login` in production.
+- **`app/auth/callback/route.ts`** — Exchanges the PKCE code for a session, then redirects to `/onboarding` or `/dashboard` based on `profile.onboarded`. Respects a `?next=` override (used by password reset to go to `/reset-password`).
 
-Supabase clients are scaffolded at `lib/supabase-client.ts` (browser) and `lib/supabase-server.ts` (server/RSC). They require `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` env vars — these are intentionally absent until auth is wired up.
+**Supabase triggers (already configured, do not touch):**
+- `on_auth_user_created` — automatically creates a `public.profiles` row when a user signs up. Do NOT create the profile manually after signup.
+- `updated_at` triggers — do NOT manually update `updated_at` on any table.
+
+**AppShell** derives the display name as `business?.name ?? profile?.full_name ?? user.email`. The client guard in `AppShell` (`useEffect` redirect) is a fallback to the middleware, not the primary gate.
 
 ### i18n system
 
-`lib/i18n.tsx` exports a React context (`TranslationProvider`) and `useTranslation()` hook. Every page that uses translations must wrap its content in `<TranslationProvider>` (see `app/page.tsx` and `app/dashboard/layout.tsx` as examples — it is NOT in the root layout).
+`lib/i18n.tsx` exports a React context (`TranslationProvider`) and `useTranslation()` hook. Every page that uses translations must wrap its content in `<TranslationProvider>` — it is **NOT** in the root layout.
 
 **5 locales:** `es` (default), `en`, `nl`, `fr`, `de` — JSON files in `locales/`.
 
@@ -74,20 +108,27 @@ const { t, locale, setLocale } = useTranslation();
 t("app.dashboard.title")  // dot-separated key path
 ```
 
-Key namespaces in the locale files: `nav`, `hero`, `demo`, `problem`, `how`, `features`, `pricing`, `faq`, `cta`, `footer`, `terms`, `privacy`, `demo_page`, `for_who`, `trust`, `app` (private app UI).
+Top-level namespaces: `nav`, `hero`, `demo`, `problem`, `how`, `features`, `pricing`, `faq`, `cta`, `footer`, `terms`, `privacy`, `demo_page`, `for_who`, `trust`, `app` (private app UI), `auth` (auth pages).
 
-When adding new strings, add the key to all 5 locale files. If unsure of a translation, use the Spanish string and leave a `// TODO: traducir` comment.
+When adding new strings, add the key to all 5 locale files. If unsure of a translation, use the Spanish string.
 
 ### Mock data
 
 `lib/mock/dashboardData.ts` exports:
 - `getMockDashboardData()` — dashboard KPIs + the 5 most recent pending reviews. Types match future API shape; replace the function body, not the types.
-- `getAllMockReviews()` — all 10 mock reviews across all statuses (`pending`, `responded`, `ignored`). Used by the `/reviews` page.
-- `getMockPendingCount()` — pending review count derived from `getAllMockReviews()`; used by `AppShell` to populate the sidebar badge.
+- `getAllMockReviews()` — all 10 mock reviews across all statuses (`pending`, `responded`, `ignored`). Used by `/reviews`.
+- `getMockPendingCount()` — pending review count for the sidebar badge.
+
+`lib/mock/insightsData.ts` exports:
+- `getMockInsightsData(period: Period)` — KPIs, rating evolution, star distribution, language share, topics, and critical issues.
+- `getRatingDomain(period: Period)` — y-axis domain `[min, max]` for the rating chart.
+- `Period` type: `"7d" | "30d" | "90d" | "year"`.
 
 ### Utilities
 
-`lib/utils.ts` exports `cn(...inputs)` — a `clsx` + `tailwind-merge` helper for conditional class merging. Use it whenever combining Tailwind classes conditionally.
+- `lib/utils.ts` — `cn(...inputs)`: `clsx` + `tailwind-merge` helper. Use for all conditional Tailwind class merging.
+- `lib/constants.ts` — `CONTACT_EMAIL = "contact@ansai.app"`.
+- `lib/hooks/useToast.ts` — `useToast()` hook. `ToastProvider` is in the root layout, so it's available everywhere. Usage: `const { toast } = useToast(); toast.success("msg"); toast.error("msg")`.
 
 ## Design system
 
