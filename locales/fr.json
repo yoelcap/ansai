@@ -339,7 +339,7 @@
       "nav_account": "Compte",
       "save": "Enregistrer les modifications",
       "save_tone": "Enregistrer le ton",
-      "saved": "✓ Enregistré",
+      "saved": "Modifications enregistrées",
       "coming_soon_title": "Bientôt disponible",
       "coming_soon_desc": "Cette section sera disponible bientôt.",
       "business_title": "Informations de l'établissement",
@@ -436,7 +436,14 @@
       "col_status": "Statut",
       "status_paid": "Payée",
       "download_btn": "Télécharger",
-      "billing_contact": "Des questions sur votre facturation ?"
+      "billing_contact": "Des questions sur votre facturation ?",
+      "saveError": "Erreur lors de la sauvegarde. Réessayez.",
+      "saving": "Enregistrement...",
+      "loadError": "Erreur de chargement des données",
+      "comingSoon": "Bientôt disponible",
+      "business_city": "Ville",
+      "business_country": "Pays",
+      "business_no_data": "Complétez votre profil d'établissement lors de l'intégration"
     },
     "toast": {
       "close": "Fermer"
