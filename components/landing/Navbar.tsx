@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation, localeLabels, localeFullLabels, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth/useAuth";
 
 export function Navbar() {
   const { locale, setLocale, t } = useTranslation();
+  const { user, loading } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const desktopDropdownRef = useRef<HTMLDivElement>(null);
@@ -94,23 +96,33 @@ export function Navbar() {
             {langOpen && <LangDropdown />}
           </div>
 
-          <a
-            href="/login"
-            className="text-sm font-medium text-ink-soft hover:text-terra transition-colors"
-          >
-            {t("nav.login")}
-          </a>
+          {loading ? (
+            <div className="h-10 w-40" aria-hidden />
+          ) : user ? (
+            <a href="/dashboard" className="btn-primary">
+              {t("nav.openApp")}
+            </a>
+          ) : (
+            <>
+              <a
+                href="/login"
+                className="text-sm font-medium text-ink-soft hover:text-terra transition-colors"
+              >
+                {t("nav.login")}
+              </a>
 
-          <a
-            href="/demo"
-            className="px-4 py-2 rounded-full border border-line text-sm font-medium text-ink hover:border-forest hover:text-forest transition-colors"
-          >
-            {t("nav.demo")}
-          </a>
+              <a
+                href="/demo"
+                className="px-4 py-2 rounded-full border border-line text-sm font-medium text-ink hover:border-forest hover:text-forest transition-colors"
+              >
+                {t("nav.demo")}
+              </a>
 
-          <a href="/#cta" className="btn-primary">
-            {t("nav.cta")}
-          </a>
+              <a href="/#cta" className="btn-primary">
+                {t("nav.cta")}
+              </a>
+            </>
+          )}
         </div>
 
         {/* Mobile: language + login + CTA */}
@@ -125,16 +137,26 @@ export function Navbar() {
             {langOpen && <LangDropdown />}
           </div>
 
-          <a
-            href="/login"
-            className="text-xs font-medium text-ink-soft hover:text-terra transition-colors px-1"
-          >
-            {t("nav.login")}
-          </a>
+          {loading ? (
+            <div className="h-8 w-28" aria-hidden />
+          ) : user ? (
+            <a href="/dashboard" className="btn-primary !px-4 !py-2 text-xs">
+              {t("nav.openApp")}
+            </a>
+          ) : (
+            <>
+              <a
+                href="/login"
+                className="text-xs font-medium text-ink-soft hover:text-terra transition-colors px-1"
+              >
+                {t("nav.login")}
+              </a>
 
-          <a href="/#cta" className="btn-primary !px-4 !py-2 text-xs">
-            {t("nav.cta")}
-          </a>
+              <a href="/#cta" className="btn-primary !px-4 !py-2 text-xs">
+                {t("nav.cta")}
+              </a>
+            </>
+          )}
         </div>
       </div>
     </nav>
