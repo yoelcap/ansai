@@ -38,10 +38,7 @@ export async function middleware(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  // Pages that require NO session (redirect to dashboard if already logged in)
   const authOnlyPaths = ["/login", "/signup", "/forgot-password"];
-
-  // Pages that require a session (redirect to login if not logged in)
   const protectedPaths = [
     "/dashboard",
     "/reviews",
@@ -54,14 +51,41 @@ export async function middleware(request: NextRequest) {
   const isAuthOnly = authOnlyPaths.some((p) => pathname.startsWith(p));
   const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
 
+  // Not logged in → block protected routes
   if (!user && isProtected) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Authenticated users on auth-only pages → dashboard
-  // The dashboard (AppShell) handles the onboarding redirect internally
+  // Logged in → redirect away from auth-only pages
   if (user && isAuthOnly) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  // Logged in + on protected route → check onboarding state
+  if (user && isProtected && !pathname.startsWith("/onboarding")) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("onboarded")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    // Not onboarded → force to /onboarding
+    if (profile && !profile.onboarded) {
+      return NextResponse.redirect(new URL("/onboarding", request.url));
+    }
+  }
+
+  // Logged in + onboarded + on /onboarding → send to dashboard
+  if (user && pathname.startsWith("/onboarding")) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("onboarded")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profile?.onboarded) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
   }
 
   if (pathname.startsWith("/dev-login") && process.env.NODE_ENV === "production") {

@@ -43,7 +43,7 @@ export function useAuth() {
           .from("profiles")
           .select("*")
           .eq("id", userId)
-          .single();
+          .maybeSingle();
 
         setProfile((profileData as Profile) ?? null);
 
@@ -120,12 +120,14 @@ export function useAuth() {
   }
 
   async function logout(): Promise<void> {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    setUser(null);
-    setProfile(null);
-    setBusiness(null);
-  }
+  const supabase = createClient();
+  await supabase.auth.signOut();
+  setUser(null);
+  setProfile(null);
+  setBusiness(null);
+  // Fuerza recarga completa para limpiar cookies del servidor
+  window.location.href = "/login";
+}
 
   async function resetPassword(email: string): Promise<{ error?: string }> {
     const supabase = createClient();
