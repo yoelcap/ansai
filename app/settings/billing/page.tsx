@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Download, CreditCard, Zap } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
+import { useToast } from "@/lib/hooks/useToast";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -24,8 +25,10 @@ const SECTION = "bg-paper border border-line rounded-2xl p-5 md:p-6";
 
 export default function BillingPage() {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const plan = PLAN_DATA["pro"];
   const [cancelConfirm, setCancelConfirm] = useState(false);
+  const handleComingSoon = () => toast.info(t("app.settings.comingSoon"));
 
   return (
     <div className="space-y-4">
@@ -56,7 +59,10 @@ export default function BillingPage() {
         </div>
 
         <div className="flex gap-2 mt-5 flex-wrap">
-          <button className="px-4 py-2 rounded-lg bg-forest text-paper text-sm font-medium hover:bg-forest-dark transition-colors">
+          <button
+            onClick={handleComingSoon}
+            className="px-4 py-2 rounded-lg bg-forest text-paper text-sm font-medium hover:bg-forest-dark transition-colors"
+          >
             {t("app.settings.change_plan")}
           </button>
 
@@ -71,7 +77,7 @@ export default function BillingPage() {
             <div className="flex items-center gap-2 px-4 py-2 rounded-lg border border-terra/30 bg-terra/5">
               <span className="text-xs text-terra">¿Seguro?</span>
               <button
-                onClick={() => setCancelConfirm(false)}
+                onClick={() => { setCancelConfirm(false); handleComingSoon(); }}
                 className="text-xs font-semibold text-terra hover:text-terra-light"
               >
                 {t("app.settings.cancel_sub")}
@@ -107,7 +113,10 @@ export default function BillingPage() {
             </div>
           </div>
 
-          <button className="text-sm text-forest font-medium hover:text-forest-dark transition-colors underline underline-offset-2">
+          <button
+            onClick={handleComingSoon}
+            className="text-sm text-forest font-medium hover:text-forest-dark transition-colors underline underline-offset-2"
+          >
             {t("app.settings.payment_change")}
           </button>
         </div>
@@ -146,7 +155,10 @@ export default function BillingPage() {
                     </span>
                   </td>
                   <td className="py-3 text-right">
-                    <button className="inline-flex items-center gap-1 text-xs text-muted hover:text-forest transition-colors">
+                    <button
+                      onClick={handleComingSoon}
+                      className="inline-flex items-center gap-1 text-xs text-muted hover:text-forest transition-colors"
+                    >
                       <Download size={12} />
                       {t("app.settings.download_btn")}
                     </button>

@@ -339,7 +339,7 @@
       "nav_account": "Cuenta",
       "save": "Guardar cambios",
       "save_tone": "Guardar tono",
-      "saved": "✓ Guardado",
+      "saved": "Cambios guardados",
       "coming_soon_title": "Próximamente",
       "coming_soon_desc": "Esta sección estará disponible pronto.",
       "business_title": "Información del negocio",
@@ -436,7 +436,14 @@
       "col_status": "Estado",
       "status_paid": "Pagada",
       "download_btn": "Descargar",
-      "billing_contact": "¿Dudas sobre tu facturación?"
+      "billing_contact": "¿Dudas sobre tu facturación?",
+      "saveError": "Error al guardar. Inténtalo de nuevo.",
+      "saving": "Guardando...",
+      "loadError": "Error al cargar los datos",
+      "comingSoon": "Próximamente disponible",
+      "business_city": "Ciudad",
+      "business_country": "País",
+      "business_no_data": "Completa el perfil de tu negocio en el onboarding"
     },
     "toast": {
       "close": "Cerrar"

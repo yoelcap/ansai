@@ -1,46 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import { UserPlus, Lock, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { UserPlus, X } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth/useAuth";
+import { createClient } from "@/lib/supabase-client";
+import { useToast } from "@/lib/hooks/useToast";
 import { cn } from "@/lib/utils";
 
 type Role = "owner" | "admin" | "editor" | "viewer";
 
-interface Member {
+interface DBMember {
   id: string;
-  name: string;
+  business_id: string;
+  user_id: string;
   email: string;
   role: Role;
-  lastAccess: string;
-  isCurrentUser?: boolean;
 }
-
-const MOCK_MEMBERS: Member[] = [
-  {
-    id: "m1",
-    name: "Marco Rossi",
-    email: "demo@ansai.app",
-    role: "owner",
-    lastAccess: "Ahora",
-    isCurrentUser: true,
-  },
-  {
-    id: "m2",
-    name: "Laura Gómez",
-    email: "laura@latrattoriamarco.be",
-    role: "admin",
-    lastAccess: "Hace 2h",
-  },
-  {
-    id: "m3",
-    name: "Thomas Jacobs",
-    email: "thomas@latrattoriamarco.be",
-    role: "editor",
-    lastAccess: "Hace 3 días",
-  },
-];
 
 const ROLE_COLORS: Record<Role, string> = {
   owner:  "bg-forest/10 text-forest",
@@ -50,104 +26,83 @@ const ROLE_COLORS: Record<Role, string> = {
 };
 
 const LABEL = "block text-xs font-semibold text-muted uppercase tracking-wide mb-1.5";
-const INPUT =
-  "w-full px-3 py-2 text-sm text-ink border border-line rounded-lg bg-cream focus:outline-none focus:ring-1 focus:ring-forest/40";
+const INPUT = "w-full px-3 py-2 text-sm text-ink border border-line rounded-lg bg-cream focus:outline-none focus:ring-1 focus:ring-forest/40";
 
-function Avatar({ name }: { name: string }) {
-  const initials = name
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+function Avatar({ email }: { email: string }) {
+  const initial = email.charAt(0).toUpperCase();
   return (
     <div className="w-8 h-8 rounded-full bg-forest/10 text-forest flex items-center justify-center text-xs font-semibold shrink-0">
-      {initials}
+      {initial}
     </div>
+  );
+}
+
+function RowSkeleton() {
+  return (
+    <li className="flex items-center gap-3 px-5 py-3.5 animate-pulse">
+      <div className="w-8 h-8 rounded-full bg-line shrink-0" />
+      <div className="flex-1 space-y-1.5">
+        <div className="h-3 w-40 bg-line rounded" />
+        <div className="h-3 w-28 bg-line rounded" />
+      </div>
+      <div className="h-5 w-14 bg-line rounded-full" />
+    </li>
   );
 }
 
 export default function TeamPage() {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, business, loading } = useAuth();
+  const { toast } = useToast();
 
-  const [members, setMembers] = useState<Member[]>(() =>
-    MOCK_MEMBERS.map((m) =>
-      m.isCurrentUser ? { ...m, email: user?.email ?? m.email } : m
-    )
-  );
+  const [members, setMembers] = useState<DBMember[]>([]);
+  const [dbLoading, setDbLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<Role>("editor");
 
-  const canInvite = true; // TODO: check subscription plan via Stripe
+  useEffect(() => {
+    if (loading) return;
+    if (!business?.id) { setDbLoading(false); return; }
 
-  const handleRemove = (id: string) =>
-    setMembers((prev) => prev.filter((m) => m.id !== id));
+    const supabase = createClient();
+    supabase
+      .from("team_members")
+      .select("*")
+      .eq("business_id", business.id)
+      .then(({ data }) => {
+        if (data) setMembers(data as DBMember[]);
+        setDbLoading(false);
+      });
+  }, [loading, business?.id]);
 
-  const handleInvite = () => {
-    if (!inviteEmail.trim()) return;
-    const newMember: Member = {
-      id: `m${Date.now()}`,
-      name: inviteEmail.split("@")[0],
-      email: inviteEmail.trim(),
-      role: inviteRole,
-      lastAccess: "—",
-    };
-    setMembers((prev) => [...prev, newMember]);
-    setInviteEmail("");
-    setInviteRole("editor");
-    setShowModal(false);
-  };
+  const handleComingSoon = () => toast.info(t("app.settings.comingSoon"));
 
   return (
     <>
       <div className="space-y-4">
         {/* Header row */}
         <div className="flex items-center justify-between gap-3 flex-wrap">
-          <p className="text-sm text-muted">
-            {members.length} {members.length === 1 ? "miembro" : "miembros"}
-          </p>
-
-          {canInvite ? (
-            <button
-              onClick={() => setShowModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-forest text-paper text-sm font-medium hover:bg-forest-dark transition-colors"
-            >
-              <UserPlus size={15} />
-              {t("app.settings.invite_btn")}
-            </button>
-          ) : (
-            <div className="flex items-center gap-2 px-4 py-2 rounded-lg border border-line bg-cream text-muted text-sm cursor-not-allowed">
-              <Lock size={14} />
-              <span>{t("app.settings.invite_btn")}</span>
-            </div>
+          {!dbLoading && (
+            <p className="text-sm text-muted">
+              {members.length} {members.length === 1 ? "miembro" : "miembros"}
+            </p>
           )}
-        </div>
 
-        {/* Upgrade notice for starter */}
-        {!canInvite && (
-          <div className="bg-gold/8 border border-gold/25 rounded-2xl px-5 py-4 flex items-center gap-3">
-            <Lock size={16} className="text-gold shrink-0" />
-            <p className="text-sm text-ink flex-1">{t("app.settings.upgrade_lock")}</p>
-            <a
-              href="#pricing"
-              className="text-xs font-semibold text-forest hover:text-forest-dark underline underline-offset-2 shrink-0"
-            >
-              {t("app.settings.upgrade_btn")}
-            </a>
-          </div>
-        )}
+          <button
+            onClick={() => setShowModal(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-forest text-paper text-sm font-medium hover:bg-forest-dark transition-colors"
+          >
+            <UserPlus size={15} />
+            {t("app.settings.invite_btn")}
+          </button>
+        </div>
 
         {/* Members table */}
         <div className="bg-paper border border-line rounded-2xl overflow-hidden">
-          {/* Table header */}
-          <div className="hidden md:grid grid-cols-[1fr_1fr_100px_100px_48px] gap-4 px-5 py-3 border-b border-line bg-cream/60">
+          <div className="hidden md:grid grid-cols-[1fr_140px_48px] gap-4 px-5 py-3 border-b border-line bg-cream/60">
             <span className="text-[11px] font-semibold text-muted uppercase tracking-wide">
               {t("app.settings.col_member")}
-            </span>
-            <span className="text-[11px] font-semibold text-muted uppercase tracking-wide">
-              {t("app.settings.col_last_access")}
             </span>
             <span className="text-[11px] font-semibold text-muted uppercase tracking-wide">
               {t("app.settings.col_role")}
@@ -155,58 +110,58 @@ export default function TeamPage() {
             <span />
           </div>
 
-          {/* Rows */}
           <ul className="divide-y divide-line">
-            {members.map((member) => (
-              <li
-                key={member.id}
-                className="flex items-center gap-3 px-5 py-3.5 flex-wrap md:grid md:grid-cols-[1fr_1fr_100px_100px_48px]"
-              >
-                {/* Member info */}
-                <div className="flex items-center gap-3 min-w-0">
-                  <Avatar name={member.name} />
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-sm font-semibold text-ink truncate">
-                        {member.name}
-                      </span>
-                      {member.isCurrentUser && (
-                        <span className="text-[10px] px-1.5 py-0.5 bg-forest/10 text-forest rounded font-medium">
-                          {t("app.settings.you_badge")}
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-xs text-muted truncate block">{member.email}</span>
-                  </div>
-                </div>
-
-                {/* Last access */}
-                <span className="text-xs text-muted hidden md:block">{member.lastAccess}</span>
-
-                {/* Role badge */}
-                <span
-                  className={cn(
-                    "inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold",
-                    ROLE_COLORS[member.role]
-                  )}
+            {(loading || dbLoading)
+              ? Array.from({ length: 2 }).map((_, i) => <RowSkeleton key={i} />)
+              : members.length === 0
+              ? (
+                <li className="px-5 py-8 text-center text-sm text-muted">
+                  {t("app.settings.invite_btn")} para añadir miembros al equipo.
+                </li>
+              )
+              : members.map((member) => (
+                <li
+                  key={member.id}
+                  className="flex items-center gap-3 px-5 py-3.5 flex-wrap md:grid md:grid-cols-[1fr_140px_48px]"
                 >
-                  {t(`app.settings.role_${member.role}`)}
-                </span>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Avatar email={member.email} />
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-sm font-semibold text-ink truncate">
+                          {member.email}
+                        </span>
+                        {member.user_id === user?.id && (
+                          <span className="text-[10px] px-1.5 py-0.5 bg-forest/10 text-forest rounded font-medium">
+                            {t("app.settings.you_badge")}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
 
-                {/* Remove */}
-                <div className="md:col-start-5">
-                  {!member.isCurrentUser && (
-                    <button
-                      onClick={() => handleRemove(member.id)}
-                      className="text-xs text-muted hover:text-terra transition-colors"
-                      title={t("app.settings.remove_btn")}
-                    >
-                      <X size={15} />
-                    </button>
-                  )}
-                </div>
-              </li>
-            ))}
+                  <span
+                    className={cn(
+                      "inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold",
+                      ROLE_COLORS[member.role]
+                    )}
+                  >
+                    {t(`app.settings.role_${member.role}`)}
+                  </span>
+
+                  <div className="md:col-start-3">
+                    {member.user_id !== user?.id && (
+                      <button
+                        onClick={handleComingSoon}
+                        className="text-xs text-muted hover:text-terra transition-colors"
+                        title={t("app.settings.remove_btn")}
+                      >
+                        <X size={15} />
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ))}
           </ul>
         </div>
       </div>
@@ -267,7 +222,12 @@ export default function TeamPage() {
                   {t("app.settings.invite_cancel")}
                 </button>
                 <button
-                  onClick={handleInvite}
+                  onClick={() => {
+                    setShowModal(false);
+                    setInviteEmail("");
+                    setInviteRole("editor");
+                    handleComingSoon();
+                  }}
                   disabled={!inviteEmail.trim()}
                   className={cn(
                     "flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors",

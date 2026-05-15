@@ -339,7 +339,7 @@
       "nav_account": "Konto",
       "save": "Änderungen speichern",
       "save_tone": "Ton speichern",
-      "saved": "✓ Gespeichert",
+      "saved": "Änderungen gespeichert",
       "coming_soon_title": "Demnächst verfügbar",
       "coming_soon_desc": "Dieser Bereich wird bald verfügbar sein.",
       "business_title": "Unternehmensinformationen",
@@ -436,7 +436,14 @@
       "col_status": "Status",
       "status_paid": "Bezahlt",
       "download_btn": "Herunterladen",
-      "billing_contact": "Fragen zu Ihrer Abrechnung?"
+      "billing_contact": "Fragen zu Ihrer Abrechnung?",
+      "saveError": "Fehler beim Speichern. Bitte versuchen Sie es erneut.",
+      "saving": "Speichern...",
+      "loadError": "Fehler beim Laden der Daten",
+      "comingSoon": "Demnächst verfügbar",
+      "business_city": "Stadt",
+      "business_country": "Land",
+      "business_no_data": "Vervollständigen Sie Ihr Geschäftsprofil beim Onboarding"
     },
     "toast": {
       "close": "Schließen"

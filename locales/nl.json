@@ -339,7 +339,7 @@
       "nav_account": "Account",
       "save": "Wijzigingen opslaan",
       "save_tone": "Toon opslaan",
-      "saved": "✓ Opgeslagen",
+      "saved": "Wijzigingen opgeslagen",
       "coming_soon_title": "Binnenkort beschikbaar",
       "coming_soon_desc": "Deze sectie is binnenkort beschikbaar.",
       "business_title": "Bedrijfsinformatie",
@@ -436,7 +436,14 @@
       "col_status": "Status",
       "status_paid": "Betaald",
       "download_btn": "Downloaden",
-      "billing_contact": "Vragen over uw facturering?"
+      "billing_contact": "Vragen over uw facturering?",
+      "saveError": "Fout bij opslaan. Probeer opnieuw.",
+      "saving": "Opslaan...",
+      "loadError": "Fout bij laden van gegevens",
+      "comingSoon": "Binnenkort beschikbaar",
+      "business_city": "Stad",
+      "business_country": "Land",
+      "business_no_data": "Vul uw bedrijfsprofiel in bij de onboarding"
     },
     "toast": {
       "close": "Sluiten"

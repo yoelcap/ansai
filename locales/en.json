@@ -339,7 +339,7 @@
       "nav_account": "Account",
       "save": "Save changes",
       "save_tone": "Save tone",
-      "saved": "✓ Saved",
+      "saved": "Changes saved",
       "coming_soon_title": "Coming soon",
       "coming_soon_desc": "This section will be available soon.",
       "business_title": "Business information",
@@ -436,7 +436,14 @@
       "col_status": "Status",
       "status_paid": "Paid",
       "download_btn": "Download",
-      "billing_contact": "Questions about your billing?"
+      "billing_contact": "Questions about your billing?",
+      "saveError": "Error saving. Please try again.",
+      "saving": "Saving...",
+      "loadError": "Error loading data",
+      "comingSoon": "Coming soon",
+      "business_city": "City",
+      "business_country": "Country",
+      "business_no_data": "Complete your business profile in onboarding"
     },
     "toast": {
       "close": "Close"
