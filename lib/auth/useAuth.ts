@@ -60,8 +60,6 @@ export function useAuth() {
         }
       } catch (error) {
         console.error("Error fetching profile/business:", error);
-      } finally {
-        setLoading(false);
       }
     }
 
@@ -69,9 +67,8 @@ export function useAuth() {
       setUser(u ?? null);
       if (u) {
         await fetchProfileAndBusiness(u.id);
-      } else {
-        setLoading(false);
       }
+      setLoading(false);
     });
 
     const {
@@ -84,8 +81,8 @@ export function useAuth() {
       } else {
         setProfile(null);
         setBusiness(null);
-        setLoading(false);
       }
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
