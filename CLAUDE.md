@@ -85,8 +85,9 @@ Auth is handled by Supabase. Key files:
 - **`lib/auth/useAuth.ts`** — Client hook. Returns `{ user, profile, business, loading, login, signup, logout, resetPassword, updatePassword }`.
   - `user` — Supabase `User` object (has `.email`, `.id`, `.user_metadata`)
   - `profile` — row from `public.profiles` (has `full_name`, `onboarded`, `current_business_id`, etc.)
-  - `business` — row from `public.businesses` (has `name`, `type`, `city`, etc.)
+  - `business` — row from `public.businesses` (has `name`, `type`, `city`, etc.). Fetched by `user_id`, not by `current_business_id`. `business.id` is the foreign key to use for all business-scoped DB queries.
   - All auth methods return `Promise<{ error?: string }>` or `Promise<void>`.
+  - `lib/supabase-client.ts` uses a **module-level** singleton (not a React-level ref). Calling `createClient()` anywhere in a Client Component always returns the same instance.
 - **`middleware.ts`** — Validates the Supabase session on every request using `supabase.auth.getUser()` (also refreshes the session cookie). Protects `/dashboard`, `/reviews`, `/insights`, `/settings`, `/onboarding`. Blocks `/dev-login` in production.
 - **`app/auth/callback/route.ts`** — Exchanges the PKCE code for a session, then redirects to `/onboarding` or `/dashboard` based on `profile.onboarded`. Respects a `?next=` override (used by password reset to go to `/reset-password`).
 
@@ -112,12 +113,27 @@ Top-level namespaces: `nav`, `hero`, `demo`, `problem`, `how`, `features`, `pric
 
 When adding new strings, add the key to all 5 locale files. If unsure of a translation, use the Spanish string.
 
-### Mock data
+### Key UI libraries
+
+- **recharts** — all charts (line, bar, donut). See `components/app/insights/` for usage patterns.
+- **lucide-react** — all icons throughout the app. Import named icons: `import { Star, Search } from "lucide-react"`.
+
+### Mock data / type mismatches to know
 
 `lib/mock/dashboardData.ts` exports:
 - `getMockDashboardData()` — dashboard KPIs + the 5 most recent pending reviews. Types match future API shape; replace the function body, not the types.
 - `getAllMockReviews()` — all 10 mock reviews across all statuses (`pending`, `responded`, `ignored`). Used by `/reviews`.
 - `getMockPendingCount()` — pending review count for the sidebar badge.
+
+**Important schema divergences** between the `Review` type and the real DB:
+
+| Field | Mock type | DB schema |
+|---|---|---|
+| `status` | `"pending" \| "responded" \| "ignored"` | `"pending" \| "approved" \| "rejected" \| "published"` |
+| `source` | `"google"` (only) | `"google" \| "facebook" \| "tripadvisor" \| "thefork" \| "manual"` |
+| `language` | `"es" \| "en" \| "nl"` | `"es" \| "en" \| "nl" \| "fr" \| "de"` |
+
+When connecting real data, map DB values to the mock type to avoid breaking existing UI. Do NOT change the exported types in `dashboardData.ts`.
 
 `lib/mock/insightsData.ts` exports:
 - `getMockInsightsData(period: Period)` — KPIs, rating evolution, star distribution, language share, topics, and critical issues.
