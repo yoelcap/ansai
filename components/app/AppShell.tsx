@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth/useAuth";
+import { createClient } from "@/lib/supabase-client";
 import { Sidebar } from "./Sidebar";
 import { AppHeader } from "./AppHeader";
-import { getMockPendingCount } from "@/lib/mock/dashboardData";
 
 function Spinner() {
   return (
@@ -22,6 +22,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const { user, profile, business, loading, logout } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -30,16 +31,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [loading, user, router]);
 
   useEffect(() => {
-    if (!loading && user && profile === null) {
-      logout().then(() => router.replace("/login"));
-    }
-  }, [loading, user, profile, router, logout]);
-
-  useEffect(() => {
     if (!loading && user && profile !== null && !profile.onboarded) {
       router.replace("/onboarding");
     }
   }, [loading, user, profile, router]);
+
+  useEffect(() => {
+    if (!business?.id) return;
+    const supabase = createClient();
+    supabase
+      .from("reviews")
+      .select("*", { count: "exact", head: true })
+      .eq("business_id", business.id)
+      .eq("status", "pending")
+      .then(({ count }: { count: number | null }) => setPendingCount(count ?? 0));
+  }, [business?.id]);
 
   // Show spinner while loading auth state
   if (loading) return <Spinner />;
@@ -47,7 +53,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // Show spinner while redirect-to-login is in flight
   if (!user) return <Spinner />;
 
-  // User exists but has no profile — stale/invalid session, logout in progress
+  // User exists but profile not yet loaded (or RLS issue) — wait silently
   if (profile === null) return <Spinner />;
 
   // Show spinner while redirect-to-onboarding is in flight
@@ -73,7 +79,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Sidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
-        pendingCount={getMockPendingCount()}
+        pendingCount={pendingCount}
       />
 
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">

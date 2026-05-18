@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Star } from "lucide-react";
+import { X, Star, RefreshCw } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import type { Review } from "@/lib/mock/dashboardData";
 
@@ -19,26 +19,25 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-const mockAIResponses: Record<string, string> = {
-  r1: "Gracias, María, por tu reseña y por tomarte el tiempo de compartir tu experiencia. Lamentamos mucho la larga espera y entendemos lo frustrante que puede resultar, especialmente cuando el servicio no estuvo a la altura. Estamos trabajando activamente para mejorar nuestros tiempos de atención en horas de mayor afluencia. Esperamos tener la oportunidad de ofrecerte una experiencia mejor en tu próxima visita.",
-  r2: "Hartelijk dank voor uw geweldige beoordeling, Jan! We zijn blij dat het eten en de bediening naar uw wens waren. We kijken er al naar uit u opnieuw te mogen verwelkomen. Tot ziens!",
-  r3: "Thank you so much for your kind review, Sophie! We're really glad you enjoyed the food and cosy atmosphere — the pasta is a house favourite. We take your note about service speed to heart and are always working to improve. We hope to see you again soon!",
-  r4: "Estimado Carlos, agradecemos que nos haya comunicado su experiencia. Lo que describes es completamente inaceptable y nos ha consternado. Le pedimos disculpas sinceras tanto por el incidente como por la falta de atención de nuestro equipo. Estamos tomando medidas para que esto no vuelva a ocurrir y nos gustaría invitarle a volver para ofrecerle la experiencia que merece.",
-  r5: "Dank u wel voor uw vriendelijke beoordeling, Emma! Het doet ons goed te horen dat u genoten heeft van het eten en de sfeer. We hopen u binnenkort weer te mogen verwelkomen. Tot ziens!",
-};
-
-function getMockResponse(review: Review): string {
-  return (
-    mockAIResponses[review.id] ??
-    `Gracias por tu reseña, ${review.authorName}. Valoramos mucho tu opinión y esperamos verte de nuevo pronto.`
-  );
+// Extends Review with optional real-data fields (all extra fields optional
+// so that plain Review objects remain assignable to this type).
+export interface ReviewWithResponse extends Omit<Review, "language" | "status" | "source"> {
+  language: string;
+  status: string;
+  source: string;
+  responseText?: string | null;
+  editedText?: string | null;
+  responseStatus?: string | null;
+  modelUsed?: string | null;
 }
 
 interface ReviewSlideOverProps {
-  review: Review | null;
+  review: ReviewWithResponse | null;
   onClose: () => void;
   onApprove: (id: string) => void;
   onReject: (id: string) => void;
+  onEdit?: (id: string, newText: string) => void;
+  onRetry?: (id: string) => void;
 }
 
 export function ReviewSlideOver({
@@ -46,6 +45,8 @@ export function ReviewSlideOver({
   onClose,
   onApprove,
   onReject,
+  onEdit,
+  onRetry,
 }: ReviewSlideOverProps) {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
@@ -53,12 +54,33 @@ export function ReviewSlideOver({
 
   useEffect(() => {
     if (review) {
-      setDraftText(getMockResponse(review));
+      setDraftText(review.editedText ?? review.responseText ?? "");
       setIsEditing(false);
     }
   }, [review?.id]);
 
   if (!review) return null;
+
+  const hasFailed = review.responseStatus === "generation_failed";
+  const modelLabel =
+    review.modelUsed === "claude-opus-4-7"
+      ? t("app.reviews.modelUsedOpus")
+      : review.modelUsed === "claude-haiku-4-5-20251001"
+      ? t("app.reviews.modelUsedHaiku")
+      : null;
+
+  function handleSaveEdit() {
+    if (!review) return;
+    onEdit?.(review.id, draftText);
+    setIsEditing(false);
+  }
+
+  function handleCancelEdit() {
+    setDraftText(review?.editedText ?? review?.responseText ?? "");
+    setIsEditing(false);
+  }
+
+  const displayText = review.editedText || draftText;
 
   return (
     <>
@@ -98,18 +120,40 @@ export function ReviewSlideOver({
 
           <div className="border-t border-line" />
 
-          {/* AI response */}
+          {/* AI response section */}
           <div>
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="text-xs font-semibold text-muted uppercase tracking-wide">
-                {t("app.review_panel.ai_label")}
-              </span>
-              <span className="text-[10px] px-1.5 py-0.5 bg-forest/10 text-forest rounded font-medium">
-                {t("app.review_panel.ai_badge")}
-              </span>
+            <div className="flex items-center justify-between gap-2 mb-2.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-muted uppercase tracking-wide">
+                  {t("app.review_panel.ai_label")}
+                </span>
+                {!hasFailed && displayText && (
+                  <span className="text-[10px] px-1.5 py-0.5 bg-forest/10 text-forest rounded font-medium">
+                    {t("app.review_panel.ai_badge")}
+                  </span>
+                )}
+              </div>
+              {modelLabel && !hasFailed && (
+                <span className="text-[10px] px-2 py-0.5 bg-ink/8 text-muted rounded font-medium shrink-0">
+                  {modelLabel}
+                </span>
+              )}
             </div>
 
-            {isEditing ? (
+            {hasFailed ? (
+              <div className="rounded-lg border border-terra/30 bg-terra/5 px-4 py-3 text-sm text-terra flex items-center justify-between gap-3">
+                <span>{t("app.reviews.generationFailed")}</span>
+                {onRetry && (
+                  <button
+                    onClick={() => onRetry(review.id)}
+                    className="flex items-center gap-1.5 text-xs font-medium text-terra border border-terra/40 rounded-lg px-2.5 py-1.5 hover:bg-terra hover:text-paper transition-all shrink-0"
+                  >
+                    <RefreshCw size={12} />
+                    {t("app.reviews.retry")}
+                  </button>
+                )}
+              </div>
+            ) : isEditing ? (
               <textarea
                 value={draftText}
                 onChange={(e) => setDraftText(e.target.value)}
@@ -118,23 +162,20 @@ export function ReviewSlideOver({
               />
             ) : (
               <p className="text-sm text-ink bg-cream/60 border border-line rounded-lg px-3 py-3 leading-relaxed whitespace-pre-wrap">
-                {draftText}
+                {displayText || "—"}
               </p>
             )}
 
             {isEditing && (
               <div className="flex gap-2 mt-3">
                 <button
-                  onClick={() => setIsEditing(false)}
+                  onClick={handleSaveEdit}
                   className="flex-1 px-3 py-2 rounded-lg bg-forest text-paper text-sm font-medium hover:bg-forest-dark transition-colors"
                 >
                   {t("app.review_panel.save_changes")}
                 </button>
                 <button
-                  onClick={() => {
-                    setDraftText(getMockResponse(review));
-                    setIsEditing(false);
-                  }}
+                  onClick={handleCancelEdit}
                   className="px-3 py-2 rounded-lg border border-line text-muted text-sm hover:bg-cream transition-colors"
                 >
                   {t("app.review_panel.cancel")}
@@ -145,7 +186,7 @@ export function ReviewSlideOver({
         </div>
 
         {/* Footer actions */}
-        {!isEditing && (
+        {!isEditing && !hasFailed && (
           <div className="px-5 py-4 border-t border-line flex gap-2 shrink-0">
             <button
               onClick={() => onApprove(review.id)}
@@ -153,12 +194,14 @@ export function ReviewSlideOver({
             >
               {t("app.review_panel.approve")}
             </button>
-            <button
-              onClick={() => setIsEditing(true)}
-              className="px-4 py-2.5 rounded-lg border border-line text-ink text-sm font-medium hover:bg-cream transition-colors"
-            >
-              {t("app.review_panel.edit")}
-            </button>
+            {onEdit && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-4 py-2.5 rounded-lg border border-line text-ink text-sm font-medium hover:bg-cream transition-colors"
+              >
+                {t("app.review_panel.edit")}
+              </button>
+            )}
             <button
               onClick={() => onReject(review.id)}
               className="px-4 py-2.5 rounded-lg border border-terra/30 text-terra text-sm font-medium hover:bg-terra hover:text-paper hover:border-terra transition-all"
