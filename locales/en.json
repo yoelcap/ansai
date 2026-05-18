@@ -266,7 +266,14 @@
       "review_action": "Review",
       "chart_title": "Rating evolution",
       "chart_subtitle": "Last 30 days",
-      "alerts_title": "Smart alerts"
+      "alerts_title": "Smart alerts",
+      "allGood": "All good",
+      "allGoodDesc": "No active alerts at this time",
+      "emptyState": "You don't have any reviews yet",
+      "addFirstReview": "Add first review",
+      "loadError": "Error loading dashboard data",
+      "retryLoad": "Retry",
+      "urgentes": "urgent"
     },
     "dev_login": {
       "title": "Development access",

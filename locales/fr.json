@@ -266,7 +266,14 @@
       "review_action": "Traiter",
       "chart_title": "Évolution de la note",
       "chart_subtitle": "30 derniers jours",
-      "alerts_title": "Alertes intelligentes"
+      "alerts_title": "Alertes intelligentes",
+      "allGood": "Tout va bien",
+      "allGoodDesc": "Aucune alerte active pour le moment",
+      "emptyState": "Vous n'avez pas encore d'avis",
+      "addFirstReview": "Ajouter le premier avis",
+      "loadError": "Erreur lors du chargement du tableau de bord",
+      "retryLoad": "Réessayer",
+      "urgentes": "urgent"
     },
     "dev_login": {
       "title": "Accès développeur",

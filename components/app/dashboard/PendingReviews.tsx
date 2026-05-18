@@ -4,8 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
-import type { Review } from "@/lib/mock/dashboardData";
-import { ReviewSlideOver } from "./ReviewSlideOver";
+import { ReviewSlideOver, type ReviewWithResponse } from "./ReviewSlideOver";
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -14,21 +13,17 @@ function StarRating({ rating }: { rating: number }) {
         <Star
           key={n}
           size={11}
-          className={
-            n <= rating
-              ? "fill-gold text-gold"
-              : "fill-line text-line"
-          }
+          className={n <= rating ? "fill-gold text-gold" : "fill-line text-line"}
         />
       ))}
     </div>
   );
 }
 
-export function PendingReviews({ reviews: initialReviews }: { reviews: Review[] }) {
+export function PendingReviews({ reviews: initialReviews }: { reviews: ReviewWithResponse[] }) {
   const { t } = useTranslation();
   const [reviews, setReviews] = useState(initialReviews);
-  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [selectedReview, setSelectedReview] = useState<ReviewWithResponse | null>(null);
 
   const handleApprove = (id: string) => {
     setReviews((prev) => prev.filter((r) => r.id !== id));
@@ -61,17 +56,12 @@ export function PendingReviews({ reviews: initialReviews }: { reviews: Review[] 
               key={review.id}
               className="flex items-start gap-3 px-5 py-3.5 hover:bg-cream/50 transition-colors"
             >
-              {/* Initial avatar */}
               <div className="w-8 h-8 rounded-full bg-forest/10 text-forest flex items-center justify-center text-xs font-semibold shrink-0 mt-0.5">
                 {review.authorInitial}
               </div>
-
-              {/* Content */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-semibold text-ink">
-                    {review.authorName}
-                  </span>
+                  <span className="text-sm font-semibold text-ink">{review.authorName}</span>
                   <StarRating rating={review.rating} />
                   <span className="text-xs text-muted">{review.relativeTime}</span>
                 </div>
@@ -79,8 +69,6 @@ export function PendingReviews({ reviews: initialReviews }: { reviews: Review[] 
                   {review.text}
                 </p>
               </div>
-
-              {/* Action button */}
               <button
                 onClick={() => setSelectedReview(review)}
                 className="shrink-0 px-3 py-1.5 rounded-lg border border-forest/40 text-forest text-xs font-medium hover:bg-forest hover:text-paper hover:border-forest transition-all"

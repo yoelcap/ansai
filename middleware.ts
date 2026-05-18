@@ -11,22 +11,22 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name) {
-          return request.cookies.get(name)?.value;
+        getAll() {
+          return request.cookies.getAll();
         },
-        set(name, value, options) {
-          request.cookies.set({ name, value, ...options });
+        // setAll is called once with ALL cookies to set (e.g. chunked session tokens).
+        // The old get/set/remove pattern recreated the response on every individual set,
+        // which silently dropped all but the last cookie chunk and corrupted the session.
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value)
+          );
           response = NextResponse.next({
             request: { headers: request.headers },
           });
-          response.cookies.set({ name, value, ...options });
-        },
-        remove(name, options) {
-          request.cookies.set({ name, value: "", ...options });
-          response = NextResponse.next({
-            request: { headers: request.headers },
-          });
-          response.cookies.set({ name, value: "", ...options });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          );
         },
       },
     }

@@ -266,7 +266,14 @@
       "review_action": "Bekijken",
       "chart_title": "Beoordelingsevolutie",
       "chart_subtitle": "Laatste 30 dagen",
-      "alerts_title": "Slimme meldingen"
+      "alerts_title": "Slimme meldingen",
+      "allGood": "Alles in orde",
+      "allGoodDesc": "Momenteel geen actieve meldingen",
+      "emptyState": "U heeft nog geen beoordelingen",
+      "addFirstReview": "Eerste beoordeling toevoegen",
+      "loadError": "Fout bij laden dashboardgegevens",
+      "retryLoad": "Opnieuw proberen",
+      "urgentes": "urgent"
     },
     "dev_login": {
       "title": "Ontwikkelaarstoegang",

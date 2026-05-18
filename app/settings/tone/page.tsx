@@ -183,7 +183,7 @@ export default function TonePage() {
       .select("*")
       .eq("business_id", business.id)
       .maybeSingle()
-      .then(({ data, error }) => {
+      .then(({ data, error }: { data: any; error: any }) => {
         if (error) toast.error(t("app.settings.loadError"));
         if (data) {
           const loaded: FormState = {

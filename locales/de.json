@@ -266,7 +266,14 @@
       "review_action": "Prüfen",
       "chart_title": "Bewertungsentwicklung",
       "chart_subtitle": "Letzte 30 Tage",
-      "alerts_title": "Intelligente Warnungen"
+      "alerts_title": "Intelligente Warnungen",
+      "allGood": "Alles in Ordnung",
+      "allGoodDesc": "Derzeit keine aktiven Meldungen",
+      "emptyState": "Sie haben noch keine Bewertungen",
+      "addFirstReview": "Erste Bewertung hinzufügen",
+      "loadError": "Fehler beim Laden der Dashboard-Daten",
+      "retryLoad": "Erneut versuchen",
+      "urgentes": "dringend"
     },
     "dev_login": {
       "title": "Entwicklerzugang",

@@ -266,7 +266,14 @@
       "review_action": "Revisar",
       "chart_title": "Evolución del rating",
       "chart_subtitle": "Últimos 30 días",
-      "alerts_title": "Alertas inteligentes"
+      "alerts_title": "Alertas inteligentes",
+      "allGood": "Todo en orden",
+      "allGoodDesc": "No hay alertas activas en este momento",
+      "emptyState": "Aún no tienes reseñas",
+      "addFirstReview": "Añadir primera reseña",
+      "loadError": "Error al cargar los datos del dashboard",
+      "retryLoad": "Reintentar",
+      "urgentes": "urgentes"
     },
     "dev_login": {
       "title": "Acceso de desarrollo",
