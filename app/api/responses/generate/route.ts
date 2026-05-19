@@ -121,7 +121,14 @@ export async function POST(req: NextRequest) {
     const businessType =
       BUSINESS_TYPE_LABELS[business?.type ?? ""] ?? "negocio de hostelería";
 
-    let systemPrompt = `Eres el encargado de responder reseñas de ${businessName}, un/a ${businessType}. ${formalityInstruction}. Longitud: ${lengthInstruction}. Responde en ${lang}.`;
+    let systemPrompt = `REGLA CRÍTICA — NO INVENTAR: Responde ÚNICAMENTE con información que el cliente menciona EXPLÍCITAMENTE en su reseña. NO añadas, asumas ni infieras detalles que no estén escritos textualmente. Ejemplos de lo que NUNCA debes hacer:
+- Si dice "sábado" → NO digas "sábado por la noche" (no mencionó noche)
+- Si dice "la comida" → NO especifiques platos que no nombró
+- Si dice "esperé" → NO inventes cuánto tiempo si no lo dijo
+- NO inventes nombres de personal, horarios, ni circunstancias
+Ante la duda, sé genérico. Es preferible una respuesta menos específica a una que inventa hechos. Inventar datos en una respuesta pública daña gravemente la reputación del negocio.
+
+Eres el encargado de responder reseñas de ${businessName}, un/a ${businessType}. ${formalityInstruction}. Longitud: ${lengthInstruction}. Responde en ${lang}.`;
 
     if (signature) {
       systemPrompt += ` Termina SIEMPRE con esta firma exacta en su propia línea: ${signature}`;
@@ -136,10 +143,11 @@ export async function POST(req: NextRequest) {
     systemPrompt += `
 Reglas:
 - Reseña positiva (4-5★): agradece con sinceridad y personaliza mencionando algo concreto que dijo el cliente.
-- Reseña negativa (1-2★): discúlpate de forma sincera y concreta, reconociendo el problema específico que menciona el cliente. Muestra empatía genuina. NO invites sistemáticamente a contactar por privado ni a 'continuar la conversación' — eso suena defensivo en una respuesta pública. Una disculpa honesta y bien expresada es suficiente. Solo si el caso es muy grave (problema de salud, seguridad, cobro incorrecto) puedes ofrecer resolverlo directamente.
+- Reseña negativa (1-2★): discúlpate de forma sincera y concreta, reconociendo el problema específico que menciona el cliente. Muestra empatía genuina. NO invites sistemáticamente a contactar por privado ni a 'continuar la conversación': eso suena defensivo en una respuesta pública. Una disculpa honesta y bien expresada es suficiente. Solo si el caso es muy grave (problema de salud, seguridad, cobro incorrecto) puedes ofrecer resolverlo directamente.
 - Reseña mixta (3★): agradece lo positivo, reconoce lo mejorable.
 - NO inventes hechos, nombres ni detalles que el cliente no mencionó.
 - NO prometas compensaciones concretas (descuentos, regalos).
+- ESTILO: No uses NUNCA el guión largo (—, em-dash) ni el guión medio (–). Usa frases separadas con punto, o comas, o paréntesis si hace falta. Escribe de forma natural y humana, evitando construcciones que delaten texto generado automáticamente.
 - Suena humano, nunca robótico ni plantillero.`;
 
     // 6. Build user prompt
@@ -178,7 +186,14 @@ Escribe ÚNICAMENTE el texto de la respuesta, sin comillas ni preámbulo.`;
       }
     }
 
-    // 8. Upsert in responses table
+    // 8. Post-process: strip em-dash and en-dash (AI tell)
+    result.text = result.text
+      .replace(/ — /g, ". ")
+      .replace(/ – /g, ", ")
+      .replace(/—/g, ", ")
+      .replace(/–/g, ", ");
+
+    // 9. Upsert in responses table
     await supabase.from("responses").upsert(
       {
         review_id: reviewId,

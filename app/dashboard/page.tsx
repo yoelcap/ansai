@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { RefreshCw } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
@@ -39,26 +39,43 @@ interface DbReview {
   }> | null;
 }
 
-// ─── Calculation helpers ──────────────────────────────────────────────────────
+// ─── Pure helpers ─────────────────────────────────────────────────────────────
 
 function avg(nums: number[]): number | null {
   if (nums.length === 0) return null;
   return nums.reduce((a, b) => a + b, 0) / nums.length;
 }
 
-function formatRelativeTime(isoDate: string): string {
-  const diff = Date.now() - new Date(isoDate).getTime();
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-  if (hours < 1) return "hace <1h";
-  if (hours < 24) return `hace ${hours}h`;
-  if (days === 1) return "ayer";
-  return `hace ${days} días`;
+/** Replace {key} placeholders in a translated string. */
+function ipl(template: string, vars: Record<string, string | number>): string {
+  return Object.entries(vars).reduce(
+    (s, [k, v]) => s.replaceAll(`{${k}}`, String(v)),
+    template
+  );
 }
 
-function mapDbReviewToCard(row: DbReview): ReviewWithResponse {
+/** Locale-aware relative time using native Intl.RelativeTimeFormat. */
+function formatRelativeTime(isoDate: string | null | undefined, locale: string): string {
+  if (!isoDate) return "";
+  try {
+    const diff = Date.now() - new Date(isoDate).getTime();
+    const mins = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+    if (mins < 60) return rtf.format(-mins, "minute");
+    if (hours < 24) return rtf.format(-hours, "hour");
+    return rtf.format(-days, "day");
+  } catch {
+    return "";
+  }
+}
+
+type TFn = (key: string) => string;
+
+function mapDbReviewToCard(row: DbReview, locale: string): ReviewWithResponse {
   const resp = row.responses?.[0] ?? null;
-  const authorName = row.customer_name ?? "Cliente";
+  const authorName = row.customer_name ?? "—";
   return {
     id: row.id,
     authorName,
@@ -67,7 +84,7 @@ function mapDbReviewToCard(row: DbReview): ReviewWithResponse {
     text: row.text ?? "",
     language: row.language ?? "es",
     createdAt: row.created_at,
-    relativeTime: formatRelativeTime(row.review_date ?? row.created_at),
+    relativeTime: formatRelativeTime(row.review_date ?? row.created_at, locale),
     status: "pending",
     source: row.source ?? "manual",
     responseText: resp?.text ?? null,
@@ -77,7 +94,7 @@ function mapDbReviewToCard(row: DbReview): ReviewWithResponse {
   };
 }
 
-function buildMetrics(reviews: DbReview[]): DashboardMetrics {
+function buildMetrics(reviews: DbReview[], t: TFn): DashboardMetrics {
   const now = Date.now();
   const ms30 = 30 * 24 * 3600 * 1000;
   const ms60 = 60 * 24 * 3600 * 1000;
@@ -92,38 +109,41 @@ function buildMetrics(reviews: DbReview[]): DashboardMetrics {
     1
   ).getTime();
 
-  const allRatings = reviews.map((r) => r.rating);
-  const overallAvg = avg(allRatings);
+  const overallAvg = avg(reviews.map((r) => r.rating));
 
-  // Rating trend: last 30d vs previous 30d
   const recent30 = reviews.filter((r) => now - new Date(r.created_at).getTime() < ms30);
   const prev30 = reviews.filter((r) => {
     const age = now - new Date(r.created_at).getTime();
     return age >= ms30 && age < ms60;
   });
-  const recentAvg = avg(recent30.map((r) => r.rating));
-  const prevAvg = avg(prev30.map((r) => r.rating));
   const ratingDiff =
-    recentAvg !== null && prevAvg !== null ? recentAvg - prevAvg : null;
+    recent30.length > 0 && prev30.length > 0
+      ? (avg(recent30.map((r) => r.rating)) ?? 0) - (avg(prev30.map((r) => r.rating)) ?? 0)
+      : null;
 
   const avgRating: Metric = {
     value: overallAvg !== null ? overallAvg.toFixed(1) : "—",
     change:
       ratingDiff !== null
         ? `${ratingDiff >= 0 ? "+" : ""}${ratingDiff.toFixed(1)}`
-        : "Sin datos",
+        : t("app.dashboard.noData"),
     trend:
-      ratingDiff === null ? "neutral" : ratingDiff > 0 ? "positive" : ratingDiff < 0 ? "negative" : "neutral",
+      ratingDiff === null
+        ? "neutral"
+        : ratingDiff > 0
+        ? "positive"
+        : ratingDiff < 0
+        ? "negative"
+        : "neutral",
     changeContext: "",
   };
 
-  // Total reviews: this month vs last month
   const thisMonthCount = reviews.filter(
     (r) => new Date(r.created_at).getTime() >= thisMonthStart
   ).length;
   const lastMonthCount = reviews.filter((r) => {
-    const t = new Date(r.created_at).getTime();
-    return t >= lastMonthStart && t < thisMonthStart;
+    const ts = new Date(r.created_at).getTime();
+    return ts >= lastMonthStart && ts < thisMonthStart;
   }).length;
   const countDiff = thisMonthCount - lastMonthCount;
 
@@ -134,18 +154,20 @@ function buildMetrics(reviews: DbReview[]): DashboardMetrics {
     changeContext: "",
   };
 
-  // Pending + urgent
   const pending = reviews.filter((r) => r.status === "pending");
   const urgent = pending.filter((r) => r.rating <= 2);
+  const urgentLabel =
+    urgent.length === 0
+      ? t("app.dashboard.upToDate")
+      : `${urgent.length} ${urgent.length === 1 ? t("app.dashboard.urgentOne") : t("app.dashboard.urgentMany")}`;
 
   const pendingCount: Metric = {
     value: pending.length,
-    change: urgent.length > 0 ? `${urgent.length} urgentes` : "Al día",
+    change: urgentLabel,
     trend: urgent.length > 0 ? "negative" : "neutral",
     changeContext: "",
   };
 
-  // Avg response time (hours) over last 30d approved responses
   const responseTimes: number[] = [];
   for (const review of reviews) {
     const resp = review.responses?.[0];
@@ -161,7 +183,7 @@ function buildMetrics(reviews: DbReview[]): DashboardMetrics {
 
   const avgResponseTime: Metric = {
     value: avgHours !== null ? `${avgHours.toFixed(1)}h` : "—",
-    change: avgHours !== null ? "" : "Sin datos",
+    change: avgHours !== null ? "" : t("app.dashboard.noData"),
     trend: "neutral",
     changeContext: "",
   };
@@ -174,28 +196,26 @@ function buildChartData(reviews: DbReview[]): ChartDataPoint[] {
   const ms30 = 30 * 24 * 3600 * 1000;
   const map = new Map<string, number[]>();
 
-  // Pre-fill all 30 days so the axis is stable
   for (let i = 29; i >= 0; i--) {
     const d = new Date(now - i * 24 * 3600 * 1000);
-    const key = `${d.getDate()} ${d.toLocaleString("es", { month: "short" })}`;
-    map.set(key, []);
+    map.set(d.toISOString().slice(0, 10), []);
   }
 
   for (const r of reviews) {
     const ts = new Date(r.created_at).getTime();
     if (now - ts < ms30) {
-      const d = new Date(r.created_at);
-      const key = `${d.getDate()} ${d.toLocaleString("es", { month: "short" })}`;
-      map.get(key)?.push(r.rating);
+      const key = new Date(r.created_at).toISOString().slice(0, 10);
+      map.get(key)?.push(Number(r.rating));
     }
   }
 
   return Array.from(map.entries())
     .filter(([, ratings]) => ratings.length > 0)
-    .map(([date, ratings]) => ({
-      date,
-      rating: avg(ratings) as number,
-    }));
+    .map(([isoDate, ratings]) => {
+      const d = new Date(isoDate);
+      const label = `${d.getDate()} ${d.toLocaleString("es", { month: "short" })}`;
+      return { date: label, rating: avg(ratings) as number };
+    });
 }
 
 const NEGATIVE_WORDS: Record<string, string[]> = {
@@ -206,7 +226,7 @@ const NEGATIVE_WORDS: Record<string, string[]> = {
   de: ["langsam", "kalt", "schmutzig", "teuer", "schlecht", "warten"],
 };
 
-function buildAlerts(reviews: DbReview[]): SmartAlert[] {
+function buildAlerts(reviews: DbReview[], t: TFn): SmartAlert[] {
   const now = Date.now();
   const ms7 = 7 * 24 * 3600 * 1000;
   const ms30 = 30 * 24 * 3600 * 1000;
@@ -214,7 +234,6 @@ function buildAlerts(reviews: DbReview[]): SmartAlert[] {
   const ms48h = 48 * 3600 * 1000;
   const alerts: SmartAlert[] = [];
 
-  // Negative word frequency in last 7 days
   const recent7 = reviews.filter((r) => now - new Date(r.created_at).getTime() < ms7);
   const wordCounts = new Map<string, number>();
   for (const review of recent7) {
@@ -234,45 +253,43 @@ function buildAlerts(reviews: DbReview[]): SmartAlert[] {
       alerts.push({
         id: `word-${word}`,
         type: "warning",
-        message: `${count} reseñas recientes mencionan "${word}"`,
+        message: ipl(t("app.dashboard.alertWordMention"), { count, word }),
       });
     }
   }
 
-  // Rating trend last 30d vs previous 30d
   const recent30 = reviews.filter((r) => now - new Date(r.created_at).getTime() < ms30);
   const prev30 = reviews.filter((r) => {
     const age = now - new Date(r.created_at).getTime();
     return age >= ms30 && age < ms60;
   });
-  const recentAvg = avg(recent30.map((r) => r.rating));
-  const prevAvg = avg(prev30.map((r) => r.rating));
-  if (recentAvg !== null && prevAvg !== null) {
-    const diff = recentAvg - prevAvg;
+  if (recent30.length > 0 && prev30.length > 0) {
+    const diff =
+      (avg(recent30.map((r) => r.rating)) ?? 0) -
+      (avg(prev30.map((r) => r.rating)) ?? 0);
     if (Math.abs(diff) >= 0.3) {
+      const key =
+        diff > 0 ? "app.dashboard.alertRatingUp" : "app.dashboard.alertRatingDown";
       alerts.push({
         id: "rating-trend",
         type: diff > 0 ? "success" : "warning",
-        message:
-          diff > 0
-            ? `Tu rating subió ${diff.toFixed(1)} puntos vs el mes pasado`
-            : `Tu rating bajó ${Math.abs(diff).toFixed(1)} puntos vs el mes pasado`,
+        message: ipl(t(key), { diff: Math.abs(diff).toFixed(1) }),
       });
     }
   }
 
-  // Critical reviews (rating ≤ 2) in last 48h
   const critical48h = reviews.filter(
     (r) => r.rating <= 2 && now - new Date(r.created_at).getTime() < ms48h
   );
   if (critical48h.length > 0) {
+    const key =
+      critical48h.length === 1
+        ? "app.dashboard.alertCriticalOne"
+        : "app.dashboard.alertCriticalMany";
     alerts.push({
       id: "critical-48h",
       type: "warning",
-      message:
-        critical48h.length === 1
-          ? "Nueva reseña de 1-2 ★ en las últimas 48h — requiere atención"
-          : `${critical48h.length} reseñas de 1-2 ★ en las últimas 48h — requieren atención`,
+      message: ipl(t(key), { count: critical48h.length }),
     });
   }
 
@@ -335,25 +352,19 @@ function ChartSkeleton() {
   );
 }
 
-// ─── Empty state ──────────────────────────────────────────────────────────────
-
-function EmptyStateCard({ t }: { t: (k: string) => string }) {
+function EmptyStateCard({ t }: { t: TFn }) {
   return (
     <div className="lg:col-span-3 bg-paper border border-line rounded-2xl p-10 text-center">
       <p className="font-serif text-xl text-forest mb-2">
         {t("app.dashboard.emptyState")}
       </p>
-      <p className="text-sm text-muted mb-5">
-        Añade tu primera reseña para empezar a ver datos aquí.
-      </p>
+      <p className="text-sm text-muted mb-5">{t("app.dashboard.emptyStateDesc")}</p>
       <Link href="/reviews" className="btn-primary inline-flex">
         {t("app.dashboard.addFirstReview")}
       </Link>
     </div>
   );
 }
-
-// ─── Zero-value metrics for empty/error state ─────────────────────────────────
 
 const ZERO_METRICS: DashboardMetrics = {
   avgRating: { value: "—", change: "", trend: "neutral", changeContext: "" },
@@ -365,26 +376,30 @@ const ZERO_METRICS: DashboardMetrics = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { business, loading: authLoading } = useAuth();
 
   const [dataLoading, setDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [metrics, setMetrics] = useState<DashboardMetrics>(ZERO_METRICS);
-  const [pendingReviews, setPendingReviews] = useState<ReviewWithResponse[]>([]);
-  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
-  const [alerts, setAlerts] = useState<SmartAlert[]>([]);
-  const [hasAnyReviews, setHasAnyReviews] = useState(false);
+  const [rawReviews, setRawReviews] = useState<DbReview[]>([]);
+  const [rawPending, setRawPending] = useState<DbReview[]>([]);
+
+  // Derived — recompute on locale change without re-fetching
+  const hasAnyReviews = rawReviews.length > 0;
+  const metrics = useMemo(() => buildMetrics(rawReviews, t), [rawReviews, t]);
+  const chartData = useMemo(() => buildChartData(rawReviews), [rawReviews]);
+  const alerts = useMemo(() => buildAlerts(rawReviews, t), [rawReviews, t]);
+  const pendingReviews = useMemo(
+    () => rawPending.map((r) => mapDbReviewToCard(r, locale)),
+    [rawPending, locale]
+  );
 
   const loadData = useCallback(async (businessId: string) => {
     setDataLoading(true);
     setError(null);
-
     try {
       const supabase = createClient();
-
       const [allResult, pendingResult] = await Promise.all([
-        // All reviews with response timestamps for KPI + chart + alerts
         supabase
           .from("reviews")
           .select(
@@ -392,8 +407,6 @@ export default function DashboardPage() {
           )
           .eq("business_id", businessId)
           .order("created_at", { ascending: false }),
-
-        // Pending reviews (full) for the dashboard list
         supabase
           .from("reviews")
           .select("*, responses(*)")
@@ -402,25 +415,17 @@ export default function DashboardPage() {
           .order("created_at", { ascending: false })
           .limit(5),
       ]);
-
       if (allResult.error) throw allResult.error;
       if (pendingResult.error) throw pendingResult.error;
-
-      const allReviews = (allResult.data ?? []) as DbReview[];
-      const pendingRaw = (pendingResult.data ?? []) as DbReview[];
-
-      setHasAnyReviews(allReviews.length > 0);
-      setMetrics(buildMetrics(allReviews));
-      setChartData(buildChartData(allReviews));
-      setAlerts(buildAlerts(allReviews));
-      setPendingReviews(pendingRaw.map(mapDbReviewToCard));
+      setRawReviews((allResult.data ?? []) as DbReview[]);
+      setRawPending((pendingResult.data ?? []) as DbReview[]);
     } catch (err) {
       console.error("Dashboard load error:", err);
-      setError(err instanceof Error ? err.message : "Error desconocido");
+      setError(err instanceof Error ? err.message : t("app.dashboard.unknownError"));
     } finally {
       setDataLoading(false);
     }
-  }, []);
+  }, []); // no t/locale dep — only fetches raw data
 
   useEffect(() => {
     if (!authLoading && business?.id) {
@@ -445,7 +450,6 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-[1200px] mx-auto">
-      {/* Page header */}
       <div className="mb-6">
         <h1 className="display-serif text-[26px] font-semibold text-forest">
           {t("app.dashboard.title")}
@@ -453,7 +457,6 @@ export default function DashboardPage() {
         <p className="text-muted text-sm mt-1">{t("app.dashboard.subtitle")}</p>
       </div>
 
-      {/* Error banner */}
       {error && !isLoading && (
         <div className="mb-5 flex items-center justify-between gap-4 bg-terra/5 border border-terra/25 rounded-2xl px-5 py-4">
           <p className="text-sm text-terra">{t("app.dashboard.loadError")}</p>
@@ -467,7 +470,6 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* KPI grid — always rendered (skeleton or real) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
         {isLoading ? (
           <>
@@ -501,7 +503,6 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Main content grid */}
       <div className="grid lg:grid-cols-3 gap-4">
         {isLoading ? (
           <>

@@ -12,8 +12,39 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+const MIN_DATA_POINTS = 5;
+
 export function RatingChart({ data }: { data: ChartDataPoint[] }) {
   const { t } = useTranslation();
+
+  // Ensure ratings are valid numbers before computing domain
+  const validData = data.filter((d) => typeof d.rating === "number" && isFinite(d.rating));
+
+  if (validData.length < MIN_DATA_POINTS) {
+    return (
+      <div className="bg-paper border border-line rounded-2xl p-5">
+        <div className="mb-4">
+          <h2 className="font-serif font-semibold text-ink text-base">
+            {t("app.dashboard.chart_title")}
+          </h2>
+          <p className="text-xs text-muted mt-0.5">
+            {t("app.dashboard.chart_subtitle")}
+          </p>
+        </div>
+        <div className="h-[180px] flex flex-col items-center justify-center gap-2 bg-cream rounded-xl border border-line">
+          <p className="text-sm font-medium text-ink-soft">
+            {t("app.dashboard.chartNotEnoughData")}
+          </p>
+          <p className="text-xs text-muted text-center px-6">
+            {t("app.dashboard.chartNotEnoughDataDesc")}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const minRating = Math.min(...validData.map((d) => d.rating));
+  const yMin = Math.max(1, Math.floor(minRating * 2) / 2 - 0.5);
 
   return (
     <div className="bg-paper border border-line rounded-2xl p-5">
@@ -28,7 +59,7 @@ export function RatingChart({ data }: { data: ChartDataPoint[] }) {
 
       <ResponsiveContainer width="100%" height={180}>
         <LineChart
-          data={data}
+          data={validData}
           margin={{ top: 4, right: 8, left: -24, bottom: 0 }}
         >
           <CartesianGrid
@@ -44,7 +75,7 @@ export function RatingChart({ data }: { data: ChartDataPoint[] }) {
             interval={4}
           />
           <YAxis
-            domain={[3.8, 5]}
+            domain={[yMin, 5]}
             tick={{ fontSize: 10, fill: "#6b6660" }}
             tickLine={false}
             axisLine={false}
