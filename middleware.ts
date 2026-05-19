@@ -61,33 +61,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // Logged in + on protected route → check onboarding state
-  if (user && isProtected && !pathname.startsWith("/onboarding")) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("onboarded")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    // Not onboarded → force to /onboarding
-    if (profile && !profile.onboarded) {
-      return NextResponse.redirect(new URL("/onboarding", request.url));
-    }
-  }
-
-  // Logged in + onboarded + on /onboarding → send to dashboard
-  if (user && pathname.startsWith("/onboarding")) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("onboarded")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    if (profile?.onboarded) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-  }
-
   if (pathname.startsWith("/dev-login") && process.env.NODE_ENV === "production") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
