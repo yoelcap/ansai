@@ -5,17 +5,26 @@ import { createClient } from "@/lib/supabase-server";
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const FORMALITY_INSTRUCTIONS: Record<string, string> = {
-  very_informal: "Tutea, cercano y espontáneo, como un amigo",
-  informal: "Tutea, cercano pero correcto",
-  neutral: "Trato neutro, ni muy cercano ni muy distante",
-  formal: "Trato de usted, profesional y cortés",
-  very_formal: "Trato de usted, muy formal y protocolario",
+  very_informal: `Tutea SIEMPRE. Cercano, espontáneo, como hablarías a un amigo. Exclamaciones permitidas. Lenguaje coloquial natural.
+Ejemplo de estilo (imita este registro): "¡Gracias crack! Nos alegra un montón que lo disfrutaras 😄 te esperamos pronto!"`,
+
+  informal: `Tutea SIEMPRE (tú, no usted). Cercano y natural pero sin coloquialismos excesivos ni emojis. Suena a persona real, NO a comunicado corporativo. Evita "nos enorgullece", "es nuestro compromiso", "agradecemos su comentario": eso es formal, está PROHIBIDO en este nivel.
+Ejemplo de estilo (imita este registro): "¡Gracias Mike! Qué bien que te gustaran los postres, le ponemos mucho cariño. Te esperamos pronto."`,
+
+  neutral: `Trato equilibrado, ni tuteo marcado ni usted marcado. Profesional pero cálido.
+Ejemplo de estilo (imita este registro): "Gracias por tu reseña, Mike. Nos alegra que disfrutaras de los postres. Esperamos verte de nuevo."`,
+
+  formal: `Trato de usted SIEMPRE. Profesional y cortés.
+Ejemplo de estilo (imita este registro): "Estimado Mike, le agradecemos su reseña. Nos complace que disfrutara de nuestros postres. Esperamos recibirle de nuevo."`,
+
+  very_formal: `Trato de usted SIEMPRE. Muy protocolario y solemne.
+Ejemplo de estilo (imita este registro): "Estimado Sr.: reciba nuestro más sincero agradecimiento por su reseña. Es un honor que nuestros postres fueran de su agrado. Quedamos a su entera disposición."`,
 };
 
 const LENGTH_INSTRUCTIONS: Record<string, string> = {
-  short: "2-3 frases",
-  medium: "4-6 frases",
-  long: "7-10 frases",
+  short: "MÁXIMO 30 palabras. 1-2 frases. Sé breve y directo. NO te extiendas. Una respuesta larga aquí es un ERROR.",
+  medium: "Entre 40 y 70 palabras. 3-4 frases.",
+  long: "Entre 80 y 120 palabras. 5-7 frases.",
 };
 
 const LANGUAGE_NAMES: Record<string, string> = {
@@ -121,7 +130,20 @@ export async function POST(req: NextRequest) {
     const businessType =
       BUSINESS_TYPE_LABELS[business?.type ?? ""] ?? "negocio de hostelería";
 
-    let systemPrompt = `Eres el encargado de responder reseñas de ${businessName}, un/a ${businessType}. ${formalityInstruction}. Longitud: ${lengthInstruction}. Responde en ${lang}.`;
+    let systemPrompt = `REGLA CRÍTICA — NO INVENTAR: Responde ÚNICAMENTE con información que el cliente menciona EXPLÍCITAMENTE en su reseña. NO añadas, asumas ni infieras detalles que no estén escritos textualmente. Ejemplos de lo que NUNCA debes hacer:
+- Si dice "sábado" → NO digas "sábado por la noche" (no mencionó noche)
+- Si dice "la comida" → NO especifiques platos que no nombró
+- Si dice "esperé" → NO inventes cuánto tiempo si no lo dijo
+- NO inventes nombres de personal, horarios, ni circunstancias
+Ante la duda, sé genérico. Es preferible una respuesta menos específica a una que inventa hechos. Inventar datos en una respuesta pública daña gravemente la reputación del negocio.
+
+Eres el encargado de responder reseñas de ${businessName}, un/a ${businessType}. Responde en ${lang}.
+
+REGISTRO DE FORMALIDAD — sigue esto al pie de la letra:
+${formalityInstruction}
+El ejemplo anterior es tu referencia de estilo: imita ese registro EXACTAMENTE. No es una guía de contenido, sino de tono y vocabulario.
+
+LONGITUD OBLIGATORIA: ${lengthInstruction}`;
 
     if (signature) {
       systemPrompt += ` Termina SIEMPRE con esta firma exacta en su propia línea: ${signature}`;
@@ -136,11 +158,14 @@ export async function POST(req: NextRequest) {
     systemPrompt += `
 Reglas:
 - Reseña positiva (4-5★): agradece con sinceridad y personaliza mencionando algo concreto que dijo el cliente.
-- Reseña negativa (1-2★): discúlpate de forma sincera y concreta, reconociendo el problema específico que menciona el cliente. Muestra empatía genuina. NO invites sistemáticamente a contactar por privado ni a 'continuar la conversación' — eso suena defensivo en una respuesta pública. Una disculpa honesta y bien expresada es suficiente. Solo si el caso es muy grave (problema de salud, seguridad, cobro incorrecto) puedes ofrecer resolverlo directamente.
+- Reseña negativa (1-2★): discúlpate de forma sincera y concreta, reconociendo el problema específico que menciona el cliente. Muestra empatía genuina. NO invites sistemáticamente a contactar por privado ni a 'continuar la conversación': eso suena defensivo en una respuesta pública. Una disculpa honesta y bien expresada es suficiente. Solo si el caso es muy grave (problema de salud, seguridad, cobro incorrecto) puedes ofrecer resolverlo directamente.
 - Reseña mixta (3★): agradece lo positivo, reconoce lo mejorable.
 - NO inventes hechos, nombres ni detalles que el cliente no mencionó.
 - NO prometas compensaciones concretas (descuentos, regalos).
-- Suena humano, nunca robótico ni plantillero.`;
+- ESTILO: No uses NUNCA el guión largo (—, em-dash) ni el guión medio (–). Usa frases separadas con punto, o comas, o paréntesis si hace falta. Escribe de forma natural y humana, evitando construcciones que delaten texto generado automáticamente.
+- Suena humano, nunca robótico ni plantillero.
+
+RECORDATORIO DE LONGITUD: respeta el límite de palabras indicado ESTRICTAMENTE. Es preferible quedarse corto que pasarse.`;
 
     // 6. Build user prompt
     const customerName = review.customer_name ?? "el cliente";
@@ -178,7 +203,14 @@ Escribe ÚNICAMENTE el texto de la respuesta, sin comillas ni preámbulo.`;
       }
     }
 
-    // 8. Upsert in responses table
+    // 8. Post-process: strip em-dash and en-dash (AI tell)
+    result.text = result.text
+      .replace(/ — /g, ". ")
+      .replace(/ – /g, ", ")
+      .replace(/—/g, ", ")
+      .replace(/–/g, ", ");
+
+    // 9. Upsert in responses table
     await supabase.from("responses").upsert(
       {
         review_id: reviewId,

@@ -61,6 +61,7 @@ export function ReviewSlideOver({
 
   if (!review) return null;
 
+  const isGenerating = review.responseStatus === "generating";
   const hasFailed = review.responseStatus === "generation_failed";
   const modelLabel =
     review.modelUsed === "claude-opus-4-7"
@@ -140,7 +141,14 @@ export function ReviewSlideOver({
               )}
             </div>
 
-            {hasFailed ? (
+            {isGenerating ? (
+              <div className="rounded-lg border border-line bg-cream/60 px-4 py-4 flex flex-col gap-2">
+                <div className="h-3 bg-line rounded animate-pulse w-full" />
+                <div className="h-3 bg-line rounded animate-pulse w-3/4" />
+                <div className="h-3 bg-line rounded animate-pulse w-5/6" />
+                <p className="text-xs text-muted mt-1">{t("app.reviews.generating")}</p>
+              </div>
+            ) : hasFailed ? (
               <div className="rounded-lg border border-terra/30 bg-terra/5 px-4 py-3 text-sm text-terra flex items-center justify-between gap-3">
                 <span>{t("app.reviews.generationFailed")}</span>
                 {onRetry && (
@@ -162,7 +170,7 @@ export function ReviewSlideOver({
               />
             ) : (
               <p className="text-sm text-ink bg-cream/60 border border-line rounded-lg px-3 py-3 leading-relaxed whitespace-pre-wrap">
-                {displayText || "—"}
+                {displayText}
               </p>
             )}
 
@@ -186,7 +194,7 @@ export function ReviewSlideOver({
         </div>
 
         {/* Footer actions */}
-        {!isEditing && !hasFailed && (
+        {!isEditing && !hasFailed && !isGenerating && (
           <div className="px-5 py-4 border-t border-line flex gap-2 shrink-0">
             <button
               onClick={() => onApprove(review.id)}

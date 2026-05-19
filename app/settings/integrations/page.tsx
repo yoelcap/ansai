@@ -151,7 +151,7 @@ export default function IntegrationsPage() {
       .from("integrations")
       .select("*")
       .eq("business_id", business.id)
-      .then(({ data }) => {
+      .then(({ data }: { data: unknown }) => {
         if (data) setIntegrations(data as Integration[]);
         setDbLoading(false);
       });

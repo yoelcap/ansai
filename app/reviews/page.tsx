@@ -1,28 +1,34 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { Search, Star, Plus, X } from "lucide-react";
+import { Search, Star, Plus, X, Loader2 } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { ReviewSlideOver, type ReviewWithResponse } from "@/components/app/dashboard/ReviewSlideOver";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase-client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { useToast } from "@/lib/hooks/useToast";
+import { usePendingCount } from "@/lib/hooks/usePendingCount";
 
 type StatusFilter = "all" | "pending" | "responded" | "ignored";
 type StarsFilter = "all" | "low" | "mid" | "high";
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
-function formatRelativeTime(isoDate: string | null | undefined): string {
+function formatRelativeTime(isoDate: string | null | undefined, locale: string): string {
   if (!isoDate) return "";
-  const diff = Date.now() - new Date(isoDate).getTime();
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-  if (hours < 1) return "hace <1h";
-  if (hours < 24) return `hace ${hours}h`;
-  if (days === 1) return "ayer";
-  return `hace ${days} días`;
+  try {
+    const diff = Date.now() - new Date(isoDate).getTime();
+    const mins = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+    if (mins < 60) return rtf.format(-mins, "minute");
+    if (hours < 24) return rtf.format(-hours, "hour");
+    return rtf.format(-days, "day");
+  } catch {
+    return "";
+  }
 }
 
 function mapDbStatus(dbStatus: string): ReviewWithResponse["status"] {
@@ -32,9 +38,9 @@ function mapDbStatus(dbStatus: string): ReviewWithResponse["status"] {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mapRow(row: any): ReviewWithResponse {
+function mapRow(row: any, locale: string): ReviewWithResponse {
   const response = Array.isArray(row.responses) ? row.responses[0] : row.responses;
-  const authorName: string = row.customer_name ?? "Cliente";
+  const authorName: string = row.customer_name ?? "—";
   return {
     id: row.id,
     authorName,
@@ -43,7 +49,7 @@ function mapRow(row: any): ReviewWithResponse {
     text: row.text ?? "",
     language: row.language ?? "es",
     createdAt: row.created_at ?? "",
-    relativeTime: formatRelativeTime(row.review_date ?? row.created_at),
+    relativeTime: formatRelativeTime(row.review_date ?? row.created_at, locale),
     status: mapDbStatus(row.status ?? "pending"),
     source: row.source ?? "manual",
     responseText: response?.text ?? null,
@@ -114,12 +120,12 @@ function SkeletonList() {
 
 interface AddReviewModalProps {
   onClose: () => void;
-  onSaved: (reviewId: string) => void;
+  onSaved: (reviewId: string, newReview: ReviewWithResponse) => void;
   businessId: string;
 }
 
 function AddReviewModal({ onClose, onSaved, businessId }: AddReviewModalProps) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const supabase = createClient();
 
   const [customerName, setCustomerName] = useState("");
@@ -167,7 +173,25 @@ function AddReviewModal({ onClose, onSaved, businessId }: AddReviewModalProps) {
       return;
     }
 
-    onSaved(inserted.id as string);
+    const now = new Date().toISOString();
+    const name = customerName.trim();
+    const newReview: ReviewWithResponse = {
+      id: inserted.id as string,
+      authorName: name,
+      authorInitial: name.charAt(0).toUpperCase(),
+      rating: Math.min(5, Math.max(1, rating)) as 1 | 2 | 3 | 4 | 5,
+      text: reviewText.trim(),
+      language,
+      createdAt: now,
+      relativeTime: formatRelativeTime(now, locale),
+      status: "pending",
+      source: platform,
+      responseText: null,
+      editedText: null,
+      responseStatus: "generating",
+      modelUsed: null,
+    };
+    onSaved(inserted.id as string, newReview);
   }
 
   return (
@@ -307,9 +331,10 @@ function AddReviewModal({ onClose, onSaved, businessId }: AddReviewModalProps) {
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function ReviewsPage() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { business, loading: authLoading } = useAuth();
   const { toast } = useToast();
+  const { refreshPendingCount } = usePendingCount();
   const supabase = createClient();
 
   const [reviews, setReviews] = useState<ReviewWithResponse[]>([]);
@@ -336,9 +361,10 @@ export default function ReviewsPage() {
       setDataLoading(false);
       return;
     }
-    setReviews((data ?? []).map(mapRow));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setReviews((data ?? []).map((r: any) => mapRow(r, locale)));
     setDataLoading(false);
-  }, []); // supabase is a singleton, no dep needed
+  }, [locale]); // re-map relative times when locale changes
 
   useEffect(() => {
     if (!authLoading && business?.id) {
@@ -373,15 +399,17 @@ export default function ReviewsPage() {
       .eq("review_id", id);
     setReviews((prev) => prev.map((r) => r.id === id ? { ...r, status: "responded" } : r));
     setSelectedReview(null);
+    refreshPendingCount();
     toast.success(t("app.review_panel.approve"));
-  }, [supabase, t, toast]);
+  }, [supabase, t, toast, refreshPendingCount]);
 
   const handleReject = useCallback(async (id: string) => {
     await supabase.from("reviews").update({ status: "rejected" }).eq("id", id);
     setReviews((prev) => prev.map((r) => r.id === id ? { ...r, status: "ignored" } : r));
     setSelectedReview(null);
+    refreshPendingCount();
     toast.warning(t("app.review_panel.reject"));
-  }, [supabase, t, toast]);
+  }, [supabase, t, toast, refreshPendingCount]);
 
   const handleEdit = useCallback(async (id: string, newText: string) => {
     const { error } = await supabase
@@ -426,21 +454,50 @@ export default function ReviewsPage() {
     }
   }, [t, toast]);
 
-  async function handleReviewSaved(reviewId: string) {
+  async function handleReviewSaved(reviewId: string, newReview: ReviewWithResponse) {
     setShowAddModal(false);
-    if (business?.id) loadReviews(business.id);
+
+    // Optimistically add the new review with "generating" status
+    setReviews((prev) => [newReview, ...prev]);
+    refreshPendingCount();
+
     toast.info(t("app.reviews.generating"));
+
     const res = await fetch("/api/responses/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ reviewId }),
     });
+
     if (res.ok) {
+      const { responseText, modelUsed } = await res.json() as {
+        responseText: string;
+        modelUsed: string;
+      };
+      setReviews((prev) =>
+        prev.map((r) =>
+          r.id === reviewId
+            ? { ...r, responseText, responseStatus: "generated", modelUsed }
+            : r
+        )
+      );
+      setSelectedReview((prev) =>
+        prev?.id === reviewId
+          ? { ...prev, responseText, responseStatus: "generated", modelUsed }
+          : prev
+      );
       toast.success(t("app.reviews.responseReady"));
     } else {
+      setReviews((prev) =>
+        prev.map((r) =>
+          r.id === reviewId ? { ...r, responseStatus: "generation_failed" } : r
+        )
+      );
+      setSelectedReview((prev) =>
+        prev?.id === reviewId ? { ...prev, responseStatus: "generation_failed" } : prev
+      );
       toast.error(t("app.reviews.generationError"));
     }
-    if (business?.id) loadReviews(business.id);
   }
 
   // ── Status tabs ────────────────────────────────────────────────────────────
@@ -585,12 +642,22 @@ export default function ReviewsPage() {
                       {review.text}
                     </p>
                   </div>
-                  <button
-                    onClick={() => setSelectedReview(review)}
-                    className="shrink-0 px-3 py-1.5 rounded-lg border border-forest/40 text-forest text-xs font-medium hover:bg-forest hover:text-paper hover:border-forest transition-all"
-                  >
-                    {t("app.reviews.review_action")}
-                  </button>
+                  {review.responseStatus === "generating" ? (
+                    <button
+                      disabled
+                      className="shrink-0 px-3 py-1.5 rounded-lg border border-line text-muted text-xs font-medium opacity-60 cursor-not-allowed flex items-center gap-1.5"
+                    >
+                      <Loader2 size={11} className="animate-spin" />
+                      {t("app.reviews.generating_short")}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setSelectedReview(review)}
+                      className="shrink-0 px-3 py-1.5 rounded-lg border border-forest/40 text-forest text-xs font-medium hover:bg-forest hover:text-paper hover:border-forest transition-all"
+                    >
+                      {t("app.reviews.review_action")}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>

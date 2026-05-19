@@ -70,7 +70,7 @@ export default function TeamPage() {
       .from("team_members")
       .select("*")
       .eq("business_id", business.id)
-      .then(({ data }) => {
+      .then(({ data }: { data: unknown }) => {
         if (data) setMembers(data as DBMember[]);
         setDbLoading(false);
       });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { User } from "@supabase/supabase-js";
+import type { User, AuthChangeEvent, Session } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase-client";
 
 export interface Profile {
@@ -29,14 +29,14 @@ export interface Business {
 }
 
 export function useAuth() {
+  // Singleton — all useAuth() calls share the same browser client instance.
+  const [supabase] = useState(() => createClient());
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient();
-
     async function fetchProfileAndBusiness(userId: string) {
       try {
         const { data: profileData } = await supabase
@@ -63,7 +63,7 @@ export function useAuth() {
       }
     }
 
-    supabase.auth.getUser().then(async ({ data: { user: u } }) => {
+    supabase.auth.getUser().then(async ({ data: { user: u } }: { data: { user: User | null } }) => {
       setUser(u ?? null);
       if (u) {
         await fetchProfileAndBusiness(u.id);
@@ -73,7 +73,7 @@ export function useAuth() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, session: Session | null) => {
       const u = session?.user ?? null;
       setUser(u);
       if (u) {
@@ -82,17 +82,20 @@ export function useAuth() {
         setProfile(null);
         setBusiness(null);
       }
-      setLoading(false);
+      // setLoading(false) is intentionally NOT called here.
+      // Only getUser() (server-validated) controls the loading flag.
+      // onAuthStateChange can fire with a null session during token refresh,
+      // which would create the intermediate state loading=false + user=null
+      // before getUser resolves — causing redirect loops.
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [supabase]);
 
   async function login(
     email: string,
     password: string
   ): Promise<{ error?: string }> {
-    const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return { error: error.message };
     return {};
@@ -103,7 +106,6 @@ export function useAuth() {
     password: string,
     fullName: string
   ): Promise<{ error?: string }> {
-    const supabase = createClient();
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -117,17 +119,15 @@ export function useAuth() {
   }
 
   async function logout(): Promise<void> {
-  const supabase = createClient();
-  await supabase.auth.signOut();
-  setUser(null);
-  setProfile(null);
-  setBusiness(null);
-  // Fuerza recarga completa para limpiar cookies del servidor
-  window.location.href = "/login";
-}
+    await supabase.auth.signOut();
+    setUser(null);
+    setProfile(null);
+    setBusiness(null);
+    // Full reload to clear server-side session cookies
+    window.location.href = "/login";
+  }
 
   async function resetPassword(email: string): Promise<{ error?: string }> {
-    const supabase = createClient();
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
     });
@@ -136,7 +136,6 @@ export function useAuth() {
   }
 
   async function updatePassword(newPassword: string): Promise<{ error?: string }> {
-    const supabase = createClient();
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) return { error: error.message };
     return {};
