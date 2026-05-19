@@ -18,6 +18,7 @@ Requires `.env.local` with:
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=        # server-only; used by /api/complete-onboarding to bypass RLS
 ANTHROPIC_API_KEY=
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
@@ -88,7 +89,10 @@ Auth is handled by Supabase. Key files:
   - `business` — row from `public.businesses` (has `name`, `type`, `city`, etc.). Fetched by `user_id`, not by `current_business_id`. `business.id` is the foreign key to use for all business-scoped DB queries.
   - All auth methods return `Promise<{ error?: string }>` or `Promise<void>`.
   - `lib/supabase-client.ts` uses a **module-level** singleton (not a React-level ref). Calling `createClient()` anywhere in a Client Component always returns the same instance.
-- **`middleware.ts`** — Validates the Supabase session on every request using `supabase.auth.getUser()` (also refreshes the session cookie). Protects `/dashboard`, `/reviews`, `/insights`, `/settings`, `/onboarding`. Blocks `/dev-login` in production.
+- **`middleware.ts`** — Runs on every request. Makes **up to 2 network round-trips per navigation**:
+  1. `supabase.auth.getUser()` — always (validates token with Supabase Auth server).
+  2. `supabase.from("profiles").select("onboarded")` — only when user is authenticated and on a protected non-onboarding path, or when user is on `/onboarding`. This is a Supabase DB query and is the source of intermittent ~1300ms latency spikes.
+  Protects `/dashboard`, `/reviews`, `/insights`, `/settings`, `/onboarding`. Blocks `/dev-login` in production.
 - **`app/auth/callback/route.ts`** — Exchanges the PKCE code for a session, then redirects to `/onboarding` or `/dashboard` based on `profile.onboarded`. Respects a `?next=` override (used by password reset to go to `/reset-password`).
 
 **Supabase triggers (already configured, do not touch):**
@@ -96,6 +100,39 @@ Auth is handled by Supabase. Key files:
 - `updated_at` triggers — do NOT manually update `updated_at` on any table.
 
 **AppShell** derives the display name as `business?.name ?? profile?.full_name ?? user.email`. The client guard in `AppShell` (`useEffect` redirect) is a fallback to the middleware, not the primary gate.
+
+### Onboarding flow
+
+`app/onboarding/page.tsx` — simple single-step page shown to new users (middleware redirects here when `profile.onboarded = false`). The only action is a button that calls `POST /api/complete-onboarding`.
+
+`app/api/complete-onboarding/route.ts` — authenticated Route Handler that:
+1. Verifies session with `supabase.auth.getUser()`.
+2. Creates a default `businesses` row if one doesn't exist (using the **admin client** with `SUPABASE_SERVICE_ROLE_KEY` to bypass RLS).
+3. Upserts `profiles` row with `onboarded: true`.
+
+After success the page does `router.push("/dashboard")`, which triggers the middleware profiles query again and lets through because `onboarded` is now `true`.
+
+### AI response generation
+
+`app/api/responses/generate/route.ts` — Route Handler that generates a review reply using Anthropic.
+
+**Model selection:** `claude-opus-4-7` for reviews with rating ≤ 2★ or text > 400 chars; `claude-haiku-4-5-20251001` for everything else.
+
+**Data flow per request:**
+1. Fetch review from `reviews` table.
+2. Fetch business from `businesses` table (`name`, `type`).
+3. Fetch tone config from `tone_configs` table (may not exist — all fields have defaults).
+4. Call Anthropic with one retry on failure.
+5. Post-process: strip em-dash / en-dash.
+6. Upsert into `responses` table (keyed on `review_id`, `onConflict: "review_id"`).
+
+**`tone_configs` table fields:** `formality` (`very_informal | informal | neutral | formal | very_formal`), `response_length` (`short | medium | long`), `response_language` (`auto` or locale code), `signature` (string appended to every reply), `forbidden_phrases` (string[]), `favorite_phrases` (string[]).
+
+**`responses` table fields:** `review_id` (unique), `text`, `status` (`generated | generation_failed`), `model_used`, `tokens_input`, `tokens_output`.
+
+### PendingCount pattern
+
+`lib/hooks/usePendingCount.ts` — exports `PendingCountContext` and `usePendingCount()`. `AppShell` provides the context with a `refreshPendingCount` callback. Child components (e.g. `ReviewSlideOver`) call `usePendingCount().refreshPendingCount()` after status changes to update the sidebar badge without prop-drilling.
 
 ### i18n system
 
