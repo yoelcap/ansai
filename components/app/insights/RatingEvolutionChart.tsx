@@ -24,47 +24,66 @@ interface Props {
   data: RatingPoint[];
   domain: [number, number];
   title: string;
+  emptyMessage?: string;
+  minPoints?: number;
 }
 
-export function RatingEvolutionChart({ data, domain, title }: Props) {
+export function RatingEvolutionChart({
+  data,
+  domain,
+  title,
+  emptyMessage,
+  minPoints = 3,
+}: Props) {
+  const hasEnough = data.length >= minPoints;
   const interval = data.length <= 7 ? 0 : data.length <= 30 ? 4 : 1;
 
   return (
     <div className="bg-paper border border-line rounded-2xl p-5">
       <h2 className="font-serif font-semibold text-ink text-base mb-4">{title}</h2>
-      <ResponsiveContainer width="100%" height={200}>
-        <LineChart data={data} margin={{ top: 4, right: 8, left: -24, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#d8d2c4" vertical={false} />
-          <XAxis
-            dataKey="date"
-            tick={{ fontSize: 10, fill: "#6b6660" }}
-            tickLine={false}
-            axisLine={false}
-            interval={interval}
-          />
-          <YAxis
-            domain={domain}
-            tick={{ fontSize: 10, fill: "#6b6660" }}
-            tickLine={false}
-            axisLine={false}
-            tickCount={4}
-            tickFormatter={(v) => Number(v).toFixed(1)}
-          />
-          <Tooltip
-            contentStyle={TOOLTIP_STYLE}
-            formatter={(value) => [Number(value).toFixed(1), "Rating"]}
-            labelStyle={{ color: "#6b6660", marginBottom: 2 }}
-          />
-          <Line
-            type="monotone"
-            dataKey="rating"
-            stroke="#1f3a2e"
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ r: 4, fill: "#1f3a2e", strokeWidth: 0 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      {hasEnough ? (
+        <div style={{ height: 200 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data} margin={{ top: 4, right: 8, left: -24, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#d8d2c4" vertical={false} />
+              <XAxis
+                dataKey="date"
+                tick={{ fontSize: 10, fill: "#6b6660" }}
+                tickLine={false}
+                axisLine={false}
+                interval={interval}
+              />
+              <YAxis
+                domain={domain}
+                tick={{ fontSize: 10, fill: "#6b6660" }}
+                tickLine={false}
+                axisLine={false}
+                tickCount={4}
+                tickFormatter={(v) => Number(v).toFixed(1)}
+              />
+              <Tooltip
+                contentStyle={TOOLTIP_STYLE}
+                formatter={(value) => [Number(value).toFixed(1), "Rating"]}
+                labelStyle={{ color: "#6b6660", marginBottom: 2 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="rating"
+                stroke="#1f3a2e"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4, fill: "#1f3a2e", strokeWidth: 0 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center h-[200px]">
+          <p className="text-sm text-muted text-center max-w-[260px]">
+            {emptyMessage ?? "No hay suficientes datos para mostrar el gráfico"}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -331,7 +331,16 @@
       "critical_mentions": "vermeldingen",
       "severity_high": "Hoog",
       "severity_medium": "Gemiddeld",
-      "severity_low": "Laag"
+      "severity_low": "Laag",
+      "empty_no_reviews": "Je hebt nog geen beoordelingen. Voeg je eerste beoordeling toe om analyses te zien.",
+      "go_reviews": "Beoordeling toevoegen",
+      "error_load": "Fout bij het laden van analyses",
+      "retry": "Opnieuw proberen",
+      "empty_rating_chart": "Je hebt minstens 3 beoordelingen nodig in deze periode om de ratingevolutie te zien",
+      "empty_stars_chart": "Je hebt minstens 5 beoordelingen nodig om de sterrenvedeling te zien",
+      "empty_lang_chart": "Je hebt minstens 5 beoordelingen nodig om de taalverdeling te zien",
+      "empty_topics": "Onderwerpen zijn binnenkort beschikbaar",
+      "empty_critical": "Geen kritieke beoordelingen in deze periode"
     },
     "reviews": {
       "title": "Beoordelingen",
@@ -438,7 +447,6 @@
       "account_delete_desc": "Deze actie is permanent en onomkeerbaar. Al uw gegevens, instellingen en toegang worden verwijderd.",
       "account_delete_confirm_label": "Typ uw e-mailadres ter bevestiging",
       "account_delete_btn": "Mijn account permanent verwijderen",
-
       "google_title": "Google Business Profile",
       "google_desc": "Importeer en beheer uw Google-beoordelingen rechtstreeks vanuit Ansai.",
       "google_connected": "Verbonden",
@@ -452,7 +460,6 @@
       "thefork_title": "TheFork",
       "thefork_desc": "Beheer van TheFork-beoordelingen. Binnenkort beschikbaar.",
       "integrations_contact": "Hulp nodig bij integraties?",
-
       "invite_btn": "Lid uitnodigen",
       "invite_title": "Een lid uitnodigen",
       "invite_email": "E-mail",
@@ -470,7 +477,6 @@
       "upgrade_btn": "Plannen bekijken",
       "you_badge": "Jij",
       "remove_btn": "Verwijderen",
-
       "plan_renews": "Verlengt op",
       "change_plan": "Plan wijzigen",
       "cancel_sub": "Abonnement opzeggen",

@@ -331,7 +331,16 @@
       "critical_mentions": "mentions",
       "severity_high": "Élevée",
       "severity_medium": "Moyenne",
-      "severity_low": "Faible"
+      "severity_low": "Faible",
+      "empty_no_reviews": "Vous n'avez pas encore d'avis. Ajoutez votre premier avis pour voir les analyses.",
+      "go_reviews": "Ajouter un avis",
+      "error_load": "Erreur lors du chargement des analyses",
+      "retry": "Réessayer",
+      "empty_rating_chart": "Vous avez besoin d'au moins 3 avis dans cette période pour voir l'évolution de la note",
+      "empty_stars_chart": "Vous avez besoin d'au moins 5 avis pour voir la répartition des étoiles",
+      "empty_lang_chart": "Vous avez besoin d'au moins 5 avis pour voir la répartition par langue",
+      "empty_topics": "Les sujets seront disponibles prochainement",
+      "empty_critical": "Aucun avis critique dans cette période"
     },
     "reviews": {
       "title": "Avis",
@@ -438,7 +447,6 @@
       "account_delete_desc": "Cette action est permanente et irréversible. Toutes vos données, paramètres et accès seront supprimés.",
       "account_delete_confirm_label": "Entrez votre email pour confirmer",
       "account_delete_btn": "Supprimer définitivement mon compte",
-
       "google_title": "Google Business Profile",
       "google_desc": "Importez et gérez vos avis Google directement depuis Ansai.",
       "google_connected": "Connecté",
@@ -452,7 +460,6 @@
       "thefork_title": "TheFork",
       "thefork_desc": "Gestion des avis TheFork. Bientôt disponible.",
       "integrations_contact": "Besoin d'aide avec les intégrations ?",
-
       "invite_btn": "Inviter un membre",
       "invite_title": "Inviter un membre",
       "invite_email": "E-mail",
@@ -470,7 +477,6 @@
       "upgrade_btn": "Voir les plans",
       "you_badge": "Vous",
       "remove_btn": "Supprimer",
-
       "plan_renews": "Se renouvelle le",
       "change_plan": "Changer de plan",
       "cancel_sub": "Annuler l'abonnement",

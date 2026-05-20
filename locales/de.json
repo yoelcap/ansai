@@ -331,7 +331,16 @@
       "critical_mentions": "Erwähnungen",
       "severity_high": "Hoch",
       "severity_medium": "Mittel",
-      "severity_low": "Niedrig"
+      "severity_low": "Niedrig",
+      "empty_no_reviews": "Sie haben noch keine Bewertungen. Fügen Sie Ihre erste Bewertung hinzu, um Analysen zu sehen.",
+      "go_reviews": "Bewertung hinzufügen",
+      "error_load": "Fehler beim Laden der Analysen",
+      "retry": "Wiederholen",
+      "empty_rating_chart": "Sie benötigen mindestens 3 Bewertungen in diesem Zeitraum, um die Bewertungsentwicklung zu sehen",
+      "empty_stars_chart": "Sie benötigen mindestens 5 Bewertungen, um die Sternverteilung zu sehen",
+      "empty_lang_chart": "Sie benötigen mindestens 5 Bewertungen, um die Sprachverteilung zu sehen",
+      "empty_topics": "Themen werden in Kürze verfügbar sein",
+      "empty_critical": "Keine kritischen Bewertungen in diesem Zeitraum"
     },
     "reviews": {
       "title": "Bewertungen",
@@ -438,7 +447,6 @@
       "account_delete_desc": "Diese Aktion ist dauerhaft und unumkehrbar. Alle Ihre Daten, Einstellungen und der Zugang werden gelöscht.",
       "account_delete_confirm_label": "Geben Sie Ihre E-Mail zur Bestätigung ein",
       "account_delete_btn": "Mein Konto dauerhaft löschen",
-
       "google_title": "Google Business Profile",
       "google_desc": "Importieren und verwalten Sie Ihre Google-Bewertungen direkt in Ansai.",
       "google_connected": "Verbunden",
@@ -452,7 +460,6 @@
       "thefork_title": "TheFork",
       "thefork_desc": "Verwaltung von TheFork-Bewertungen. Demnächst verfügbar.",
       "integrations_contact": "Benötigen Sie Hilfe bei Integrationen?",
-
       "invite_btn": "Mitglied einladen",
       "invite_title": "Ein Mitglied einladen",
       "invite_email": "E-Mail",
@@ -470,7 +477,6 @@
       "upgrade_btn": "Pläne ansehen",
       "you_badge": "Sie",
       "remove_btn": "Entfernen",
-
       "plan_renews": "Verlängert am",
       "change_plan": "Plan wechseln",
       "cancel_sub": "Abonnement kündigen",

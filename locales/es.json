@@ -331,7 +331,16 @@
       "critical_mentions": "menciones",
       "severity_high": "Alta",
       "severity_medium": "Media",
-      "severity_low": "Baja"
+      "severity_low": "Baja",
+      "empty_no_reviews": "Aún no tienes reseñas. Añade tu primera reseña para ver el análisis.",
+      "go_reviews": "Añadir reseña",
+      "error_load": "Error al cargar los análisis",
+      "retry": "Reintentar",
+      "empty_rating_chart": "Necesitas al menos 3 reseñas en el periodo para ver la evolución del rating",
+      "empty_stars_chart": "Necesitas al menos 5 reseñas para ver la distribución de estrellas",
+      "empty_lang_chart": "Necesitas al menos 5 reseñas para ver la distribución por idioma",
+      "empty_topics": "Los temas se mostrarán próximamente",
+      "empty_critical": "No hay reseñas críticas en este periodo"
     },
     "reviews": {
       "title": "Reseñas",
@@ -438,7 +447,6 @@
       "account_delete_desc": "Esta acción es permanente e irreversible. Se eliminarán todos tus datos, configuración y acceso al servicio.",
       "account_delete_confirm_label": "Escribe tu email para confirmar",
       "account_delete_btn": "Eliminar mi cuenta permanentemente",
-
       "google_title": "Google Business Profile",
       "google_desc": "Importa y gestiona tus reseñas de Google directamente desde Ansai.",
       "google_connected": "Conectado",
@@ -452,7 +460,6 @@
       "thefork_title": "TheFork / ElTenedor",
       "thefork_desc": "Gestión de reseñas de TheFork. Próximamente disponible.",
       "integrations_contact": "¿Necesitas ayuda con las integraciones?",
-
       "invite_btn": "Invitar miembro",
       "invite_title": "Invitar a un miembro",
       "invite_email": "Email",
@@ -470,7 +477,6 @@
       "upgrade_btn": "Ver planes",
       "you_badge": "Tú",
       "remove_btn": "Eliminar",
-
       "plan_renews": "Se renueva el",
       "change_plan": "Cambiar plan",
       "cancel_sub": "Cancelar suscripción",

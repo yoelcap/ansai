@@ -331,7 +331,16 @@
       "critical_mentions": "mentions",
       "severity_high": "High",
       "severity_medium": "Medium",
-      "severity_low": "Low"
+      "severity_low": "Low",
+      "empty_no_reviews": "You have no reviews yet. Add your first review to see analytics.",
+      "go_reviews": "Add review",
+      "error_load": "Error loading insights",
+      "retry": "Retry",
+      "empty_rating_chart": "You need at least 3 reviews in this period to see the rating evolution",
+      "empty_stars_chart": "You need at least 5 reviews to see the star distribution",
+      "empty_lang_chart": "You need at least 5 reviews to see the language distribution",
+      "empty_topics": "Topics will be available soon",
+      "empty_critical": "No critical reviews in this period"
     },
     "reviews": {
       "title": "Reviews",
@@ -438,7 +447,6 @@
       "account_delete_desc": "This action is permanent and irreversible. All your data, settings and access will be deleted.",
       "account_delete_confirm_label": "Type your email to confirm",
       "account_delete_btn": "Permanently delete my account",
-
       "google_title": "Google Business Profile",
       "google_desc": "Import and manage your Google reviews directly from Ansai.",
       "google_connected": "Connected",
@@ -452,7 +460,6 @@
       "thefork_title": "TheFork",
       "thefork_desc": "TheFork review management. Coming soon.",
       "integrations_contact": "Need help with integrations?",
-
       "invite_btn": "Invite member",
       "invite_title": "Invite a member",
       "invite_email": "Email",
@@ -470,7 +477,6 @@
       "upgrade_btn": "View plans",
       "you_badge": "You",
       "remove_btn": "Remove",
-
       "plan_renews": "Renews on",
       "change_plan": "Change plan",
       "cancel_sub": "Cancel subscription",

@@ -128,7 +128,7 @@ After success the page does `router.push("/dashboard")`, which triggers the midd
 
 **`tone_configs` table fields:** `formality` (`very_informal | informal | neutral | formal | very_formal`), `response_length` (`short | medium | long`), `response_language` (`auto` or locale code), `signature` (string appended to every reply), `forbidden_phrases` (string[]), `favorite_phrases` (string[]).
 
-**`responses` table fields:** `review_id` (unique), `text`, `status` (`generated | generation_failed`), `model_used`, `tokens_input`, `tokens_output`.
+**`responses` table fields:** `review_id` (unique), `text`, `status` (`generated | generation_failed`), `model_used`, `tokens_input`, `tokens_output`, `approved_at`.
 
 ### PendingCount pattern
 
@@ -162,6 +162,12 @@ When adding new strings, add the key to all 5 locale files. If unsure of a trans
 - `getAllMockReviews()` — all 10 mock reviews across all statuses (`pending`, `responded`, `ignored`). Used by `/reviews`.
 - `getMockPendingCount()` — pending review count for the sidebar badge.
 
+**`Metric` interface** (defined in `dashboardData.ts`, re-used everywhere including insights):
+```ts
+{ value: number | string; change: string; trend: "positive" | "negative" | "neutral"; changeContext: string }
+```
+When constructing real KPI data, build `Metric` objects manually — `change` is a pre-formatted string (e.g. `"+0.2"`), not a raw number.
+
 **Important schema divergences** between the `Review` type and the real DB:
 
 | Field | Mock type | DB schema |
@@ -176,6 +182,11 @@ When connecting real data, map DB values to the mock type to avoid breaking exis
 - `getMockInsightsData(period: Period)` — KPIs, rating evolution, star distribution, language share, topics, and critical issues.
 - `getRatingDomain(period: Period)` — y-axis domain `[min, max]` for the rating chart.
 - `Period` type: `"7d" | "30d" | "90d" | "year"`.
+
+**Insights-specific DB notes:**
+- `LanguageBucket.code` — the mock uses uppercase (`"NL"`, `"FR"`); the DB `reviews.language` column stores lowercase (`"nl"`, `"fr"`). Map when constructing real buckets.
+- `InsightKPIs.responseRate` and `InsightKPIs.avgResponseTime` — no direct DB columns. `responseRate` can be derived from `COUNT(responses) / COUNT(reviews)`; `avgResponseTime` requires `responses.approved_at - reviews.review_date`. Neither is available if `responses` rows are missing.
+- Topics (`InsightsData.topics`) have no NLP pipeline yet — keep as mock or hide the section.
 
 ### Utilities
 
@@ -207,3 +218,5 @@ When connecting real data, map DB values to the mock type to avoid breaking exis
 **Animations** (defined in `tailwind.config.ts`): `animate-slide-up`, `animate-pulse-slow`, `animate-spin-slow`.
 
 **Style rule:** No blue SaaS aesthetics. Use the palette above. Terracota (`terra`) for alerts/negative, forest for positive/primary.
+
+**Chart containers:** Recharts `ResponsiveContainer` requires its parent to have an explicit pixel height (e.g. `h-48` / `h-64` Tailwind class or `style={{ height: 200 }}`). A parent with only `height: 100%` or no height causes the `width(-1) height(-1)` console warning and broken renders.

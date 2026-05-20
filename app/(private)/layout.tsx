@@ -3,7 +3,7 @@
 import { TranslationProvider } from "@/lib/i18n";
 import { AppShell } from "@/components/app/AppShell";
 
-export default function ReviewsLayout({
+export default function PrivateLayout({
   children,
 }: {
   children: React.ReactNode;
