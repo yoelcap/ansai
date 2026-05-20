@@ -77,7 +77,11 @@ export function useAuth() {
       const u = session?.user ?? null;
       if (u) {
         setUser(u);
-        await fetchProfileAndBusiness(u.id);
+        // TOKEN_REFRESHED only rotates the JWT — profile and business are unchanged.
+        // Skip the DB round-trip to avoid spurious re-renders and parallel fetches.
+        if (event !== "TOKEN_REFRESHED") {
+          await fetchProfileAndBusiness(u.id);
+        }
       } else if (event === "SIGNED_OUT") {
         // Only clear state on an explicit sign-out. A null session from
         // TOKEN_REFRESHED or other transient events is not a real sign-out

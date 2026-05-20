@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { Search, Star, Plus, X, Loader2 } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { ReviewSlideOver, type ReviewWithResponse } from "@/components/app/dashboard/ReviewSlideOver";
@@ -338,6 +338,8 @@ export default function ReviewsPage() {
   const supabase = createClient();
 
   const [reviews, setReviews] = useState<ReviewWithResponse[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rawDbRowsRef = useRef<any[]>([]); // backup for locale-only remaps
   const [dataLoading, setDataLoading] = useState(true);
   const [dataError, setDataError] = useState<string | null>(null);
 
@@ -361,10 +363,13 @@ export default function ReviewsPage() {
       setDataLoading(false);
       return;
     }
+    const rows = data ?? [];
+    rawDbRowsRef.current = rows;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setReviews((data ?? []).map((r: any) => mapRow(r, locale)));
+    setReviews(rows.map((r: any) => mapRow(r, locale)));
     setDataLoading(false);
-  }, [locale]); // re-map relative times when locale changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // locale omitted — locale changes trigger the re-map effect below, not a re-fetch
 
   useEffect(() => {
     if (!authLoading && business?.id) {
@@ -373,6 +378,14 @@ export default function ReviewsPage() {
       setDataLoading(false);
     }
   }, [authLoading, business?.id, loadReviews]);
+
+  // Re-map relative times when locale changes without re-fetching from Supabase
+  useEffect(() => {
+    if (rawDbRowsRef.current.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setReviews(rawDbRowsRef.current.map((r: any) => mapRow(r, locale)));
+    }
+  }, [locale]);
 
   const filtered = useMemo(() => {
     return reviews.filter((r) => {

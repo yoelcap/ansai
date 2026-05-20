@@ -53,6 +53,7 @@ export default function AccountPage() {
   const [language, setLanguage] = useState<Locale>(locale);
   const initialName = useRef("");
   const initialLang = useRef<Locale>(locale);
+  const isInitialized = useRef(false);
   const [personalSaving, setPersonalSaving] = useState(false);
 
   // ── Password ───────────────────────────────────────────────────────────────
@@ -65,13 +66,15 @@ export default function AccountPage() {
 
   useEffect(() => {
     if (loading || !profile) return;
+    if (isInitialized.current) return;
+    isInitialized.current = true;
     const n = profile.full_name ?? "";
-    const lang = (profile.interface_language as Locale) ?? locale;
+    const lang = (profile.interface_language as Locale | null) ?? locale;
     setName(n);
     setLanguage(lang);
     initialName.current = n;
     initialLang.current = lang;
-  }, [loading, profile]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loading, profile, locale]);
 
   const isPersonalDirty =
     name !== initialName.current || language !== initialLang.current;
