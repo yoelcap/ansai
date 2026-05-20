@@ -73,20 +73,21 @@ export function useAuth() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, session: Session | null) => {
+    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
       const u = session?.user ?? null;
-      setUser(u);
       if (u) {
+        setUser(u);
         await fetchProfileAndBusiness(u.id);
-      } else {
+      } else if (event === "SIGNED_OUT") {
+        // Only clear state on an explicit sign-out. A null session from
+        // TOKEN_REFRESHED or other transient events is not a real sign-out
+        // and must not trigger the AppShell guard that redirects to /login.
+        setUser(null);
         setProfile(null);
         setBusiness(null);
       }
       // setLoading(false) is intentionally NOT called here.
       // Only getUser() (server-validated) controls the loading flag.
-      // onAuthStateChange can fire with a null session during token refresh,
-      // which would create the intermediate state loading=false + user=null
-      // before getUser resolves — causing redirect loops.
     });
 
     return () => subscription.unsubscribe();
