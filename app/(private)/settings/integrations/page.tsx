@@ -149,7 +149,8 @@ export default function IntegrationsPage() {
     const supabase = createClient();
     supabase
       .from("integrations")
-      .select("*")
+      // Explicit columns: OAuth token columns are not granted to browser roles (migration 0002).
+      .select("id, business_id, provider, status")
       .eq("business_id", business.id)
       .then(({ data }: { data: unknown }) => {
         if (data) setIntegrations(data as Integration[]);
