@@ -59,6 +59,13 @@ function mapRow(row: any, locale: string): ReviewWithResponse {
   };
 }
 
+/** Translation key for a failed /api/responses/generate call. */
+async function generationErrorKey(res: Response): Promise<string> {
+  if (res.status !== 429) return "app.reviews.generationError";
+  const body = (await res.json().catch(() => ({}))) as { code?: string };
+  return body.code === "demo_daily_limit" ? "app.reviews.aiLimitDemo" : "app.reviews.aiLimitUser";
+}
+
 function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
@@ -463,7 +470,7 @@ export default function ReviewsPage() {
       );
       toast.success(t("app.reviews.responseReady"));
     } else {
-      toast.error(t("app.reviews.generationError"));
+      toast.error(t(await generationErrorKey(res)));
     }
   }, [t, toast]);
 
@@ -509,7 +516,7 @@ export default function ReviewsPage() {
       setSelectedReview((prev) =>
         prev?.id === reviewId ? { ...prev, responseStatus: "generation_failed" } : prev
       );
-      toast.error(t("app.reviews.generationError"));
+      toast.error(t(await generationErrorKey(res)));
     }
   }
 

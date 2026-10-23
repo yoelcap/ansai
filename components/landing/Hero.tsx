@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/lib/i18n";
+import { DemoButton } from "@/components/DemoButton";
 
 export function Hero() {
   const { t } = useTranslation();
@@ -34,12 +35,7 @@ export function Hero() {
                 <span>{t("hero.cta_primary")}</span>
                 <span>→</span>
               </a>
-              <a
-                href="/demo"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-ink/25 text-ink font-semibold text-sm transition-all hover:border-forest hover:text-forest"
-              >
-                {t("hero.cta_secondary")}
-              </a>
+              <DemoButton className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-ink/25 text-ink font-semibold text-sm transition-all hover:border-forest hover:text-forest" />
             </div>
 
             <div className="mt-6 text-[13px] text-muted flex flex-wrap items-center gap-3 sm:gap-4 animate-slide-up [animation-delay:0.4s]">

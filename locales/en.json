@@ -17,7 +17,6 @@
     "title_em": "without losing hours every week.",
     "subtitle": "Ansai prepares personalised responses for your Google reviews in your business's tone. You review, edit and approve with one click. Nothing is published without your permission.",
     "cta_primary": "Request beta access",
-    "cta_secondary": "See demo",
     "form_placeholder": "you@restaurant.com",
     "form_cta": "Request my spot",
     "form_success": "✓ Got it! We'll be in touch soon.",
@@ -146,7 +145,8 @@
   "cta": {
     "title_part1": "Join Ansai's",
     "title_em": "private beta.",
-    "subtitle": "Limited spots left. The first 50 businesses get 30 days free with no commitment."
+    "subtitle": "Limited spots left. The first 50 businesses get 30 days free with no commitment.",
+    "demo_hint": "Rather see it before signing up?"
   },
   "footer": {
     "tagline": "The simplest way to keep your reviews up to date. Built for restaurants, cafés, hotels and hospitality groups in Belgium.",
@@ -191,26 +191,18 @@
     "s5_body": "We keep your data while your account is active. Upon cancellation, we delete all your data within a maximum of 30 days, unless legally required to retain it for a longer period."
   },
   "demo_page": {
-    "eyebrow": "Interactive demo",
-    "title": "See how your reply would look",
-    "subtitle": "Paste any review and see the reply in 3 seconds. No sign-up needed.",
-    "review_label": "Google review",
-    "review_placeholder": "Paste a real customer review here...",
-    "tone_label": "Reply tone",
-    "tone_formal": "Formal",
-    "tone_casual": "Friendly",
-    "lang_label": "Response language",
-    "generate": "Generate response",
-    "generating": "Preparing response...",
-    "result_label": "Response prepared by Ansai",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "error": "Please paste a review first",
-    "badge": "Sample response · Not connected to Google",
-    "cta_title": "Want this for your business?",
-    "cta_sub": "Set it up in 5 minutes. No credit card.",
-    "cta_btn": "Request beta access →",
-    "back": "← Back to home"
+    "eyebrow": "Demo account",
+    "title": "Try Ansai from the inside",
+    "subtitle": "Step into a fictional restaurant with 40 reviews in 5 languages. No sign-up, no Google connection.",
+    "point_reviews": "Go through pending reviews, edit the AI's suggested reply and approve or reject it.",
+    "point_insights": "Explore how the rating evolves, the star distribution and your guests' languages.",
+    "point_tone": "Adjust the tone, length and signature of replies, and generate a new one with AI.",
+    "cta": "Enter the demo",
+    "loading": "Signing in…",
+    "note": "Demo data is reset periodically.",
+    "back": "← Back to home",
+    "error_unavailable": "The demo is not available right now. Please try again in a few minutes.",
+    "login_hint": "Just want to look around?"
   },
   "for_who": {
     "eyebrow": "Is this for me?",
@@ -383,7 +375,9 @@
       "form_validation_text": "Text must be at least 10 characters",
       "emptyState": "You don't have any reviews yet",
       "loadError": "Error loading reviews",
-      "retryLoad": "Retry"
+      "retryLoad": "Retry",
+      "aiLimitDemo": "The demo has reached its daily limit of AI replies. Come back tomorrow or create your own account.",
+      "aiLimitUser": "You have reached the AI generation limit. Please wait a moment and try again."
     },
     "settings": {
       "title": "Settings",
@@ -500,6 +494,10 @@
     },
     "toast": {
       "close": "Close"
+    },
+    "demo": {
+      "banner": "You are viewing a demo account. Data is reset periodically.",
+      "password_locked": "The demo account's password cannot be changed."
     }
   },
   "auth": {

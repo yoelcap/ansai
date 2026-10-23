@@ -17,7 +17,6 @@
     "title_em": "sin perder horas cada semana.",
     "subtitle": "Ansai prepara respuestas personalizadas para tus reseñas de Google con el tono de tu negocio. Tú revisas, editas y apruebas con un click. Nada se publica sin tu permiso.",
     "cta_primary": "Solicitar acceso a la beta",
-    "cta_secondary": "Ver demo",
     "form_placeholder": "tu@restaurante.com",
     "form_cta": "Solicitar mi plaza",
     "form_success": "✓ ¡Anotado! Te contactaremos pronto.",
@@ -146,7 +145,8 @@
   "cta": {
     "title_part1": "Únete a la beta privada",
     "title_em": "de Ansai.",
-    "subtitle": "Quedan pocas plazas. Los primeros 50 negocios tienen 30 días gratis sin compromiso."
+    "subtitle": "Quedan pocas plazas. Los primeros 50 negocios tienen 30 días gratis sin compromiso.",
+    "demo_hint": "¿Prefieres verlo antes de apuntarte?"
   },
   "footer": {
     "tagline": "La forma más sencilla de mantener tus reseñas al día. Creado para restaurantes, cafés, hoteles y grupos hosteleros en Bélgica.",
@@ -191,26 +191,18 @@
     "s5_body": "Conservamos tus datos mientras tu cuenta esté activa. Al cancelar la suscripción, eliminamos todos tus datos en un plazo máximo de 30 días, salvo obligación legal de conservarlos durante un período mayor."
   },
   "demo_page": {
-    "eyebrow": "Demo interactiva",
-    "title": "Ve cómo quedaría tu respuesta",
-    "subtitle": "Pega cualquier reseña y ve la respuesta en 3 segundos. Sin registro.",
-    "review_label": "Reseña de Google",
-    "review_placeholder": "Pega aquí la reseña de un cliente real...",
-    "tone_label": "Tono de respuesta",
-    "tone_formal": "Formal",
-    "tone_casual": "Cercano",
-    "lang_label": "Idioma de la respuesta",
-    "generate": "Generar respuesta",
-    "generating": "Preparando respuesta...",
-    "result_label": "Respuesta preparada por Ansai",
-    "copy": "Copiar",
-    "copied": "¡Copiado!",
-    "error": "Pega una reseña primero",
-    "badge": "Respuesta de ejemplo · Sin conexión real a Google",
-    "cta_title": "¿Quieres esto para tu negocio?",
-    "cta_sub": "Configúralo en 5 minutos. Sin tarjeta de crédito.",
-    "cta_btn": "Solicitar acceso a la beta →",
-    "back": "← Volver al inicio"
+    "eyebrow": "Cuenta de demostración",
+    "title": "Prueba Ansai por dentro",
+    "subtitle": "Entra en un restaurante ficticio con 40 reseñas en 5 idiomas. Sin registro y sin conectar Google.",
+    "point_reviews": "Revisa reseñas pendientes, edita la respuesta que propone la IA y apruébala o recházala.",
+    "point_insights": "Explora la evolución de la valoración, el reparto de estrellas y los idiomas de tus clientes.",
+    "point_tone": "Ajusta el tono, la longitud y la firma de las respuestas, y genera una nueva con IA.",
+    "cta": "Entrar en la demo",
+    "loading": "Entrando…",
+    "note": "Los datos de la demo se reinician periódicamente.",
+    "back": "← Volver al inicio",
+    "error_unavailable": "La demo no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.",
+    "login_hint": "¿Solo quieres echar un vistazo?"
   },
   "for_who": {
     "eyebrow": "¿Es para mí?",
@@ -383,7 +375,9 @@
       "form_validation_text": "El texto debe tener al menos 10 caracteres",
       "emptyState": "Aún no tienes reseñas",
       "loadError": "Error al cargar las reseñas",
-      "retryLoad": "Reintentar"
+      "retryLoad": "Reintentar",
+      "aiLimitDemo": "La demo ha alcanzado el límite diario de respuestas con IA. Vuelve mañana o crea tu propia cuenta.",
+      "aiLimitUser": "Has alcanzado el límite de generaciones con IA. Espera un poco y vuelve a intentarlo."
     },
     "settings": {
       "title": "Configuración",
@@ -500,6 +494,10 @@
     },
     "toast": {
       "close": "Cerrar"
+    },
+    "demo": {
+      "banner": "Estás viendo una cuenta de demostración. Los datos se reinician periódicamente.",
+      "password_locked": "La contraseña de la cuenta de demostración no se puede cambiar."
     }
   },
   "auth": {

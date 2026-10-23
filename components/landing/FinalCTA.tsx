@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
+import { DemoButton } from "@/components/DemoButton";
 
 export function FinalCTA() {
   const { t } = useTranslation();
@@ -58,6 +59,11 @@ export function FinalCTA() {
             {t("hero.form_success")}
           </div>
         )}
+
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <p className="text-sm text-muted">{t("cta.demo_hint")}</p>
+          <DemoButton className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-ink/25 text-ink font-semibold text-sm transition-all hover:border-forest hover:text-forest" />
+        </div>
       </div>
     </section>
   );

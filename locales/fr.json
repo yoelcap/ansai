@@ -17,7 +17,6 @@
     "title_em": "sans perdre des heures chaque semaine.",
     "subtitle": "Ansai prépare des réponses personnalisées pour vos avis Google dans le ton de votre établissement. Vous relisez, modifiez et approuvez en un clic. Rien n'est publié sans votre accord.",
     "cta_primary": "Demander l'accès bêta",
-    "cta_secondary": "Voir la démo",
     "form_placeholder": "vous@restaurant.fr",
     "form_cta": "Demander ma place",
     "form_success": "✓ Noté ! Nous vous contacterons bientôt.",
@@ -146,7 +145,8 @@
   "cta": {
     "title_part1": "Rejoignez la bêta privée",
     "title_em": "d'Ansai.",
-    "subtitle": "Il reste peu de places. Les 50 premiers établissements bénéficient de 30 jours gratuits sans engagement."
+    "subtitle": "Il reste peu de places. Les 50 premiers établissements bénéficient de 30 jours gratuits sans engagement.",
+    "demo_hint": "Vous préférez voir avant de vous inscrire ?"
   },
   "footer": {
     "tagline": "La façon la plus simple de garder vos avis à jour. Créé pour restaurants, cafés, hôtels et groupes de restauration en Belgique.",
@@ -191,26 +191,18 @@
     "s5_body": "Nous conservons vos données tant que votre compte est actif. À la résiliation, nous supprimons toutes vos données dans un délai maximum de 30 jours, sauf obligation légale de les conserver plus longtemps."
   },
   "demo_page": {
-    "eyebrow": "Démo interactive",
-    "title": "Voyez à quoi ressemblerait votre réponse",
-    "subtitle": "Collez n'importe quel avis et voyez la réponse en 3 secondes. Sans inscription.",
-    "review_label": "Avis Google",
-    "review_placeholder": "Collez ici un vrai avis client...",
-    "tone_label": "Ton de réponse",
-    "tone_formal": "Formel",
-    "tone_casual": "Convivial",
-    "lang_label": "Langue de réponse",
-    "generate": "Générer une réponse",
-    "generating": "Réponse en préparation...",
-    "result_label": "Réponse préparée par Ansai",
-    "copy": "Copier",
-    "copied": "Copié !",
-    "error": "Veuillez d'abord coller un avis",
-    "badge": "Réponse exemple · Non connectée à Google",
-    "cta_title": "Vous voulez ça pour votre établissement ?",
-    "cta_sub": "Configuration en 5 minutes. Sans carte bancaire.",
-    "cta_btn": "Demander l'accès bêta →",
-    "back": "← Retour à l'accueil"
+    "eyebrow": "Compte de démonstration",
+    "title": "Découvrez Ansai de l'intérieur",
+    "subtitle": "Entrez dans un restaurant fictif avec 40 avis en 5 langues. Sans inscription et sans connecter Google.",
+    "point_reviews": "Parcourez les avis en attente, modifiez la réponse proposée par l'IA et approuvez-la ou rejetez-la.",
+    "point_insights": "Explorez l'évolution de la note, la répartition des étoiles et les langues de vos clients.",
+    "point_tone": "Réglez le ton, la longueur et la signature des réponses, et générez-en une nouvelle avec l'IA.",
+    "cta": "Accéder à la démo",
+    "loading": "Connexion…",
+    "note": "Les données de la démo sont réinitialisées régulièrement.",
+    "back": "← Retour à l'accueil",
+    "error_unavailable": "La démo n'est pas disponible pour le moment. Réessayez dans quelques minutes.",
+    "login_hint": "Vous voulez juste jeter un œil ?"
   },
   "for_who": {
     "eyebrow": "Est-ce pour moi ?",
@@ -383,7 +375,9 @@
       "form_validation_text": "Le texte doit comporter au moins 10 caractères",
       "emptyState": "Vous n'avez pas encore d'avis",
       "loadError": "Erreur lors du chargement des avis",
-      "retryLoad": "Réessayer"
+      "retryLoad": "Réessayer",
+      "aiLimitDemo": "La démo a atteint sa limite quotidienne de réponses IA. Revenez demain ou créez votre propre compte.",
+      "aiLimitUser": "Vous avez atteint la limite de générations IA. Patientez un instant puis réessayez."
     },
     "settings": {
       "title": "Paramètres",
@@ -500,6 +494,10 @@
     },
     "toast": {
       "close": "Fermer"
+    },
+    "demo": {
+      "banner": "Vous consultez un compte de démonstration. Les données sont réinitialisées régulièrement.",
+      "password_locked": "Le mot de passe du compte de démonstration ne peut pas être modifié."
     }
   },
   "auth": {

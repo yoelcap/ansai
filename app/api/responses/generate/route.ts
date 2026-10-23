@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
+import { demoDailyAiLimit } from "@/lib/demo";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -77,6 +79,13 @@ export async function POST(req: NextRequest) {
 
     const supabase = await createClient();
 
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     // 1. Fetch review
     const { data: review, error: reviewError } = await supabase
       .from("reviews")
@@ -86,6 +95,28 @@ export async function POST(req: NextRequest) {
 
     if (reviewError || !review) {
       return NextResponse.json({ error: "Review not found" }, { status: 404 });
+    }
+
+    // Quota check + ledger entry, atomic in the database (migration 0005).
+    // Runs before the Anthropic call so a blocked request costs nothing.
+    const { data: claim, error: claimError } = await createAdminClient().rpc(
+      "claim_ai_generation",
+      {
+        p_user_id: user.id,
+        p_business_id: review.business_id,
+        p_demo_daily_limit: demoDailyAiLimit(),
+      }
+    );
+    if (claimError) {
+      // Fail closed: without the quota check we must not spend credits.
+      console.error("claim_ai_generation failed:", claimError);
+      return NextResponse.json({ error: "Quota check unavailable" }, { status: 503 });
+    }
+    if (claim !== "ok") {
+      return NextResponse.json(
+        { error: "AI generation limit reached", code: claim },
+        { status: 429 }
+      );
     }
 
     // 2. Fetch business

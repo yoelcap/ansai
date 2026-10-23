@@ -35,7 +35,7 @@ The seed creates the demo account (`demo@ansai.local` / `ansai-demo-local`) with
 2. Link the CLI and push the migrations:
    ```bash
    npx supabase login
-   npx supabase link --project-ref <project-ref>     # asks for the DB password
+   npx supabase link --project-ref <project-ref>     # may ask for the DB password
    npm run db:push                                   # applies 0001 → latest
    ```
 3. Copy **Project Settings → API**: the URL, the `anon` key and the `service_role` key go into `.env.local`.
@@ -95,7 +95,8 @@ supabase/
 │   ├── 0001_initial_schema.sql  # baseline exported from production (incl. its known defects)
 │   ├── 0002_fixes.sql           # CHECK fix, function hardening, token column grants, indexes
 │   ├── 0003_rls.sql             # all RLS policies rewritten
-│   └── 0004_demo.sql            # businesses.is_demo + reset_demo_data()
+│   ├── 0004_demo.sql            # businesses.is_demo + reset_demo_data()
+│   └── 0005_demo_guards.sql     # demo business protections + AI quota ledger
 └── seed.sql                     # local only: demo user + business
 ```
 

@@ -48,15 +48,28 @@ async function findUserByEmail(email: string): Promise<User | null> {
 }
 
 async function ensureDemoUser(): Promise<User> {
-  const existing = await findUserByEmail(demoEmail);
+  // The demo account is shared, so a visitor may have changed its email or
+  // password through the Auth API. Resolve it through the demo business first
+  // and restore both credentials.
+  const { data: flagged, error: flaggedError } = await admin
+    .from("businesses")
+    .select("user_id")
+    .eq("is_demo", true)
+    .maybeSingle();
+  if (flaggedError) throw flaggedError;
+
+  const existing = flagged
+    ? (await admin.auth.admin.getUserById(flagged.user_id)).data.user
+    : await findUserByEmail(demoEmail);
+
   if (existing) {
-    // Keep the password in sync with the env var (allows rotating it).
-    const { error } = await admin.auth.admin.updateUserById(existing.id, {
+    const { data, error } = await admin.auth.admin.updateUserById(existing.id, {
+      email: demoEmail,
       password: demoPassword,
       email_confirm: true,
     });
     if (error) throw error;
-    return existing;
+    return data.user;
   }
 
   const { data, error } = await admin.auth.admin.createUser({

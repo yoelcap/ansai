@@ -17,7 +17,6 @@
     "title_em": "ohne jede Woche Stunden zu verlieren.",
     "subtitle": "Ansai bereitet personalisierte Antworten auf deine Google-Bewertungen im Ton deines Betriebs vor. Du prüfst, bearbeitest und genehmigst mit einem Klick. Nichts wird ohne deine Erlaubnis veröffentlicht.",
     "cta_primary": "Beta-Zugang anfragen",
-    "cta_secondary": "Demo ansehen",
     "form_placeholder": "du@restaurant.de",
     "form_cta": "Meinen Platz anfragen",
     "form_success": "✓ Notiert! Wir melden uns bald.",
@@ -146,7 +145,8 @@
   "cta": {
     "title_part1": "Werde Teil der privaten Beta",
     "title_em": "von Ansai.",
-    "subtitle": "Nur noch wenige Plätze verfügbar. Die ersten 50 Betriebe erhalten 30 Tage kostenlos ohne Verpflichtung."
+    "subtitle": "Nur noch wenige Plätze verfügbar. Die ersten 50 Betriebe erhalten 30 Tage kostenlos ohne Verpflichtung.",
+    "demo_hint": "Lieber erst ansehen, bevor Sie sich anmelden?"
   },
   "footer": {
     "tagline": "Der einfachste Weg, deine Bewertungen aktuell zu halten. Erstellt für Restaurants, Cafés, Hotels und Gastronomiebetriebe in Belgien.",
@@ -191,26 +191,18 @@
     "s5_body": "Wir speichern deine Daten, solange dein Konto aktiv ist. Bei der Kündigung löschen wir alle deine Daten innerhalb von maximal 30 Tagen, sofern keine gesetzliche Aufbewahrungspflicht besteht."
   },
   "demo_page": {
-    "eyebrow": "Interaktive Demo",
-    "title": "Sieh, wie deine Antwort aussehen würde",
-    "subtitle": "Füge eine Bewertung ein und sieh die Antwort in 3 Sekunden. Ohne Registrierung.",
-    "review_label": "Google-Bewertung",
-    "review_placeholder": "Füge hier eine echte Kundenbewertung ein...",
-    "tone_label": "Antwortton",
-    "tone_formal": "Formell",
-    "tone_casual": "Freundlich",
-    "lang_label": "Antwortsprache",
-    "generate": "Antwort generieren",
-    "generating": "Antwort wird vorbereitet...",
-    "result_label": "Von Ansai vorbereitete Antwort",
-    "copy": "Kopieren",
-    "copied": "Kopiert!",
-    "error": "Füge zuerst eine Bewertung ein",
-    "badge": "Beispielantwort · Keine echte Google-Verbindung",
-    "cta_title": "Möchtest du das für deinen Betrieb?",
-    "cta_sub": "Einrichten in 5 Minuten. Keine Kreditkarte.",
-    "cta_btn": "Beta-Zugang anfragen →",
-    "back": "← Zurück zur Startseite"
+    "eyebrow": "Demo-Konto",
+    "title": "Ansai von innen ausprobieren",
+    "subtitle": "Betreten Sie ein fiktives Restaurant mit 40 Bewertungen in 5 Sprachen. Ohne Registrierung und ohne Google-Verbindung.",
+    "point_reviews": "Gehen Sie offene Bewertungen durch, bearbeiten Sie die von der KI vorgeschlagene Antwort und geben Sie sie frei oder lehnen Sie sie ab.",
+    "point_insights": "Sehen Sie, wie sich die Bewertung entwickelt, wie sich die Sterne verteilen und welche Sprachen Ihre Gäste sprechen.",
+    "point_tone": "Passen Sie Ton, Länge und Signatur der Antworten an und erzeugen Sie eine neue mit KI.",
+    "cta": "Zur Demo",
+    "loading": "Anmeldung…",
+    "note": "Die Demodaten werden regelmäßig zurückgesetzt.",
+    "back": "← Zurück zur Startseite",
+    "error_unavailable": "Die Demo ist gerade nicht verfügbar. Bitte versuchen Sie es in ein paar Minuten erneut.",
+    "login_hint": "Nur mal umschauen?"
   },
   "for_who": {
     "eyebrow": "Ist das für mich?",
@@ -383,7 +375,9 @@
       "form_validation_text": "Text muss mindestens 10 Zeichen lang sein",
       "emptyState": "Sie haben noch keine Bewertungen",
       "loadError": "Fehler beim Laden der Bewertungen",
-      "retryLoad": "Erneut versuchen"
+      "retryLoad": "Erneut versuchen",
+      "aiLimitDemo": "Die Demo hat ihr tägliches Limit für KI-Antworten erreicht. Kommen Sie morgen wieder oder erstellen Sie Ihr eigenes Konto.",
+      "aiLimitUser": "Sie haben das Limit für KI-Generierungen erreicht. Bitte warten Sie kurz und versuchen Sie es erneut."
     },
     "settings": {
       "title": "Einstellungen",
@@ -500,6 +494,10 @@
     },
     "toast": {
       "close": "Schließen"
+    },
+    "demo": {
+      "banner": "Sie sehen ein Demo-Konto. Die Daten werden regelmäßig zurückgesetzt.",
+      "password_locked": "Das Passwort des Demo-Kontos kann nicht geändert werden."
     }
   },
   "auth": {

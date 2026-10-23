@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslation, localeLabels, localeFullLabels, type Locale } from "@/lib/i18n";
+import { DemoButton } from "@/components/DemoButton";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -98,12 +99,7 @@ export function Navbar() {
             {t("nav.login")}
           </a>
 
-          <a
-            href="/demo"
-            className="px-4 py-2 rounded-full border border-line text-sm font-medium text-ink hover:border-forest hover:text-forest transition-colors"
-          >
-            {t("nav.demo")}
-          </a>
+          <DemoButton className="px-4 py-2 rounded-full border border-line text-sm font-medium text-ink hover:border-forest hover:text-forest transition-colors" />
 
           <a href="/signup" className="btn-primary">
             {t("nav.signup")}

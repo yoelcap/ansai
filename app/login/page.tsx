@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase-client";
 import { AuthLayout } from "@/components/auth/AuthLayout";
+import { DemoButton } from "@/components/DemoButton";
+import { TranslationProvider, useTranslation } from "@/lib/i18n";
 
 async function getOnboardedRedirect(userId: string): Promise<string> {
   const supabase = createClient();
@@ -20,6 +22,8 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || null;
+  const { t } = useTranslation();
+  const demoUnavailable = searchParams.get("error") === "demo_unavailable";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -165,14 +169,26 @@ function LoginForm() {
           {oauthLoading ? "Redirigiendo..." : "Continuar con Google"}
         </button>
       </form>
+
+      <div className="mt-6 pt-6 border-t border-line text-center space-y-3">
+        <p className="text-xs text-muted">{t("demo_page.login_hint")}</p>
+        {demoUnavailable && (
+          <div role="alert" className="px-4 py-3 bg-terra/10 border border-terra/20 rounded-xl text-sm text-terra">
+            {t("demo_page.error_unavailable")}
+          </div>
+        )}
+        <DemoButton className="w-full px-4 py-3 rounded-xl border border-forest/40 text-sm font-medium text-forest hover:bg-forest hover:text-paper transition-colors" />
+      </div>
     </AuthLayout>
   );
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-cream" />}>
-      <LoginForm />
-    </Suspense>
+    <TranslationProvider>
+      <Suspense fallback={<div className="min-h-screen bg-cream" />}>
+        <LoginForm />
+      </Suspense>
+    </TranslationProvider>
   );
 }

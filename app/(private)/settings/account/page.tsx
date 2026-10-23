@@ -10,7 +10,7 @@ import { CONTACT_EMAIL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const LABEL = "block text-xs font-semibold text-muted uppercase tracking-wide mb-1.5";
-const INPUT = "w-full px-3 py-2 text-sm text-ink border border-line rounded-lg bg-cream focus:outline-none focus:ring-1 focus:ring-forest/40 transition-shadow";
+const INPUT = "w-full px-3 py-2 text-sm text-ink border border-line rounded-lg bg-cream focus:outline-none focus:ring-1 focus:ring-forest/40 transition-shadow disabled:opacity-60 disabled:cursor-not-allowed";
 const INPUT_ERR = "w-full px-3 py-2 text-sm text-ink border border-terra/50 rounded-lg bg-cream focus:outline-none focus:ring-1 focus:ring-terra/40 transition-shadow";
 const SECTION = "bg-paper border border-line rounded-2xl p-5 md:p-6";
 
@@ -45,7 +45,8 @@ function PageSkeleton() {
 
 export default function AccountPage() {
   const { t, locale, setLocale } = useTranslation();
-  const { user, profile, loading } = useAuth();
+  const { user, profile, business, loading } = useAuth();
+  const isDemo = business?.is_demo ?? false;
   const { toast } = useToast();
 
   // ── Personal data ──────────────────────────────────────────────────────────
@@ -110,6 +111,7 @@ export default function AccountPage() {
   };
 
   const handlePasswordSave = async () => {
+    if (isDemo) return;
     if (!validatePassword()) return;
     setPasswordSaving(true);
 
@@ -128,7 +130,7 @@ export default function AccountPage() {
   };
 
   const canSavePassword =
-    passwords.next.length >= 8 && passwords.next === passwords.confirm;
+    !isDemo && passwords.next.length >= 8 && passwords.next === passwords.confirm;
 
   if (loading) return <PageSkeleton />;
 
@@ -199,11 +201,18 @@ export default function AccountPage() {
           {t("app.settings.account_password_section")}
         </h2>
 
+        {isDemo && (
+          <p className="mb-4 text-sm text-muted" data-testid="demo-password-locked">
+            {t("app.demo.password_locked")}
+          </p>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className={LABEL}>{t("app.settings.account_new_password")}</label>
             <input
               type="password"
+              disabled={isDemo}
               value={passwords.next}
               onChange={(e) => {
                 setPasswords((p) => ({ ...p, next: e.target.value }));
@@ -218,6 +227,7 @@ export default function AccountPage() {
             <label className={LABEL}>{t("app.settings.account_confirm_password")}</label>
             <input
               type="password"
+              disabled={isDemo}
               value={passwords.confirm}
               onChange={(e) => {
                 setPasswords((p) => ({ ...p, confirm: e.target.value }));

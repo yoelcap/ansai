@@ -17,7 +17,6 @@
     "title_em": "zonder uren te verliezen elke week.",
     "subtitle": "Ansai bereidt persoonlijke antwoorden voor op je Google-reviews in de toon van jouw zaak. Jij controleert, bewerkt en keurt goed met één klik. Er wordt niets gepubliceerd zonder jouw toestemming.",
     "cta_primary": "Bètatoegang aanvragen",
-    "cta_secondary": "Demo bekijken",
     "form_placeholder": "jij@restaurant.be",
     "form_cta": "Mijn plek aanvragen",
     "form_success": "✓ Genoteerd! We nemen snel contact op.",
@@ -146,7 +145,8 @@
   "cta": {
     "title_part1": "Word lid van de privébeta",
     "title_em": "van Ansai.",
-    "subtitle": "Er zijn nog maar weinig plekken. De eerste 50 zaken krijgen 30 dagen gratis zonder verplichtingen."
+    "subtitle": "Er zijn nog maar weinig plekken. De eerste 50 zaken krijgen 30 dagen gratis zonder verplichtingen.",
+    "demo_hint": "Liever eerst zien voor je je aanmeldt?"
   },
   "footer": {
     "tagline": "De eenvoudigste manier om je reviews bij te houden. Gemaakt voor restaurants, cafés, hotels en horecagroepen in België.",
@@ -191,26 +191,18 @@
     "s5_body": "We bewaren je gegevens zolang je account actief is. Na opzegging verwijderen we al je gegevens binnen maximaal 30 dagen, tenzij we ze wettelijk gezien langer moeten bewaren."
   },
   "demo_page": {
-    "eyebrow": "Interactieve demo",
-    "title": "Zie hoe jouw antwoord eruit zou zien",
-    "subtitle": "Plak een review en zie het antwoord in 3 seconden. Geen registratie nodig.",
-    "review_label": "Google review",
-    "review_placeholder": "Plak hier een echte klantreview...",
-    "tone_label": "Antwoordtoon",
-    "tone_formal": "Formeel",
-    "tone_casual": "Vriendelijk",
-    "lang_label": "Antwoordtaal",
-    "generate": "Antwoord genereren",
-    "generating": "Antwoord voorbereiden...",
-    "result_label": "Antwoord voorbereid door Ansai",
-    "copy": "Kopiëren",
-    "copied": "Gekopieerd!",
-    "error": "Plak eerst een review",
-    "badge": "Voorbeeldantwoord · Niet verbonden met Google",
-    "cta_title": "Wil je dit voor jouw zaak?",
-    "cta_sub": "Klaar in 5 minuten. Geen creditcard.",
-    "cta_btn": "Bètatoegang aanvragen →",
-    "back": "← Terug naar de startpagina"
+    "eyebrow": "Demo-account",
+    "title": "Bekijk Ansai van binnenuit",
+    "subtitle": "Stap binnen in een fictief restaurant met 40 reviews in 5 talen. Zonder registratie en zonder Google te koppelen.",
+    "point_reviews": "Bekijk openstaande reviews, pas het antwoord van de AI aan en keur het goed of af.",
+    "point_insights": "Ontdek hoe de score evolueert, hoe de sterren verdeeld zijn en welke talen je gasten spreken.",
+    "point_tone": "Stel de toon, lengte en ondertekening van antwoorden in en genereer een nieuw antwoord met AI.",
+    "cta": "Naar de demo",
+    "loading": "Bezig met inloggen…",
+    "note": "De demogegevens worden regelmatig teruggezet.",
+    "back": "← Terug naar home",
+    "error_unavailable": "De demo is momenteel niet beschikbaar. Probeer het over een paar minuten opnieuw.",
+    "login_hint": "Wil je gewoon even rondkijken?"
   },
   "for_who": {
     "eyebrow": "Is dit voor mij?",
@@ -383,7 +375,9 @@
       "form_validation_text": "Tekst moet minimaal 10 tekens bevatten",
       "emptyState": "U heeft nog geen beoordelingen",
       "loadError": "Fout bij het laden van beoordelingen",
-      "retryLoad": "Opnieuw proberen"
+      "retryLoad": "Opnieuw proberen",
+      "aiLimitDemo": "De demo heeft de dagelijkse limiet voor AI-antwoorden bereikt. Kom morgen terug of maak je eigen account aan.",
+      "aiLimitUser": "Je hebt de limiet voor AI-generaties bereikt. Wacht even en probeer het opnieuw."
     },
     "settings": {
       "title": "Instellingen",
@@ -500,6 +494,10 @@
     },
     "toast": {
       "close": "Sluiten"
+    },
+    "demo": {
+      "banner": "Je bekijkt een demo-account. De gegevens worden regelmatig teruggezet.",
+      "password_locked": "Het wachtwoord van het demo-account kan niet worden gewijzigd."
     }
   },
   "auth": {

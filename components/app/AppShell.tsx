@@ -2,11 +2,27 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { Info } from "lucide-react";
 import { useAuth } from "@/lib/auth/useAuth";
 import { createClient } from "@/lib/supabase-client";
 import { PendingCountContext } from "@/lib/hooks/usePendingCount";
 import { Sidebar } from "./Sidebar";
 import { AppHeader } from "./AppHeader";
+import { useTranslation } from "@/lib/i18n";
+
+function DemoBanner() {
+  const { t } = useTranslation();
+  return (
+    <div
+      role="status"
+      data-testid="demo-banner"
+      className="flex items-center justify-center gap-2 px-4 py-1.5 bg-gold/15 border-b border-gold/30 text-[12px] text-ink-soft text-center"
+    >
+      <Info size={13} className="shrink-0 text-gold" />
+      <span>{t("app.demo.banner")}</span>
+    </div>
+  );
+}
 
 function Spinner() {
   return (
@@ -97,6 +113,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             onMenuClick={() => setSidebarOpen(true)}
             onLogout={handleLogout}
           />
+          {business?.is_demo && <DemoBanner />}
           <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
             {children}
           </main>

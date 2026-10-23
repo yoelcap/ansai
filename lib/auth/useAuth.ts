@@ -26,6 +26,8 @@ export interface Business {
   phone: string | null;
   email: string | null;
   website: string | null;
+  /** The shared public demo business (see /api/demo/login). */
+  is_demo: boolean;
 }
 
 export function useAuth() {
@@ -159,7 +161,10 @@ export function useAuth() {
   }
 
   async function logout(): Promise<void> {
-    await supabase.auth.signOut();
+    // scope "local": end only this browser's session. The default ("global")
+    // revokes every session of the user, so one visitor logging out of the
+    // shared demo account would sign out everyone else using it.
+    await supabase.auth.signOut({ scope: "local" });
     // signOut() triggers SIGNED_OUT in the listener above, which clears
     // user/profile/business. The explicit sets below ensure immediate UI
     // update before the redirect.
