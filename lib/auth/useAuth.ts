@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { User, AuthChangeEvent, Session } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase-client";
 
@@ -36,66 +36,101 @@ export function useAuth() {
   const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchProfileAndBusiness(userId: string) {
-      try {
-        const { data: profileData } = await supabase
-          .from("profiles")
+  // Protección 2: guard contra fetchProfileAndBusiness paralelos.
+  const isFetchingRef = useRef(false);
+
+  // Defined outside effects so both the auth listener and the
+  // visibilitychange handler can call it without duplicating logic.
+  async function fetchProfileAndBusiness(userId: string) {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+    try {
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle();
+
+      setProfile((profileData as Profile) ?? null);
+
+      if (profileData) {
+        const { data: businessData } = await supabase
+          .from("businesses")
           .select("*")
-          .eq("id", userId)
+          .eq("user_id", userId)
+          .order("created_at", { ascending: true })
+          .limit(1)
           .maybeSingle();
 
-        setProfile((profileData as Profile) ?? null);
-
-        if (profileData) {
-          const { data: businessData } = await supabase
-            .from("businesses")
-            .select("*")
-            .eq("user_id", userId)
-            .order("created_at", { ascending: true })
-            .limit(1)
-            .maybeSingle();
-
-          setBusiness((businessData as Business) ?? null);
-        }
-      } catch (error) {
-        console.error("Error fetching profile/business:", error);
+        setBusiness((businessData as Business) ?? null);
       }
+    } catch (error) {
+      console.error("Error fetching profile/business:", error);
+    } finally {
+      isFetchingRef.current = false;
     }
+  }
 
-    supabase.auth.getUser().then(async ({ data: { user: u } }: { data: { user: User | null } }) => {
-      setUser(u ?? null);
-      if (u) {
-        await fetchProfileAndBusiness(u.id);
-      }
-      setLoading(false);
-    });
-
+  // Protección 1: única fuente de eventos — solo onAuthStateChange.
+  // Supabase fires INITIAL_SESSION immediately on subscribe with the
+  // cached session, so getUser() is no longer needed here.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
-      const u = session?.user ?? null;
-      if (u) {
-        setUser(u);
-        // TOKEN_REFRESHED only rotates the JWT — profile and business are unchanged.
-        // Skip the DB round-trip to avoid spurious re-renders and parallel fetches.
-        if (event !== "TOKEN_REFRESHED") {
-          await fetchProfileAndBusiness(u.id);
+    } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
+      switch (event) {
+        case "INITIAL_SESSION":
+        case "SIGNED_IN":
+        case "USER_UPDATED": {
+          const u = session?.user ?? null;
+          setUser(u);
+          if (u) {
+            // Never await Supabase calls inside onAuthStateChange: the auth
+            // lock is still held and the query deadlocks. Defer it instead.
+            setTimeout(() => {
+              fetchProfileAndBusiness(u.id).finally(() => setLoading(false));
+            }, 0);
+          } else {
+            setLoading(false);
+          }
+          break;
         }
-      } else if (event === "SIGNED_OUT") {
-        // Only clear state on an explicit sign-out. A null session from
-        // TOKEN_REFRESHED or other transient events is not a real sign-out
-        // and must not trigger the AppShell guard that redirects to /login.
-        setUser(null);
-        setProfile(null);
-        setBusiness(null);
+
+        case "TOKEN_REFRESHED":
+          // JWT rotated but profile/business are unchanged — skip the DB round-trip.
+          setUser(session?.user ?? null);
+          setLoading(false);
+          break;
+
+        case "SIGNED_OUT":
+          setUser(null);
+          setProfile(null);
+          setBusiness(null);
+          setLoading(false);
+          break;
+
+        default:
+          setUser(session?.user ?? null);
+          setLoading(false);
       }
-      // setLoading(false) is intentionally NOT called here.
-      // Only getUser() (server-validated) controls the loading flag.
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase]);
+  }, [supabase]); // fetchProfileAndBusiness omitted — captures stable refs (supabase singleton, setState fns, isFetchingRef)
+
+  // Protección 3: si al recuperar el foco la sesión existe pero los datos
+  // no (race fallida), los recuperamos sin esperar al siguiente evento auth.
+  useEffect(() => {
+    function onVisibilityChange() {
+      if (document.visibilityState === "visible" && user && (!profile || !business)) {
+        fetchProfileAndBusiness(user.id);
+      }
+    }
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, profile, business]); // fetchProfileAndBusiness omitted — see above
 
   async function login(
     email: string,
@@ -125,6 +160,9 @@ export function useAuth() {
 
   async function logout(): Promise<void> {
     await supabase.auth.signOut();
+    // signOut() triggers SIGNED_OUT in the listener above, which clears
+    // user/profile/business. The explicit sets below ensure immediate UI
+    // update before the redirect.
     setUser(null);
     setProfile(null);
     setBusiness(null);
