@@ -1,0 +1,40 @@
+# Supabase pauses free-tier projects after a period without database activity.
+# This runs a real (but tiny) query every 3 days so that never happens again.
+#
+# Uses the anon key on purpose (least privilege): RLS returns an empty array,
+# but the request still reaches Postgres, which is what counts as activity.
+#
+# Required repository secrets: SUPABASE_URL, SUPABASE_ANON_KEY
+name: Supabase keepalive
+
+on:
+  schedule:
+    - cron: "17 6 */3 * *" # 06:17 UTC every 3rd day of the month
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query the database
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::Missing SUPABASE_URL or SUPABASE_ANON_KEY secret"
+            exit 1
+          fi
+          status=$(curl -sS -o response.json -w '%{http_code}' --retry 3 --retry-delay 10 \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "$SUPABASE_URL/rest/v1/businesses?select=id&limit=1")
+          echo "HTTP $status"
+          if [ "$status" != "200" ]; then
+            echo "::error::Keepalive query failed with HTTP $status"
+            cat response.json
+            exit 1
+          fi

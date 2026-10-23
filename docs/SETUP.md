@@ -75,6 +75,29 @@ npm run dev
 
 ---
 
+## Scheduled jobs (GitHub Actions)
+
+| Workflow | Schedule | What it does |
+|---|---|---|
+| `.github/workflows/keepalive.yml` | every 3 days, 06:17 UTC | Runs one tiny read query (anon key) so the free-tier project is never paused for inactivity again. |
+| `.github/workflows/reset-demo.yml` | Mondays 04:00 UTC | Runs `npm run db:seed`: restores the demo data and the demo credentials. |
+
+Both can also be started by hand: **Actions → workflow → Run workflow**.
+
+Create these in **GitHub → Settings → Secrets and variables → Actions → New repository secret**:
+
+| Secret | Value | Used by |
+|---|---|---|
+| `SUPABASE_URL` | `https://<project-ref>.supabase.co` | both |
+| `SUPABASE_ANON_KEY` | Supabase → Project Settings → API → `anon` key | keepalive |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API → `service_role` key | reset-demo |
+| `DEMO_USER_EMAIL` | same value as in `.env.local` | reset-demo |
+| `DEMO_USER_PASSWORD` | same value as in `.env.local` | reset-demo |
+
+> GitHub **disables scheduled workflows after 60 days without commits** to the repository (it emails the owner first). If that happens, re-enable them in the Actions tab; the keepalive is otherwise useless during that window.
+
+---
+
 ## Scripts
 
 | Script | What it does |
