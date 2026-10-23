@@ -1,10 +1,14 @@
 import { createClient } from "@/lib/supabase-server";
 import { NextResponse } from "next/server";
+import { safeNextPath } from "@/lib/safe-redirect";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next"); // explicit override (e.g. /reset-password)
+  // Explicit override (e.g. /reset-password). Internal paths only: building
+  // `${origin}${next}` from raw input allowed `?next=@evil.com` (open redirect).
+  const rawNext = searchParams.get("next");
+  const next = rawNext ? safeNextPath(rawNext, "/dashboard") : null;
 
   if (code) {
     const supabase = await createClient();

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase-client";
 import { AuthLayout } from "@/components/auth/AuthLayout";
+import { safeNextPath } from "@/lib/safe-redirect";
 import { DemoButton } from "@/components/DemoButton";
 import { TranslationProvider, useTranslation } from "@/lib/i18n";
 
@@ -21,7 +22,8 @@ async function getOnboardedRedirect(userId: string): Promise<string> {
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || null;
+  const rawRedirect = searchParams.get("redirect");
+  const redirectTo = rawRedirect ? safeNextPath(rawRedirect, "/dashboard") : null;
   const { t } = useTranslation();
   const demoUnavailable = searchParams.get("error") === "demo_unavailable";
 

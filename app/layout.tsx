@@ -26,17 +26,10 @@ export const metadata: Metadata = {
     "reputación online HoReCa",
     "herramienta reseñas Bélgica",
   ],
-  alternates: {
-    canonical: "https://ansaii.vercel.app",
-    languages: {
-      es: "https://ansaii.vercel.app/es",
-      en: "https://ansaii.vercel.app/en",
-      nl: "https://ansaii.vercel.app/nl",
-      fr: "https://ansaii.vercel.app/fr",
-      de: "https://ansaii.vercel.app/de",
-      "x-default": "https://ansaii.vercel.app",
-    },
-  },
+  // Absolute base for canonical / Open Graph URLs. The site has a single URL
+  // per page (the language is switched client-side), so no hreflang alternates.
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  alternates: { canonical: "/" },
   openGraph: {
     title: "Ansai — Responde a tus reseñas de Google automáticamente",
     description:
