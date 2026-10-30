@@ -10,7 +10,7 @@ One-time setup. Follow the steps in order. Steps 3–5 can be done while the fir
 
 ## 1. Create the Vercel project
 
-1. <https://vercel.com/new> → **Import Git Repository** → `yoelcap/replyo`.
+1. <https://vercel.com/new> → **Import Git Repository** → `yoelcap/ansai`.
 2. Framework preset: **Next.js** (auto-detected). Leave the build command, output directory and install command at their defaults. `.npmrc` is picked up automatically.
 3. **Before clicking Deploy**, open *Environment Variables* and add the variables from step 2. `NEXT_PUBLIC_*` values are inlined at build time, so a build without them produces a broken client.
 
