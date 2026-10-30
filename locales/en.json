@@ -196,7 +196,7 @@
     "subtitle": "Step into a fictional restaurant with 40 reviews in 5 languages. No sign-up, no Google connection.",
     "point_reviews": "Go through pending reviews, edit the AI's suggested reply and approve or reject it.",
     "point_insights": "Explore how the rating evolves, the star distribution and your guests' languages.",
-    "point_tone": "Adjust the tone, length and signature of replies, and generate a new one with AI.",
+    "point_tone": "See how tone, length and signature are configured, and generate new replies with AI.",
     "cta": "Enter the demo",
     "loading": "Signing in…",
     "note": "Demo data is reset periodically.",
@@ -497,7 +497,8 @@
     },
     "demo": {
       "banner": "You are viewing a demo account. Data is reset periodically.",
-      "password_locked": "The demo account's password cannot be changed."
+      "password_locked": "The demo account's password cannot be changed.",
+      "settings_locked": "These settings are read-only in the demo account. Create your own account to customise them."
     }
   },
   "auth": {
@@ -558,7 +559,9 @@
       "requiredField": "This field is required",
       "termsRequired": "You must accept the terms",
       "networkError": "Connection error. Please try again.",
-      "unknown": "Something went wrong. Please try again."
+      "unknown": "Something went wrong. Please try again.",
+      "captchaFailed": "We couldn't verify that you're not a robot. Please try again.",
+      "captchaUnavailable": "The anti-bot check could not load. Disable your ad blocker for this site or reload the page."
     }
   }
 }

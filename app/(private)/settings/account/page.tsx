@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase-client";
 import { useToast } from "@/lib/hooks/useToast";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { DemoReadOnlyNote } from "@/components/app/DemoReadOnlyNote";
 
 const LABEL = "block text-xs font-semibold text-muted uppercase tracking-wide mb-1.5";
 const INPUT = "w-full px-3 py-2 text-sm text-ink border border-line rounded-lg bg-cream focus:outline-none focus:ring-1 focus:ring-forest/40 transition-shadow disabled:opacity-60 disabled:cursor-not-allowed";
@@ -81,7 +82,7 @@ export default function AccountPage() {
     name !== initialName.current || language !== initialLang.current;
 
   const handlePersonalSave = async () => {
-    if (!user) return;
+    if (!user || isDemo) return;
     setPersonalSaving(true);
 
     const supabase = createClient();
@@ -142,6 +143,9 @@ export default function AccountPage() {
           {t("app.settings.account_personal")}
         </h2>
 
+        {isDemo && <DemoReadOnlyNote />}
+
+        <fieldset disabled={isDemo}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className={LABEL}>{t("app.settings.account_name")}</label>
@@ -193,6 +197,7 @@ export default function AccountPage() {
             {personalSaving ? t("app.settings.saving") : t("app.settings.save")}
           </button>
         </div>
+        </fieldset>
       </div>
 
       {/* ── Change password ─────────────────────────────────────────────────── */}

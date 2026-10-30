@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase-client";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { safeNextPath } from "@/lib/safe-redirect";
 import { DemoButton } from "@/components/DemoButton";
+import { useCaptcha, isCaptchaError } from "@/components/auth/Turnstile";
 import { TranslationProvider, useTranslation } from "@/lib/i18n";
 
 async function getOnboardedRedirect(userId: string): Promise<string> {
@@ -26,6 +27,7 @@ function LoginForm() {
   const redirectTo = rawRedirect ? safeNextPath(rawRedirect, "/dashboard") : null;
   const { t } = useTranslation();
   const demoUnavailable = searchParams.get("error") === "demo_unavailable";
+  const captcha = useCaptcha();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,13 +41,18 @@ function LoginForm() {
     setLoading(true);
 
     const supabase = createClient();
-    const { data, error: signInError } = await supabase.auth.signInWithPassword(
-      { email, password }
-    );
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+      options: { captchaToken: captcha.token },
+    });
+    captcha.reset(); // tokens are single-use
 
     if (signInError || !data.user) {
       const msg = signInError?.message ?? "";
-      if (msg.includes("Invalid login credentials")) {
+      if (isCaptchaError(msg)) {
+        setError(t("auth.errors.captchaFailed"));
+      } else if (msg.includes("Invalid login credentials")) {
         setError("Email o contraseña incorrectos.");
       } else if (msg.includes("Email not confirmed")) {
         setError("Confirma tu email antes de iniciar sesión.");
@@ -142,9 +149,14 @@ function LoginForm() {
           </div>
         )}
 
+        {captcha.widget}
+        {captcha.failed && (
+          <p className="text-xs text-terra">{t("auth.errors.captchaUnavailable")}</p>
+        )}
+
         <button
           type="submit"
-          disabled={loading || oauthLoading}
+          disabled={loading || oauthLoading || !captcha.ready}
           className="w-full btn-primary justify-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Iniciando sesión..." : "Iniciar sesión"}

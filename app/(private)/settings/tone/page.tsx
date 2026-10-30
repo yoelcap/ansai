@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth/useAuth";
 import { createClient } from "@/lib/supabase-client";
 import { useToast } from "@/lib/hooks/useToast";
 import { cn } from "@/lib/utils";
+import { DemoReadOnlyNote } from "@/components/app/DemoReadOnlyNote";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Formality = 0 | 1 | 2 | 3 | 4;
@@ -166,6 +167,8 @@ function PageSkeleton() {
 export default function TonePage() {
   const { t } = useTranslation();
   const { business, loading } = useAuth();
+  // Read-only for the shared demo account (also enforced by RLS, migration 0006).
+  const isDemo = business?.is_demo ?? false;
   const { toast } = useToast();
 
   const [form, setForm] = useState<FormState>(DEFAULT);
@@ -207,7 +210,7 @@ export default function TonePage() {
   const isDirty = JSON.stringify(form) !== JSON.stringify(initialRef.current);
 
   const handleSave = async () => {
-    if (!business?.id) return;
+    if (!business?.id || isDemo) return;
     setSaving(true);
 
     const supabase = createClient();
@@ -266,7 +269,8 @@ export default function TonePage() {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-5 items-start">
       {/* ── Left: settings form ────────────────────────────────────────────── */}
-      <div className="space-y-4">
+      <fieldset disabled={isDemo} className="space-y-4 min-w-0">
+        {isDemo && <DemoReadOnlyNote />}
         <div className={SECTION}>
           <h2 className="font-serif font-semibold text-ink text-base mb-5">
             {t("app.settings.tone_title")}
@@ -353,7 +357,7 @@ export default function TonePage() {
         >
           {saving ? t("app.settings.saving") : t("app.settings.save_tone")}
         </button>
-      </div>
+      </fieldset>
 
       {/* ── Right: sticky live preview ─────────────────────────────────────── */}
       <div className="xl:sticky xl:top-6 xl:self-start">

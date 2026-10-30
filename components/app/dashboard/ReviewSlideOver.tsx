@@ -63,12 +63,12 @@ export function ReviewSlideOver({
 
   const isGenerating = review.responseStatus === "generating";
   const hasFailed = review.responseStatus === "generation_failed";
-  const modelLabel =
-    review.modelUsed === "claude-opus-4-7"
-      ? t("app.reviews.modelUsedOpus")
-      : review.modelUsed === "claude-haiku-4-5-20251001"
-      ? t("app.reviews.modelUsedHaiku")
-      : null;
+  // Match the model family, not an exact ID: IDs come from env vars and change with model upgrades.
+  const modelLabel = review.modelUsed?.includes("opus")
+    ? t("app.reviews.modelUsedOpus")
+    : review.modelUsed?.includes("haiku")
+    ? t("app.reviews.modelUsedHaiku")
+    : null;
 
   function handleSaveEdit() {
     if (!review) return;

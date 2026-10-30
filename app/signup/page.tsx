@@ -5,9 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase-client";
 import { AuthLayout } from "@/components/auth/AuthLayout";
+import { TranslationProvider, useTranslation } from "@/lib/i18n";
+import { useCaptcha, isCaptchaError } from "@/components/auth/Turnstile";
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
+  const { t } = useTranslation();
+  const captcha = useCaptcha();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -34,11 +38,15 @@ export default function SignupPage() {
       options: {
         data: { full_name: name },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
+        captchaToken: captcha.token,
       },
     });
+    captcha.reset(); // tokens are single-use
 
     if (signUpError) {
-      setError(signUpError.message);
+      setError(
+        isCaptchaError(signUpError.message) ? t("auth.errors.captchaFailed") : signUpError.message
+      );
       setLoading(false);
       return;
     }
@@ -140,9 +148,14 @@ export default function SignupPage() {
           </div>
         )}
 
+        {captcha.widget}
+        {captcha.failed && (
+          <p className="text-xs text-terra">{t("auth.errors.captchaUnavailable")}</p>
+        )}
+
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || !captcha.ready}
           className="w-full btn-primary justify-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Creando cuenta..." : "Crear cuenta gratis"}
@@ -161,5 +174,13 @@ export default function SignupPage() {
         </p>
       </form>
     </AuthLayout>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <TranslationProvider>
+      <SignupForm />
+    </TranslationProvider>
   );
 }

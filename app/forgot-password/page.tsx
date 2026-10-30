@@ -4,8 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase-client";
 import { AuthLayout } from "@/components/auth/AuthLayout";
+import { TranslationProvider, useTranslation } from "@/lib/i18n";
+import { useCaptcha, isCaptchaError } from "@/components/auth/Turnstile";
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordForm() {
+  const { t } = useTranslation();
+  const captcha = useCaptcha();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,10 +23,14 @@ export default function ForgotPasswordPage() {
     const supabase = createClient();
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+      captchaToken: captcha.token,
     });
+    captcha.reset(); // tokens are single-use
 
     if (resetError) {
-      setError(resetError.message);
+      setError(
+        isCaptchaError(resetError.message) ? t("auth.errors.captchaFailed") : resetError.message
+      );
       setLoading(false);
       return;
     }
@@ -80,14 +88,27 @@ export default function ForgotPasswordPage() {
           </div>
         )}
 
+        {captcha.widget}
+        {captcha.failed && (
+          <p className="text-xs text-terra">{t("auth.errors.captchaUnavailable")}</p>
+        )}
+
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || !captcha.ready}
           className="w-full btn-primary justify-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Enviando..." : "Enviar enlace"}
         </button>
       </form>
     </AuthLayout>
+  );
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <TranslationProvider>
+      <ForgotPasswordForm />
+    </TranslationProvider>
   );
 }

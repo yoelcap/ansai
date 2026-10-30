@@ -196,7 +196,7 @@
     "subtitle": "Entra en un restaurante ficticio con 40 reseñas en 5 idiomas. Sin registro y sin conectar Google.",
     "point_reviews": "Revisa reseñas pendientes, edita la respuesta que propone la IA y apruébala o recházala.",
     "point_insights": "Explora la evolución de la valoración, el reparto de estrellas y los idiomas de tus clientes.",
-    "point_tone": "Ajusta el tono, la longitud y la firma de las respuestas, y genera una nueva con IA.",
+    "point_tone": "Consulta cómo se configuran el tono, la longitud y la firma, y genera nuevas respuestas con IA.",
     "cta": "Entrar en la demo",
     "loading": "Entrando…",
     "note": "Los datos de la demo se reinician periódicamente.",
@@ -497,7 +497,8 @@
     },
     "demo": {
       "banner": "Estás viendo una cuenta de demostración. Los datos se reinician periódicamente.",
-      "password_locked": "La contraseña de la cuenta de demostración no se puede cambiar."
+      "password_locked": "La contraseña de la cuenta de demostración no se puede cambiar.",
+      "settings_locked": "En la cuenta de demostración esta configuración es de solo lectura. Crea tu cuenta para personalizarla."
     }
   },
   "auth": {
@@ -558,7 +559,9 @@
       "requiredField": "Este campo es obligatorio",
       "termsRequired": "Debes aceptar los términos",
       "networkError": "Error de conexión. Inténtalo de nuevo.",
-      "unknown": "Algo ha salido mal. Inténtalo de nuevo."
+      "unknown": "Algo ha salido mal. Inténtalo de nuevo.",
+      "captchaFailed": "No hemos podido verificar que no eres un robot. Vuelve a intentarlo.",
+      "captchaUnavailable": "No se ha podido cargar la verificación anti-bots. Desactiva el bloqueador de anuncios para este sitio o recarga la página."
     }
   }
 }

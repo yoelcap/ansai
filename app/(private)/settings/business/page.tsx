@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth/useAuth";
 import { createClient } from "@/lib/supabase-client";
 import { useToast } from "@/lib/hooks/useToast";
 import { cn } from "@/lib/utils";
+import { DemoReadOnlyNote } from "@/components/app/DemoReadOnlyNote";
 
 const LABEL = "block text-xs font-semibold text-muted uppercase tracking-wide mb-1.5";
 const INPUT = "w-full px-3 py-2 text-sm text-ink border border-line rounded-lg bg-cream focus:outline-none focus:ring-1 focus:ring-forest/40 transition-shadow";
@@ -61,6 +62,8 @@ function PageSkeleton() {
 export default function BusinessPage() {
   const { t } = useTranslation();
   const { user, business, loading } = useAuth();
+  // Read-only for the shared demo account (also enforced by RLS, migration 0006).
+  const isDemo = business?.is_demo ?? false;
   const { toast } = useToast();
 
   const [form, setForm] = useState<FormState>(EMPTY);
@@ -104,7 +107,7 @@ export default function BusinessPage() {
   };
 
   const handleSave = async () => {
-    if (!user || !business) return;
+    if (!user || !business || isDemo) return;
     if (!validate()) return;
     setSaving(true);
 
@@ -150,6 +153,9 @@ export default function BusinessPage() {
           {t("app.settings.business_title")}
         </h2>
 
+        {isDemo && <DemoReadOnlyNote />}
+
+        <fieldset disabled={isDemo}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Name */}
           <div className="sm:col-span-2">
@@ -248,6 +254,7 @@ export default function BusinessPage() {
             {saving ? t("app.settings.saving") : t("app.settings.save")}
           </button>
         </div>
+        </fieldset>
       </div>
     </div>
   );

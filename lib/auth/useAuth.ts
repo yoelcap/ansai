@@ -134,31 +134,7 @@ export function useAuth() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, profile, business]); // fetchProfileAndBusiness omitted — see above
 
-  async function login(
-    email: string,
-    password: string
-  ): Promise<{ error?: string }> {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return { error: error.message };
-    return {};
-  }
 
-  async function signup(
-    email: string,
-    password: string,
-    fullName: string
-  ): Promise<{ error?: string }> {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    if (error) return { error: error.message };
-    return {};
-  }
 
   async function logout(): Promise<void> {
     // scope "local": end only this browser's session. The default ("global")
@@ -175,29 +151,13 @@ export function useAuth() {
     window.location.href = "/login";
   }
 
-  async function resetPassword(email: string): Promise<{ error?: string }> {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
-    });
-    if (error) return { error: error.message };
-    return {};
-  }
 
-  async function updatePassword(newPassword: string): Promise<{ error?: string }> {
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-    if (error) return { error: error.message };
-    return {};
-  }
 
   return {
     user,
     profile,
     business,
     loading,
-    login,
-    signup,
     logout,
-    resetPassword,
-    updatePassword,
   };
 }

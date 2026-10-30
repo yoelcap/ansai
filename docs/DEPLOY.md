@@ -28,6 +28,9 @@ Project → Settings → Environment Variables. Mark the server-only ones as **S
 | `DEMO_USER_EMAIL` | same as `.env.local` | Production, Preview | **yes** |
 | `DEMO_USER_PASSWORD` | same as `.env.local` | Production, Preview | **yes** |
 | `AI_DEMO_DAILY_LIMIT` | `20` | Production, Preview | no |
+| `AI_USER_MINUTE_LIMIT` / `AI_USER_DAILY_LIMIT` | `5` / `100` | Production, Preview | no |
+| `ANTHROPIC_MODEL_COMPLEX` / `ANTHROPIC_MODEL_SIMPLE` | optional; defaults `claude-opus-4-7` / `claude-haiku-4-5` | Production, Preview | no |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key (see docs/SECURITY.md → Manual steps) | Production, Preview | no |
 
 Preview deployments share the production database and AI key. The demo works on them, and the shared daily AI cap still applies. Set a monthly spend limit on the Anthropic key (Console → Limits) as a last line of defence.
 

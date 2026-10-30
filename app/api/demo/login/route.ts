@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase-server";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { getDemoUser } from "@/lib/demo";
+import { isCrossSiteRequest } from "@/lib/http";
 
 /**
  * POST /api/demo/login — signs the visitor in as the shared demo account and
@@ -14,6 +15,11 @@ import { getDemoUser } from "@/lib/demo";
  * visitor who changes the demo password therefore cannot lock others out.
  */
 export async function POST(request: NextRequest) {
+  // Login CSRF: another site must not be able to sign its visitors into the demo.
+  if (isCrossSiteRequest(request)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const fail = () =>
     NextResponse.redirect(new URL("/login?error=demo_unavailable", request.url), 303);
 

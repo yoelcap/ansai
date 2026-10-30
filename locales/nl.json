@@ -196,7 +196,7 @@
     "subtitle": "Stap binnen in een fictief restaurant met 40 reviews in 5 talen. Zonder registratie en zonder Google te koppelen.",
     "point_reviews": "Bekijk openstaande reviews, pas het antwoord van de AI aan en keur het goed of af.",
     "point_insights": "Ontdek hoe de score evolueert, hoe de sterren verdeeld zijn en welke talen je gasten spreken.",
-    "point_tone": "Stel de toon, lengte en ondertekening van antwoorden in en genereer een nieuw antwoord met AI.",
+    "point_tone": "Bekijk hoe toon, lengte en ondertekening ingesteld worden en genereer nieuwe antwoorden met AI.",
     "cta": "Naar de demo",
     "loading": "Bezig met inloggen…",
     "note": "De demogegevens worden regelmatig teruggezet.",
@@ -497,7 +497,8 @@
     },
     "demo": {
       "banner": "Je bekijkt een demo-account. De gegevens worden regelmatig teruggezet.",
-      "password_locked": "Het wachtwoord van het demo-account kan niet worden gewijzigd."
+      "password_locked": "Het wachtwoord van het demo-account kan niet worden gewijzigd.",
+      "settings_locked": "In het demo-account zijn deze instellingen alleen-lezen. Maak je eigen account aan om ze aan te passen."
     }
   },
   "auth": {
@@ -558,7 +559,9 @@
       "requiredField": "Dit veld is verplicht",
       "termsRequired": "Je moet de voorwaarden accepteren",
       "networkError": "Verbindingsfout. Probeer het opnieuw.",
-      "unknown": "Er is iets misgegaan. Probeer het opnieuw."
+      "unknown": "Er is iets misgegaan. Probeer het opnieuw.",
+      "captchaFailed": "We konden niet bevestigen dat je geen robot bent. Probeer het opnieuw.",
+      "captchaUnavailable": "De anti-botcontrole kon niet worden geladen. Schakel je adblocker uit voor deze site of herlaad de pagina."
     }
   }
 }

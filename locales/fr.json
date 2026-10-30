@@ -196,7 +196,7 @@
     "subtitle": "Entrez dans un restaurant fictif avec 40 avis en 5 langues. Sans inscription et sans connecter Google.",
     "point_reviews": "Parcourez les avis en attente, modifiez la réponse proposée par l'IA et approuvez-la ou rejetez-la.",
     "point_insights": "Explorez l'évolution de la note, la répartition des étoiles et les langues de vos clients.",
-    "point_tone": "Réglez le ton, la longueur et la signature des réponses, et générez-en une nouvelle avec l'IA.",
+    "point_tone": "Découvrez comment se règlent le ton, la longueur et la signature, et générez de nouvelles réponses avec l'IA.",
     "cta": "Accéder à la démo",
     "loading": "Connexion…",
     "note": "Les données de la démo sont réinitialisées régulièrement.",
@@ -497,7 +497,8 @@
     },
     "demo": {
       "banner": "Vous consultez un compte de démonstration. Les données sont réinitialisées régulièrement.",
-      "password_locked": "Le mot de passe du compte de démonstration ne peut pas être modifié."
+      "password_locked": "Le mot de passe du compte de démonstration ne peut pas être modifié.",
+      "settings_locked": "Dans le compte de démonstration, ces réglages sont en lecture seule. Créez votre compte pour les personnaliser."
     }
   },
   "auth": {
@@ -558,7 +559,9 @@
       "requiredField": "Ce champ est obligatoire",
       "termsRequired": "Vous devez accepter les conditions",
       "networkError": "Erreur de connexion. Veuillez réessayer.",
-      "unknown": "Une erreur s'est produite. Veuillez réessayer."
+      "unknown": "Une erreur s'est produite. Veuillez réessayer.",
+      "captchaFailed": "Nous n'avons pas pu vérifier que vous n'êtes pas un robot. Réessayez.",
+      "captchaUnavailable": "La vérification anti-robots n'a pas pu se charger. Désactivez votre bloqueur de publicités pour ce site ou rechargez la page."
     }
   }
 }

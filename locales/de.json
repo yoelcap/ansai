@@ -196,7 +196,7 @@
     "subtitle": "Betreten Sie ein fiktives Restaurant mit 40 Bewertungen in 5 Sprachen. Ohne Registrierung und ohne Google-Verbindung.",
     "point_reviews": "Gehen Sie offene Bewertungen durch, bearbeiten Sie die von der KI vorgeschlagene Antwort und geben Sie sie frei oder lehnen Sie sie ab.",
     "point_insights": "Sehen Sie, wie sich die Bewertung entwickelt, wie sich die Sterne verteilen und welche Sprachen Ihre Gäste sprechen.",
-    "point_tone": "Passen Sie Ton, Länge und Signatur der Antworten an und erzeugen Sie eine neue mit KI.",
+    "point_tone": "Sehen Sie, wie Ton, Länge und Signatur eingestellt werden, und erzeugen Sie neue Antworten mit KI.",
     "cta": "Zur Demo",
     "loading": "Anmeldung…",
     "note": "Die Demodaten werden regelmäßig zurückgesetzt.",
@@ -497,7 +497,8 @@
     },
     "demo": {
       "banner": "Sie sehen ein Demo-Konto. Die Daten werden regelmäßig zurückgesetzt.",
-      "password_locked": "Das Passwort des Demo-Kontos kann nicht geändert werden."
+      "password_locked": "Das Passwort des Demo-Kontos kann nicht geändert werden.",
+      "settings_locked": "Im Demo-Konto sind diese Einstellungen schreibgeschützt. Erstellen Sie Ihr eigenes Konto, um sie anzupassen."
     }
   },
   "auth": {
@@ -558,7 +559,9 @@
       "requiredField": "Dieses Feld ist erforderlich",
       "termsRequired": "Du musst die Bedingungen akzeptieren",
       "networkError": "Verbindungsfehler. Bitte versuche es erneut.",
-      "unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+      "unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      "captchaFailed": "Wir konnten nicht bestätigen, dass Sie kein Roboter sind. Bitte versuchen Sie es erneut.",
+      "captchaUnavailable": "Die Anti-Bot-Prüfung konnte nicht geladen werden. Deaktivieren Sie Ihren Werbeblocker für diese Seite oder laden Sie die Seite neu."
     }
   }
 }
